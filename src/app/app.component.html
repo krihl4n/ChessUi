@@ -3,9 +3,12 @@
 </div>
 <div style="display: inline-block; padding: 20px;  position: absolute;
 top: 0px;">
-    <form>
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
         <input
             type="text"
-            id="moveInput">
+            id="moveInput"
+            name="move"
+            ngModel>
+        <button type="submit">submit</button>    
     </form>
 </div>
