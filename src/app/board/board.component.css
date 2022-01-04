@@ -1,0 +1,16 @@
+.field {
+    text-align: center; 
+    vertical-align: middle; 
+    line-height: 80px; 
+    width:80px; 
+    height:80px; 
+    position: absolute; 
+}
+
+.field-light {
+    background-color: #EBD1A6; 
+}
+
+.field-dark {
+    background-color: #A27551; 
+}
