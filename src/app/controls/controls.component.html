@@ -1,10 +1,19 @@
-<div style="display: inline-block; padding: 70px; position: absolute; top: 0px;">
+<div>
+    <button 
+      class="btn btn-primary">connect</button> &nbsp;
+    <button class="btn btn-danger">disconnect</button> 
+    <br><hr><br>
     <form (ngSubmit)="onSubmit(f)" #f="ngForm">
         <input
             type="text"
             id="moveInput"
             name="move"
-            ngModel>
-        <button type="submit">submit</button>    
+            class="form-control"
+            ngModel
+            autocomplete="off">
+        <br>
+        <button 
+            class="btn btn-primary" 
+            type="submit">move</button>    
     </form>
 </div>
