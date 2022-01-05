@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
-import { FieldComponent } from './board/field/field.component';
+import { ControlsComponent } from './controls/controls.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
-    FieldComponent
+    ControlsComponent
   ],
   imports: [
     BrowserModule,

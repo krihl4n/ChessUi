@@ -1,13 +1,4 @@
 <div style="display: inline-block;">
     <app-board></app-board>
 </div>
-<div style="display: inline-block; padding: 70px; position: absolute; top: 0px;">
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-        <input
-            type="text"
-            id="moveInput"
-            name="move"
-            ngModel>
-        <button type="submit">submit</button>    
-    </form>
-</div>
+<app-controls></app-controls>

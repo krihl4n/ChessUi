@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { WebSocketAPIService } from './WebSocketApi.service';
 
 @Component({
@@ -39,9 +38,4 @@ export class AppComponent implements OnInit{
 
   // guide
   // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
-
-  onSubmit(form: NgForm) {
-    const value = form.value;
-    console.log(value)
-  }
 }
