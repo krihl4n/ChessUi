@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { GameControlService } from '../game-control.service';
 
 @Component({
   selector: 'app-controls',
@@ -8,7 +9,7 @@ import { NgForm } from '@angular/forms';
 })
 export class ControlsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private gameControlService: GameControlService) { }
 
   ngOnInit(): void {
   }
@@ -16,5 +17,22 @@ export class ControlsComponent implements OnInit {
   onSubmit(form: NgForm) {
     const value = form.value;
     console.log(value)
+    this.gameControlService.sendMsg("test");
+  }
+
+  onConnect() {
+    this.gameControlService.connect()
+  }
+
+  onDisconnect() {
+    this.gameControlService.disconnect();
+  }
+
+  onGameStart() {
+    this.gameControlService.startGame()
+  }
+
+  onGameFinish() {
+
   }
 }

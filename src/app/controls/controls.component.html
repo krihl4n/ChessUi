@@ -1,8 +1,18 @@
 <div>
     <button 
-      class="btn btn-primary">connect</button> &nbsp;
-    <button class="btn btn-danger">disconnect</button> 
-    <br><hr><br>
+      class="btn btn-primary"
+      (click)="onConnect()">connect</button> &nbsp;
+    <button 
+        class="btn btn-danger"
+        (click)="onDisconnect()">disconnect</button> 
+    <br><hr>
+    <button 
+        class="btn btn-primary"
+        (click)="onGameStart()">start game</button> &nbsp;
+    <button 
+      class="btn btn-danger"    
+      (click)="onGameFinish()">finish game</button>
+    <br><br> 
     <form (ngSubmit)="onSubmit(f)" #f="ngForm">
         <input
             type="text"

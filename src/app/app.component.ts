@@ -24,17 +24,17 @@ export class AppComponent implements OnInit{
     // }, 10000)
   }
 
-  connect(){
-    this.webSocketApiService._connect();
-  }
+  // connect(){
+  //   this.webSocketApiService._connect();
+  // }
 
-  disconnect(){
-    this.webSocketApiService._disconnect();
-  }
+  // disconnect(){
+  //   this.webSocketApiService._disconnect();
+  // }
 
-  sendMessage(){
-    this.webSocketApiService._send({"text": "dupa", "from":"dupa"});
-  }
+  // sendMessage(){
+  //   this.webSocketApiService._send({"text": "dupa", "from":"dupa"});
+  // }
 
   // guide
   // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
