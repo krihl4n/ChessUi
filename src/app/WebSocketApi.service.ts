@@ -2,6 +2,8 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Injectable } from '@angular/core';
 import { MoveRequest } from './MoveRequest';
+import { PiecePositions } from './PiecePositions';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: "root"
@@ -10,7 +12,10 @@ export class WebSocketAPIService {
     webSocketEndPoint: string = 'http://localhost:8080/game';
     topic: string = "/topic/moves";
     topicGameControls: string = "/topic/gameControls";
+    topicPiecePositions: string = "/topic/piecePositions";
     stompClient: any;
+
+    piecePositionsReceivedSubject: Subject<PiecePositions[]>  = new Subject()
 
     constructor(){
     }
@@ -26,6 +31,9 @@ export class WebSocketAPIService {
             });
             _this.stompClient.subscribe(_this.topicGameControls, function (sdkEvent: any) {
                 _this.onMessageReceivedDifferentTopic(sdkEvent);
+            });
+            _this.stompClient.subscribe(_this.topicPiecePositions, function (sdkEvent: any) {
+                _this.onPiecePositionsReceived(sdkEvent);
             });
             //_this.stompClient.reconnect_delay = 2000;
         }, this.errorCallBack);
@@ -47,21 +55,27 @@ export class WebSocketAPIService {
     }
 
     send(message: MoveRequest) {
-        console.log("calling logout api via web socket");
         this.stompClient.send("/chessApp/game", {}, JSON.stringify(message));
     }
 
     sendGameControlsMsg(message: String) {
-        console.log("calling logout api via web socket");
         this.stompClient.send("/chessApp/gameControls", {}, JSON.stringify(message));
+    }
+
+    sendReqestPiecePositionsMsg(message: String) {
+        this.stompClient.send("/chessApp/piecePositions", {}, JSON.stringify(message));
     }
 
     onMessageReceived(message: any) {
         console.log("Message Recieved from Server :: " + message);
     }
 
-
     onMessageReceivedDifferentTopic(message: any) {
         console.log("DifferentTopic Message Recieved from Server :: " + message);
+    }
+
+    onPiecePositionsReceived(message: PiecePositions[]) {
+        console.log("Piece Positions recieved from Server");
+        this.piecePositionsReceivedSubject.next(message)
     }
 }
