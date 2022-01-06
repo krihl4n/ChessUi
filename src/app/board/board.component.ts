@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GameControlService } from '../game-control.service';
-import { PiecePositions } from '../PiecePositions';
+import { Piece, PiecePositions } from '../PiecePositions';
 
 @Component({
   selector: 'app-board',
@@ -21,7 +21,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.positionUpdates.subscribe((piecePositions: PiecePositions[]) => {
       console.log("Piece positions received: " + piecePositions)
       for (let i = 0; i < piecePositions.length; i++) {
-        this.positions.set(piecePositions[i].field, "X_X")
+        this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece))
       }
     })
   }
@@ -32,5 +32,47 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   getPieceAt(field: String): String {
     return this.positions.get(field) || ""
+  }
+
+  private getTokenFor(piece: Piece): String {
+    let token = "";
+    token += this.getTokenForColor(piece.color);
+    token += "_";
+    token += this.getTokenForType(piece.type);
+    return token;
+  }
+
+  private getTokenForColor(color: String): String {
+    if (color === 'WHITE') {
+      return "W"
+    } else {
+      return "B"
+    }
+  }
+
+  private getTokenForType(type: String): String {
+    switch (type) {
+      case "KING": {
+        return "K"
+      }
+      case "QUEEN": {
+        return "Q"
+      }
+      case "KNIGHT": {
+        return "N"
+      }
+      case "BISHOP": {
+        return "B"
+      }
+      case "ROOK": {
+        return "R"
+      }
+      case "PAWN": {
+        return "P"
+      }
+      default: {
+        return ""
+      }
+    }
   }
 }
