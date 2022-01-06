@@ -5,6 +5,8 @@ import { MoveRequest } from './MoveRequest';
 import { PiecePositions } from './PiecePositions';
 import { Subject } from 'rxjs';
 
+// https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
+
 @Injectable({
     providedIn: "root"
 })
@@ -74,8 +76,9 @@ export class WebSocketAPIService {
         console.log("DifferentTopic Message Recieved from Server :: " + message);
     }
 
-    onPiecePositionsReceived(message: PiecePositions[]) {
+    onPiecePositionsReceived(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
         console.log("Piece Positions recieved from Server");
-        this.piecePositionsReceivedSubject.next(message)
+        this.piecePositionsReceivedSubject.next(value)
     }
 }
