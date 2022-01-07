@@ -33,6 +33,10 @@ export class BoardComponent implements OnInit, OnDestroy {
     return this.positions.get(field) || ""
   }
 
+  isWhite(field: String) {
+    return this.getPieceAt(field).startsWith('W')
+  }
+
   private getTokenFor(piece: Piece): String {
     if(piece == null) {
       return "";
