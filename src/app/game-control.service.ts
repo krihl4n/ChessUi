@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { PiecePositions } from './PiecePositions';
+import { FieldOccupation } from './FieldOccupation';
 import { WebSocketAPIService } from './WebSocketApi.service';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class GameControlService {
     this.webSocketApiService.sendReqestPiecePositionsMsg("request_positions")
   }
 
-  getPiecePositionUpdateSubscription(): Subject<PiecePositions[]> {
+  getPiecePositionUpdateSubscription(): Subject<FieldOccupation[]> {
     return this.webSocketApiService.piecePositionsReceivedSubject
   }
 }

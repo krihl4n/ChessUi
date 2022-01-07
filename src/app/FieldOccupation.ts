@@ -1,4 +1,4 @@
-export interface PiecePositions {
+export interface FieldOccupation {
     field: String,
     piece: Piece
 }

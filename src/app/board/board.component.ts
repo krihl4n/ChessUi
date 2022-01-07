@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GameControlService } from '../game-control.service';
-import { Piece, PiecePositions } from '../PiecePositions';
+import { FieldOccupation, Piece } from '../FieldOccupation';
 
 @Component({
   selector: 'app-board',
@@ -13,12 +13,12 @@ export class BoardComponent implements OnInit, OnDestroy {
   constructor(private gameControlService: GameControlService) { }
 
   positions = new Map<String, String>()
-  private positionUpdates: Subject<PiecePositions[]> | undefined
+  private positionUpdates: Subject<FieldOccupation[]> | undefined
 
   ngOnInit(): void {
     this.positionUpdates = this.gameControlService.getPiecePositionUpdateSubscription()
 
-    this.positionUpdates.subscribe((piecePositions: PiecePositions[]) => {
+    this.positionUpdates.subscribe((piecePositions: FieldOccupation[]) => {
       for (let i = 0; i < piecePositions.length; i++) {
         this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece))
       }

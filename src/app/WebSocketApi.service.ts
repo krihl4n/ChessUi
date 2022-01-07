@@ -2,8 +2,8 @@ import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Injectable } from '@angular/core';
 import { MoveRequest } from './MoveRequest';
-import { PiecePositions } from './PiecePositions';
 import { Subject } from 'rxjs';
+import { FieldOccupation } from './FieldOccupation';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -14,10 +14,10 @@ export class WebSocketAPIService {
     webSocketEndPoint: string = 'http://localhost:8080/game';
     topic: string = "/topic/moves";
     topicGameControls: string = "/topic/gameControls";
-    topicPiecePositions: string = "/topic/piecePositions";
+    topicPiecePositions: string = "/topic/fieldsOccupation";
     stompClient: any;
 
-    piecePositionsReceivedSubject: Subject<PiecePositions[]>  = new Subject()
+    piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
 
     constructor(){
     }
@@ -65,7 +65,7 @@ export class WebSocketAPIService {
     }
 
     sendReqestPiecePositionsMsg(message: String) {
-        this.stompClient.send("/chessApp/piecePositions", {}, JSON.stringify(message));
+        this.stompClient.send("/chessApp/fieldsOccupation", {}, JSON.stringify(message));
     }
 
     onMessageReceived(message: any) {
