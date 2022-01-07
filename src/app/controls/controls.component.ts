@@ -17,7 +17,8 @@ export class ControlsComponent implements OnInit {
   onSubmit(form: NgForm) {
     const value = form.value;
     console.log(value)
-    this.gameControlService.sendMsg("test");
+    this.gameControlService.movePiece(form.value.move);
+    form.reset()
   }
 
   onConnect() {

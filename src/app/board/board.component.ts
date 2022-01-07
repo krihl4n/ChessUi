@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GameControlService } from '../game-control.service';
 import { FieldOccupation, Piece } from '../FieldOccupation';
+import { MoveResponse } from '../MoveResponse';
 
 @Component({
   selector: 'app-board',
@@ -20,6 +21,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.positionUpdates.subscribe((piecePositions: FieldOccupation[]) => {
       for (let i = 0; i < piecePositions.length; i++) {
+         // todo more verbose communication needed, do not refresh all the board every time
         this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece))
       }
     })

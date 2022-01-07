@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { MoveRequest } from './MoveRequest';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from './FieldOccupation';
+import { MoveResponse } from './MoveResponse';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -18,6 +19,7 @@ export class WebSocketAPIService {
     stompClient: any;
 
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
+    movePerformedSubject: Subject<MoveResponse> = new Subject()
 
     constructor(){
     }
@@ -29,7 +31,7 @@ export class WebSocketAPIService {
         const _this = this;
         this.stompClient.connect({}, (frame: any) => {
             _this.stompClient.subscribe(_this.topic, function (sdkEvent: any) {
-                _this.onMessageReceived(sdkEvent);
+                _this.onMoveReceived(sdkEvent);
             });
             _this.stompClient.subscribe(_this.topicGameControls, function (sdkEvent: any) {
                 _this.onMessageReceivedDifferentTopic(sdkEvent);
@@ -56,20 +58,22 @@ export class WebSocketAPIService {
         }, 5000);
     }
 
-    send(message: MoveRequest) {
-        this.stompClient.send("/chessApp/game", {}, JSON.stringify(message));
+    sendMoveMsg(message: MoveRequest) {
+        this.stompClient.send("/chessApp/move", {}, JSON.stringify(message));
     }
 
     sendGameControlsMsg(message: String) {
         this.stompClient.send("/chessApp/gameControls", {}, JSON.stringify(message));
     }
 
-    sendReqestPiecePositionsMsg(message: String) {
+    sendRequestPiecePositionsMsg(message: String) {
         this.stompClient.send("/chessApp/fieldsOccupation", {}, JSON.stringify(message));
     }
 
-    onMessageReceived(message: any) {
-        console.log("Message Recieved from Server :: " + message);
+    onMoveReceived(message: Stomp.Frame) {
+        console.log("Move Message Recieved from Server :: " + message);
+        let value = JSON.parse(message.body)
+        this.movePerformedSubject.next(value)
     }
 
     onMessageReceivedDifferentTopic(message: any) {
