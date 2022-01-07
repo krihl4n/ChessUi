@@ -19,7 +19,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.positionUpdates = this.gameControlService.getPiecePositionUpdateSubscription()
 
     this.positionUpdates.subscribe((piecePositions: PiecePositions[]) => {
-      console.log("Piece positions received: " + piecePositions)
       for (let i = 0; i < piecePositions.length; i++) {
         this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece))
       }
@@ -35,6 +34,10 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   private getTokenFor(piece: Piece): String {
+    if(piece == null) {
+      return "";
+    }
+
     let token = "";
     token += this.getTokenForColor(piece.color);
     token += "_";

@@ -78,7 +78,6 @@ export class WebSocketAPIService {
 
     onPiecePositionsReceived(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
-        console.log("Piece Positions recieved from Server");
         this.piecePositionsReceivedSubject.next(value)
     }
 }
