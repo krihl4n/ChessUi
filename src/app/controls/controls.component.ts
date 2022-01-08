@@ -12,6 +12,7 @@ export class ControlsComponent implements OnInit {
   constructor(private gameControlService: GameControlService) { }
 
   ngOnInit(): void {
+    this.gameControlService.connect()
   }
 
   onSubmit(form: NgForm) {
