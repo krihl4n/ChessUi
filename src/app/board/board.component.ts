@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GameControlService } from '../game-control.service';
 import { FieldOccupation, Piece } from '../FieldOccupation';
-import { MoveResponse } from '../MoveResponse';
 
 @Component({
   selector: 'app-board',
@@ -47,7 +46,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     } else if (this.selectedField == null) {
       this.selectedField = field
     } else {
-      this.gameControlService.movePiece1(this.selectedField, field)
+      this.gameControlService.movePiece(this.selectedField, field)
       this.selectedField = null
     }
   }

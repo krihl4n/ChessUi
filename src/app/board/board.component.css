@@ -6,6 +6,7 @@
     height:80px; 
     position: absolute; 
     cursor: pointer;
+    user-select: none
 }
 
 .field-light {

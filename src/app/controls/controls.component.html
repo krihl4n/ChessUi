@@ -13,17 +13,4 @@
       class="btn btn-danger"    
       (click)="onGameFinish()">finish game</button>
     <br><br> 
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-        <input
-            type="text"
-            id="moveInput"
-            name="move"
-            class="form-control"
-            ngModel
-            autocomplete="off">
-        <br>
-        <button 
-            class="btn btn-primary" 
-            type="submit">move</button>    
-    </form>
 </div>

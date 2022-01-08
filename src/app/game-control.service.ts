@@ -11,8 +11,6 @@ export class GameControlService {
 
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
-  private moveUpdates: Subject<MoveResponse> | undefined
-
   connect() {
       this.webSocketApiService.connect();
   }
@@ -21,12 +19,7 @@ export class GameControlService {
     this.webSocketApiService.disconnect();
   }
 
-  movePiece(expression: String) {
-    let fields = expression.split(" ")
-    this.webSocketApiService.sendMoveMsg({"from": fields[0], "to":fields[1]});
-  }
-
-  movePiece1(from: String, to: String) {
+  movePiece(from: String, to: String) {
     this.webSocketApiService.sendMoveMsg({"from": from, "to": to})
   }
 
