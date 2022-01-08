@@ -17,75 +17,75 @@
     <label style="position: absolute; top:650px; left:540px;">g</label>
     <label style="position: absolute; top:650px; left:620px;">h</label>
 
-    <div id="a8" class="field field-light" [ngStyle]="{'color': isWhite('a8') ? 'white' : 'black'}" style="top:0px; left:0px;">{{ this.getPieceAt("a8") }}</div>
-    <div id="b8" class="field field-dark" [ngStyle]="{'color': isWhite('b8') ? 'white' : 'black'}" style="top:0px; left:80px;">{{ this.getPieceAt("b8") }}</div>
-    <div id="c8" class="field field-light" [ngStyle]="{'color': isWhite('c8') ? 'white' : 'black'}" style="top:0px; left:160px;">{{ this.getPieceAt("c8") }}</div>
-    <div id="d8" class="field field-dark" [ngStyle]="{'color': isWhite('d8') ? 'white' : 'black'}" style="top:0px; left:240px;">{{ this.getPieceAt("d8") }}</div>
-    <div id="e8" class="field field-light" [ngStyle]="{'color': isWhite('e8') ? 'white' : 'black'}" style="top:0px; left:320px;">{{ this.getPieceAt("e8") }}</div>
-    <div id="f8" class="field field-dark" [ngStyle]="{'color': isWhite('f8') ? 'white' : 'black'}" style="top:0px; left:400px;">{{ this.getPieceAt("f8") }}</div>
-    <div id="g8" class="field field-light" [ngStyle]="{'color': isWhite('g8') ? 'white' : 'black'}" style="top:0px; left:480px;">{{ this.getPieceAt("g8") }}</div>
-    <div id="h8" class="field field-dark" [ngStyle]="{'color': isWhite('h8') ? 'white' : 'black'}" style="top:0px; left:560px;">{{ this.getPieceAt("h8") }}</div>
+    <div id="a8" (click)="onFieldSelected('a8')" [ngClass]="{'field-selected': isFieldSelected('a8')}" class="field field-light" [ngStyle]="{'color': isWhite('a8') ? 'white' : 'black'}" style="top:0px; left:0px;">{{ this.getPieceAt("a8") }}</div>
+    <div id="b8" (click)="onFieldSelected('b8')" [ngClass]="{'field-selected': isFieldSelected('b8')}" class="field field-dark field-selected" [ngStyle]="{'color': isWhite('b8') ? 'white' : 'black'}" style="top:0px; left:80px;">{{ this.getPieceAt("b8") }}</div>
+    <div id="c8" (click)="onFieldSelected('c8')" [ngClass]="{'field-selected': isFieldSelected('c8')}" class="field field-light" [ngStyle]="{'color': isWhite('c8') ? 'white' : 'black'}" style="top:0px; left:160px;">{{ this.getPieceAt("c8") }}</div>
+    <div id="d8" (click)="onFieldSelected('d8')" [ngClass]="{'field-selected': isFieldSelected('d8')}" class="field field-dark" [ngStyle]="{'color': isWhite('d8') ? 'white' : 'black'}" style="top:0px; left:240px;">{{ this.getPieceAt("d8") }}</div>
+    <div id="e8" (click)="onFieldSelected('e8')" [ngClass]="{'field-selected': isFieldSelected('e8')}" class="field field-light" [ngStyle]="{'color': isWhite('e8') ? 'white' : 'black'}" style="top:0px; left:320px;">{{ this.getPieceAt("e8") }}</div>
+    <div id="f8" (click)="onFieldSelected('f8')" [ngClass]="{'field-selected': isFieldSelected('f8')}" class="field field-dark" [ngStyle]="{'color': isWhite('f8') ? 'white' : 'black'}" style="top:0px; left:400px;">{{ this.getPieceAt("f8") }}</div>
+    <div id="g8" (click)="onFieldSelected('h8')" [ngClass]="{'field-selected': isFieldSelected('g8')}" class="field field-light" [ngStyle]="{'color': isWhite('g8') ? 'white' : 'black'}" style="top:0px; left:480px;">{{ this.getPieceAt("g8") }}</div>
+    <div id="h8" (click)="onFieldSelected('h8')" [ngClass]="{'field-selected': isFieldSelected('h8')}" class="field field-dark" [ngStyle]="{'color': isWhite('h8') ? 'white' : 'black'}" style="top:0px; left:560px;">{{ this.getPieceAt("h8") }}</div>
 
-    <div id="a7" class="field field-dark" [ngStyle]="{'color': isWhite('a7') ? 'white' : 'black'}" style="top:80px; left:0px;">{{ this.getPieceAt("a7") }}</div>
-    <div id="b7" class="field field-light" [ngStyle]="{'color': isWhite('b7') ? 'white' : 'black'}" style="top:80px; left:80px;">{{ this.getPieceAt("b7") }}</div>
-    <div id="c7" class="field field-dark" [ngStyle]="{'color': isWhite('c7') ? 'white' : 'black'}" style="top:80px; left:160px;">{{ this.getPieceAt("c7") }}</div>
-    <div id="d7" class="field field-light" [ngStyle]="{'color': isWhite('d7') ? 'white' : 'black'}" style="top:80px; left:240px;">{{ this.getPieceAt("d7") }}</div>
-    <div id="e7" class="field field-dark" [ngStyle]="{'color': isWhite('e7') ? 'white' : 'black'}" style="top:80px; left:320px;">{{ this.getPieceAt("e7") }}</div>
-    <div id="f7" class="field field-light" [ngStyle]="{'color': isWhite('f7') ? 'white' : 'black'}" style="top:80px; left:400px;">{{ this.getPieceAt("f7") }}</div>
-    <div id="g7" class="field field-dark" [ngStyle]="{'color': isWhite('g7') ? 'white' : 'black'}" style="top:80px; left:480px;">{{ this.getPieceAt("g7") }}</div>
-    <div id="h7" class="field field-light" [ngStyle]="{'color': isWhite('h7') ? 'white' : 'black'}" style="top:80px; left:560px;">{{ this.getPieceAt("h7") }}</div>
+    <div id="a7" (click)="onFieldSelected('a7')" [ngClass]="{'field-selected': isFieldSelected('a7')}" class="field field-dark" [ngStyle]="{'color': isWhite('a7') ? 'white' : 'black'}" style="top:80px; left:0px;">{{ this.getPieceAt("a7") }}</div>
+    <div id="b7" (click)="onFieldSelected('b7')" [ngClass]="{'field-selected': isFieldSelected('b7')}" class="field field-light" [ngStyle]="{'color': isWhite('b7') ? 'white' : 'black'}" style="top:80px; left:80px;">{{ this.getPieceAt("b7") }}</div>
+    <div id="c7" (click)="onFieldSelected('c7')" [ngClass]="{'field-selected': isFieldSelected('c7')}" class="field field-dark" [ngStyle]="{'color': isWhite('c7') ? 'white' : 'black'}" style="top:80px; left:160px;">{{ this.getPieceAt("c7") }}</div>
+    <div id="d7" (click)="onFieldSelected('d7')" [ngClass]="{'field-selected': isFieldSelected('d7')}" class="field field-light" [ngStyle]="{'color': isWhite('d7') ? 'white' : 'black'}" style="top:80px; left:240px;">{{ this.getPieceAt("d7") }}</div>
+    <div id="e7" (click)="onFieldSelected('e7')" [ngClass]="{'field-selected': isFieldSelected('e7')}" class="field field-dark" [ngStyle]="{'color': isWhite('e7') ? 'white' : 'black'}" style="top:80px; left:320px;">{{ this.getPieceAt("e7") }}</div>
+    <div id="f7" (click)="onFieldSelected('f7')" [ngClass]="{'field-selected': isFieldSelected('f7')}" class="field field-light" [ngStyle]="{'color': isWhite('f7') ? 'white' : 'black'}" style="top:80px; left:400px;">{{ this.getPieceAt("f7") }}</div>
+    <div id="g7" (click)="onFieldSelected('g7')" [ngClass]="{'field-selected': isFieldSelected('g7')}" class="field field-dark" [ngStyle]="{'color': isWhite('g7') ? 'white' : 'black'}" style="top:80px; left:480px;">{{ this.getPieceAt("g7") }}</div>
+    <div id="h7" (click)="onFieldSelected('h7')" [ngClass]="{'field-selected': isFieldSelected('h7')}" class="field field-light" [ngStyle]="{'color': isWhite('h7') ? 'white' : 'black'}" style="top:80px; left:560px;">{{ this.getPieceAt("h7") }}</div>
 
-    <div id="a6" class="field field-light" [ngStyle]="{'color': isWhite('a6') ? 'white' : 'black'}" style="top:160px; left:0px;">{{ this.getPieceAt("a6") }}</div>
-    <div id="b6" class="field field-dark" [ngStyle]="{'color': isWhite('b6') ? 'white' : 'black'}" style="top:160px; left:80px;">{{ this.getPieceAt("b6") }}</div>
-    <div id="c6" class="field field-light" [ngStyle]="{'color': isWhite('c6') ? 'white' : 'black'}" style="top:160px; left:160px;">{{ this.getPieceAt("c6") }}</div>
-    <div id="d6" class="field field-dark" [ngStyle]="{'color': isWhite('d6') ? 'white' : 'black'}" style="top:160px; left:240px;">{{ this.getPieceAt("d6") }}</div>
-    <div id="e6" class="field field-light" [ngStyle]="{'color': isWhite('e6') ? 'white' : 'black'}" style="top:160px; left:320px;">{{ this.getPieceAt("e6") }}</div>
-    <div id="f6" class="field field-dark" [ngStyle]="{'color': isWhite('f6') ? 'white' : 'black'}" style="top:160px; left:400px;">{{ this.getPieceAt("f6") }}</div>
-    <div id="g6" class="field field-light" [ngStyle]="{'color': isWhite('g6') ? 'white' : 'black'}" style="top:160px; left:480px;">{{ this.getPieceAt("g6") }}</div>
-    <div id="h6" class="field field-dark" [ngStyle]="{'color': isWhite('h6') ? 'white' : 'black'}" style="top:160px; left:560px;">{{ this.getPieceAt("h6") }}</div>
+    <div id="a6" (click)="onFieldSelected('a6')" [ngClass]="{'field-selected': isFieldSelected('a6')}" class="field field-light" [ngStyle]="{'color': isWhite('a6') ? 'white' : 'black'}" style="top:160px; left:0px;">{{ this.getPieceAt("a6") }}</div>
+    <div id="b6" (click)="onFieldSelected('b6')" [ngClass]="{'field-selected': isFieldSelected('b6')}" class="field field-dark" [ngStyle]="{'color': isWhite('b6') ? 'white' : 'black'}" style="top:160px; left:80px;">{{ this.getPieceAt("b6") }}</div>
+    <div id="c6" (click)="onFieldSelected('c6')" [ngClass]="{'field-selected': isFieldSelected('c6')}" class="field field-light" [ngStyle]="{'color': isWhite('c6') ? 'white' : 'black'}" style="top:160px; left:160px;">{{ this.getPieceAt("c6") }}</div>
+    <div id="d6" (click)="onFieldSelected('d6')" [ngClass]="{'field-selected': isFieldSelected('d6')}" class="field field-dark" [ngStyle]="{'color': isWhite('d6') ? 'white' : 'black'}" style="top:160px; left:240px;">{{ this.getPieceAt("d6") }}</div>
+    <div id="e6" (click)="onFieldSelected('e6')" [ngClass]="{'field-selected': isFieldSelected('e6')}" class="field field-light" [ngStyle]="{'color': isWhite('e6') ? 'white' : 'black'}" style="top:160px; left:320px;">{{ this.getPieceAt("e6") }}</div>
+    <div id="f6" (click)="onFieldSelected('f6')" [ngClass]="{'field-selected': isFieldSelected('f6')}" class="field field-dark" [ngStyle]="{'color': isWhite('f6') ? 'white' : 'black'}" style="top:160px; left:400px;">{{ this.getPieceAt("f6") }}</div>
+    <div id="g6" (click)="onFieldSelected('g6')" [ngClass]="{'field-selected': isFieldSelected('g6')}" class="field field-light" [ngStyle]="{'color': isWhite('g6') ? 'white' : 'black'}" style="top:160px; left:480px;">{{ this.getPieceAt("g6") }}</div>
+    <div id="h6" (click)="onFieldSelected('h6')" [ngClass]="{'field-selected': isFieldSelected('h6')}" class="field field-dark" [ngStyle]="{'color': isWhite('h6') ? 'white' : 'black'}" style="top:160px; left:560px;">{{ this.getPieceAt("h6") }}</div>
 
-    <div id="a5" class="field field-dark" [ngStyle]="{'color': isWhite('a5') ? 'white' : 'black'}" style="top:240px; left:0px;">{{ this.getPieceAt("a5") }}</div>
-    <div id="b5" class="field field-light" [ngStyle]="{'color': isWhite('b5') ? 'white' : 'black'}" style="top:240px; left:80px;">{{ this.getPieceAt("b5") }}</div>
-    <div id="c5" class="field field-dark" [ngStyle]="{'color': isWhite('c5') ? 'white' : 'black'}" style="top:240px; left:160px;">{{ this.getPieceAt("c5") }}</div>
-    <div id="d5" class="field field-light" [ngStyle]="{'color': isWhite('d5') ? 'white' : 'black'}" style="top:240px; left:240px;">{{ this.getPieceAt("d5") }}</div>
-    <div id="e5" class="field field-dark" [ngStyle]="{'color': isWhite('e5') ? 'white' : 'black'}" style="top:240px; left:320px;">{{ this.getPieceAt("e5") }}</div>
-    <div id="f5" class="field field-light" [ngStyle]="{'color': isWhite('f5') ? 'white' : 'black'}" style="top:240px; left:400px;">{{ this.getPieceAt("f5") }}</div>
-    <div id="g5" class="field field-dark" [ngStyle]="{'color': isWhite('g5') ? 'white' : 'black'}" style="top:240px; left:480px;">{{ this.getPieceAt("g5") }}</div>
-    <div id="h5" class="field field-light" [ngStyle]="{'color': isWhite('h5') ? 'white' : 'black'}" style="top:240px; left:560px;">{{ this.getPieceAt("h5") }}</div>
+    <div id="a5" (click)="onFieldSelected('a5')" [ngClass]="{'field-selected': isFieldSelected('a5')}" class="field field-dark" [ngStyle]="{'color': isWhite('a5') ? 'white' : 'black'}" style="top:240px; left:0px;">{{ this.getPieceAt("a5") }}</div>
+    <div id="b5" (click)="onFieldSelected('b5')" [ngClass]="{'field-selected': isFieldSelected('b5')}" class="field field-light" [ngStyle]="{'color': isWhite('b5') ? 'white' : 'black'}" style="top:240px; left:80px;">{{ this.getPieceAt("b5") }}</div>
+    <div id="c5" (click)="onFieldSelected('c5')" [ngClass]="{'field-selected': isFieldSelected('c5')}" class="field field-dark" [ngStyle]="{'color': isWhite('c5') ? 'white' : 'black'}" style="top:240px; left:160px;">{{ this.getPieceAt("c5") }}</div>
+    <div id="d5" (click)="onFieldSelected('d5')" [ngClass]="{'field-selected': isFieldSelected('d5')}" class="field field-light" [ngStyle]="{'color': isWhite('d5') ? 'white' : 'black'}" style="top:240px; left:240px;">{{ this.getPieceAt("d5") }}</div>
+    <div id="e5" (click)="onFieldSelected('e5')" [ngClass]="{'field-selected': isFieldSelected('e5')}" class="field field-dark" [ngStyle]="{'color': isWhite('e5') ? 'white' : 'black'}" style="top:240px; left:320px;">{{ this.getPieceAt("e5") }}</div>
+    <div id="f5" (click)="onFieldSelected('f5')" [ngClass]="{'field-selected': isFieldSelected('f5')}" class="field field-light" [ngStyle]="{'color': isWhite('f5') ? 'white' : 'black'}" style="top:240px; left:400px;">{{ this.getPieceAt("f5") }}</div>
+    <div id="g5" (click)="onFieldSelected('g5')" [ngClass]="{'field-selected': isFieldSelected('g5')}" class="field field-dark" [ngStyle]="{'color': isWhite('g5') ? 'white' : 'black'}" style="top:240px; left:480px;">{{ this.getPieceAt("g5") }}</div>
+    <div id="h5" (click)="onFieldSelected('h5')" [ngClass]="{'field-selected': isFieldSelected('h5')}" class="field field-light" [ngStyle]="{'color': isWhite('h5') ? 'white' : 'black'}" style="top:240px; left:560px;">{{ this.getPieceAt("h5") }}</div>
 
-    <div id="a4" class="field field-light" [ngStyle]="{'color': isWhite('a4') ? 'white' : 'black'}" style="top:320px; left:0px;">{{ this.getPieceAt("a4") }}</div>
-    <div id="b4" class="field field-dark" [ngStyle]="{'color': isWhite('b4') ? 'white' : 'black'}" style="top:320px; left:80px;">{{ this.getPieceAt("b4") }}</div>
-    <div id="c4" class="field field-light" [ngStyle]="{'color': isWhite('c4') ? 'white' : 'black'}" style="top:320px; left:160px;">{{ this.getPieceAt("c4") }}</div>
-    <div id="d4" class="field field-dark" [ngStyle]="{'color': isWhite('d4') ? 'white' : 'black'}" style="top:320px; left:240px;">{{ this.getPieceAt("d4") }}</div>
-    <div id="e4" class="field field-light" [ngStyle]="{'color': isWhite('e4') ? 'white' : 'black'}" style="top:320px; left:320px;">{{ this.getPieceAt("e4") }}</div>
-    <div id="f4" class="field field-dark" [ngStyle]="{'color': isWhite('f4') ? 'white' : 'black'}" style="top:320px; left:400px;">{{ this.getPieceAt("f4") }}</div>
-    <div id="g4" class="field field-light" [ngStyle]="{'color': isWhite('g4') ? 'white' : 'black'}" style="top:320px; left:480px;">{{ this.getPieceAt("g4") }}</div>
-    <div id="h4" class="field field-dark" [ngStyle]="{'color': isWhite('h4') ? 'white' : 'black'}" style="top:320px; left:560px;">{{ this.getPieceAt("h4") }}</div>
+    <div id="a4" (click)="onFieldSelected('a4')" [ngClass]="{'field-selected': isFieldSelected('a4')}" class="field field-light" [ngStyle]="{'color': isWhite('a4') ? 'white' : 'black'}" style="top:320px; left:0px;">{{ this.getPieceAt("a4") }}</div>
+    <div id="b4" (click)="onFieldSelected('b4')" [ngClass]="{'field-selected': isFieldSelected('b4')}" class="field field-dark" [ngStyle]="{'color': isWhite('b4') ? 'white' : 'black'}" style="top:320px; left:80px;">{{ this.getPieceAt("b4") }}</div>
+    <div id="c4" (click)="onFieldSelected('c4')" [ngClass]="{'field-selected': isFieldSelected('c4')}" class="field field-light" [ngStyle]="{'color': isWhite('c4') ? 'white' : 'black'}" style="top:320px; left:160px;">{{ this.getPieceAt("c4") }}</div>
+    <div id="d4" (click)="onFieldSelected('d4')" [ngClass]="{'field-selected': isFieldSelected('d4')}" class="field field-dark" [ngStyle]="{'color': isWhite('d4') ? 'white' : 'black'}" style="top:320px; left:240px;">{{ this.getPieceAt("d4") }}</div>
+    <div id="e4" (click)="onFieldSelected('e4')" [ngClass]="{'field-selected': isFieldSelected('e4')}" class="field field-light" [ngStyle]="{'color': isWhite('e4') ? 'white' : 'black'}" style="top:320px; left:320px;">{{ this.getPieceAt("e4") }}</div>
+    <div id="f4" (click)="onFieldSelected('f4')" [ngClass]="{'field-selected': isFieldSelected('f4')}" class="field field-dark" [ngStyle]="{'color': isWhite('f4') ? 'white' : 'black'}" style="top:320px; left:400px;">{{ this.getPieceAt("f4") }}</div>
+    <div id="g4" (click)="onFieldSelected('g4')" [ngClass]="{'field-selected': isFieldSelected('g4')}" class="field field-light" [ngStyle]="{'color': isWhite('g4') ? 'white' : 'black'}" style="top:320px; left:480px;">{{ this.getPieceAt("g4") }}</div>
+    <div id="h4" (click)="onFieldSelected('h4')" [ngClass]="{'field-selected': isFieldSelected('h4')}" class="field field-dark" [ngStyle]="{'color': isWhite('h4') ? 'white' : 'black'}" style="top:320px; left:560px;">{{ this.getPieceAt("h4") }}</div>
 
-    <div id="a2" class="field field-dark" [ngStyle]="{'color': isWhite('a3') ? 'white' : 'black'}" style="top:400px; left:0px;">{{ this.getPieceAt("a3") }}</div>
-    <div id="b3" class="field field-light" [ngStyle]="{'color': isWhite('b3') ? 'white' : 'black'}" style="top:400px; left:80px;">{{ this.getPieceAt("b3") }}</div>
-    <div id="c3" class="field field-dark" [ngStyle]="{'color': isWhite('c3') ? 'white' : 'black'}" style="top:400px; left:160px;">{{ this.getPieceAt("c3") }}</div>
-    <div id="d3" class="field field-light" [ngStyle]="{'color': isWhite('d3') ? 'white' : 'black'}" style="top:400px; left:240px;">{{ this.getPieceAt("d3") }}</div>
-    <div id="e3" class="field field-dark" [ngStyle]="{'color': isWhite('e3') ? 'white' : 'black'}" style="top:400px; left:320px;">{{ this.getPieceAt("e3") }}</div>
-    <div id="f3" class="field field-light" [ngStyle]="{'color': isWhite('f3') ? 'white' : 'black'}" style="top:400px; left:400px;">{{ this.getPieceAt("f3") }}</div>
-    <div id="g3" class="field field-dark" [ngStyle]="{'color': isWhite('g3') ? 'white' : 'black'}" style="top:400px; left:480px;">{{ this.getPieceAt("g3") }}</div>
-    <div id="h3" class="field field-light" [ngStyle]="{'color': isWhite('h3') ? 'white' : 'black'}" style="top:400px; left:560px;">{{ this.getPieceAt("h3") }}</div>
+    <div id="a3" (click)="onFieldSelected('a3')" [ngClass]="{'field-selected': isFieldSelected('a3')}" class="field field-dark" [ngStyle]="{'color': isWhite('a3') ? 'white' : 'black'}" style="top:400px; left:0px;">{{ this.getPieceAt("a3") }}</div>
+    <div id="b3" (click)="onFieldSelected('b3')" [ngClass]="{'field-selected': isFieldSelected('b3')}" class="field field-light" [ngStyle]="{'color': isWhite('b3') ? 'white' : 'black'}" style="top:400px; left:80px;">{{ this.getPieceAt("b3") }}</div>
+    <div id="c3" (click)="onFieldSelected('c3')" [ngClass]="{'field-selected': isFieldSelected('c3')}" class="field field-dark" [ngStyle]="{'color': isWhite('c3') ? 'white' : 'black'}" style="top:400px; left:160px;">{{ this.getPieceAt("c3") }}</div>
+    <div id="d3" (click)="onFieldSelected('d3')" [ngClass]="{'field-selected': isFieldSelected('d3')}" class="field field-light" [ngStyle]="{'color': isWhite('d3') ? 'white' : 'black'}" style="top:400px; left:240px;">{{ this.getPieceAt("d3") }}</div>
+    <div id="e3" (click)="onFieldSelected('e3')" [ngClass]="{'field-selected': isFieldSelected('e3')}" class="field field-dark" [ngStyle]="{'color': isWhite('e3') ? 'white' : 'black'}" style="top:400px; left:320px;">{{ this.getPieceAt("e3") }}</div>
+    <div id="f3" (click)="onFieldSelected('f3')" [ngClass]="{'field-selected': isFieldSelected('f3')}" class="field field-light" [ngStyle]="{'color': isWhite('f3') ? 'white' : 'black'}" style="top:400px; left:400px;">{{ this.getPieceAt("f3") }}</div>
+    <div id="g3" (click)="onFieldSelected('g3')" [ngClass]="{'field-selected': isFieldSelected('g3')}" class="field field-dark" [ngStyle]="{'color': isWhite('g3') ? 'white' : 'black'}" style="top:400px; left:480px;">{{ this.getPieceAt("g3") }}</div>
+    <div id="h3" (click)="onFieldSelected('h3')" [ngClass]="{'field-selected': isFieldSelected('h3')}" class="field field-light" [ngStyle]="{'color': isWhite('h3') ? 'white' : 'black'}" style="top:400px; left:560px;">{{ this.getPieceAt("h3") }}</div>
 
-    <div id="a2" class="field field-light" [ngStyle]="{'color': isWhite('a2') ? 'white' : 'black'}" style="top:480px; left:0px;">{{ this.getPieceAt("a2") }}</div>
-    <div id="b2" class="field field-dark" [ngStyle]="{'color': isWhite('b2') ? 'white' : 'black'}" style="top:480px; left:80px;">{{ this.getPieceAt("b2") }}</div>
-    <div id="c2" class="field field-light" [ngStyle]="{'color': isWhite('c2') ? 'white' : 'black'}" style="top:480px; left:160px;">{{ this.getPieceAt("c2") }}</div>
-    <div id="d2" class="field field-dark" [ngStyle]="{'color': isWhite('d2') ? 'white' : 'black'}" style="top:480px; left:240px;">{{ this.getPieceAt("d2") }}</div>
-    <div id="e2" class="field field-light" [ngStyle]="{'color': isWhite('e2') ? 'white' : 'black'}" style="top:480px; left:320px;">{{ this.getPieceAt("e2") }}</div>
-    <div id="f2" class="field field-dark" [ngStyle]="{'color': isWhite('f2') ? 'white' : 'black'}" style="top:480px; left:400px;">{{ this.getPieceAt("f2") }}</div>
-    <div id="g2" class="field field-light" [ngStyle]="{'color': isWhite('g2') ? 'white' : 'black'}" style="top:480px; left:480px;">{{ this.getPieceAt("g2") }}</div>
-    <div id="h2" class="field field-dark" [ngStyle]="{'color': isWhite('h2') ? 'white' : 'black'}" style="top:480px; left:560px;">{{ this.getPieceAt("h2") }}</div>
+    <div id="a2" (click)="onFieldSelected('a2')" [ngClass]="{'field-selected': isFieldSelected('a2')}" class="field field-light" [ngStyle]="{'color': isWhite('a2') ? 'white' : 'black'}" style="top:480px; left:0px;">{{ this.getPieceAt("a2") }}</div>
+    <div id="b2" (click)="onFieldSelected('b2')" [ngClass]="{'field-selected': isFieldSelected('b2')}" class="field field-dark" [ngStyle]="{'color': isWhite('b2') ? 'white' : 'black'}" style="top:480px; left:80px;">{{ this.getPieceAt("b2") }}</div>
+    <div id="c2" (click)="onFieldSelected('c2')" [ngClass]="{'field-selected': isFieldSelected('c2')}" class="field field-light" [ngStyle]="{'color': isWhite('c2') ? 'white' : 'black'}" style="top:480px; left:160px;">{{ this.getPieceAt("c2") }}</div>
+    <div id="d2" (click)="onFieldSelected('d2')" [ngClass]="{'field-selected': isFieldSelected('d2')}" class="field field-dark" [ngStyle]="{'color': isWhite('d2') ? 'white' : 'black'}" style="top:480px; left:240px;">{{ this.getPieceAt("d2") }}</div>
+    <div id="e2" (click)="onFieldSelected('e2')" [ngClass]="{'field-selected': isFieldSelected('e2')}" class="field field-light" [ngStyle]="{'color': isWhite('e2') ? 'white' : 'black'}" style="top:480px; left:320px;">{{ this.getPieceAt("e2") }}</div>
+    <div id="f2" (click)="onFieldSelected('f2')" [ngClass]="{'field-selected': isFieldSelected('f2')}" class="field field-dark" [ngStyle]="{'color': isWhite('f2') ? 'white' : 'black'}" style="top:480px; left:400px;">{{ this.getPieceAt("f2") }}</div>
+    <div id="g2" (click)="onFieldSelected('g2')" [ngClass]="{'field-selected': isFieldSelected('g2')}" class="field field-light" [ngStyle]="{'color': isWhite('g2') ? 'white' : 'black'}" style="top:480px; left:480px;">{{ this.getPieceAt("g2") }}</div>
+    <div id="h2" (click)="onFieldSelected('h2')" [ngClass]="{'field-selected': isFieldSelected('h2')}" class="field field-dark" [ngStyle]="{'color': isWhite('h2') ? 'white' : 'black'}" style="top:480px; left:560px;">{{ this.getPieceAt("h2") }}</div>
 
-    <div id="a1" class="field field-dark" [ngStyle]="{'color': isWhite('a1') ? 'white' : 'black'}" style="top:560px; left:0px;">{{ this.getPieceAt("a1") }}</div>
-    <div id="b1" class="field field-light" [ngStyle]="{'color': isWhite('b1') ? 'white' : 'black'}" style="top:560px; left:80px;">{{ this.getPieceAt("b1") }}</div>
-    <div id="c1" class="field field-dark" [ngStyle]="{'color': isWhite('c1') ? 'white' : 'black'}" style="top:560px; left:160px;">{{ this.getPieceAt("c1") }}</div>
-    <div id="d1" class="field field-light" [ngStyle]="{'color': isWhite('d1') ? 'white' : 'black'}" style="top:560px; left:240px;">{{ this.getPieceAt("d1") }}</div>
-    <div id="f1" class="field field-dark" [ngStyle]="{'color': isWhite('e1') ? 'white' : 'black'}" style="top:560px; left:320px;">{{ this.getPieceAt("e1") }}</div>
-    <div id="e1" class="field field-light" [ngStyle]="{'color': isWhite('f1') ? 'white' : 'black'}" style="top:560px; left:400px;">{{ this.getPieceAt("f1") }}</div>
-    <div id="f1" class="field field-dark" [ngStyle]="{'color': isWhite('g1') ? 'white' : 'black'}" style="top:560px; left:480px;">{{ this.getPieceAt("g1") }}</div>
-    <div id="g1" class="field field-light" [ngStyle]="{'color': isWhite('h1') ? 'white' : 'black'}" style="top:560px; left:560px;">{{ this.getPieceAt("h1") }}</div>
+    <div id="a1" (click)="onFieldSelected('a1')" [ngClass]="{'field-selected': isFieldSelected('a1')}" class="field field-dark" [ngStyle]="{'color': isWhite('a1') ? 'white' : 'black'}" style="top:560px; left:0px;">{{ this.getPieceAt("a1") }}</div>
+    <div id="b1" (click)="onFieldSelected('b1')" [ngClass]="{'field-selected': isFieldSelected('b1')}" class="field field-light" [ngStyle]="{'color': isWhite('b1') ? 'white' : 'black'}" style="top:560px; left:80px;">{{ this.getPieceAt("b1") }}</div>
+    <div id="c1" (click)="onFieldSelected('c1')" [ngClass]="{'field-selected': isFieldSelected('c1')}" class="field field-dark" [ngStyle]="{'color': isWhite('c1') ? 'white' : 'black'}" style="top:560px; left:160px;">{{ this.getPieceAt("c1") }}</div>
+    <div id="d1" (click)="onFieldSelected('d1')" [ngClass]="{'field-selected': isFieldSelected('d1')}" class="field field-light" [ngStyle]="{'color': isWhite('d1') ? 'white' : 'black'}" style="top:560px; left:240px;">{{ this.getPieceAt("d1") }}</div>
+    <div id="f1" (click)="onFieldSelected('e1')" [ngClass]="{'field-selected': isFieldSelected('e1')}" class="field field-dark" [ngStyle]="{'color': isWhite('e1') ? 'white' : 'black'}" style="top:560px; left:320px;">{{ this.getPieceAt("e1") }}</div>
+    <div id="e1" (click)="onFieldSelected('f1')" [ngClass]="{'field-selected': isFieldSelected('f1')}" class="field field-light" [ngStyle]="{'color': isWhite('f1') ? 'white' : 'black'}" style="top:560px; left:400px;">{{ this.getPieceAt("f1") }}</div>
+    <div id="f1" (click)="onFieldSelected('g1')" [ngClass]="{'field-selected': isFieldSelected('g1')}" class="field field-dark" [ngStyle]="{'color': isWhite('g1') ? 'white' : 'black'}" style="top:560px; left:480px;">{{ this.getPieceAt("g1") }}</div>
+    <div id="g1" (click)="onFieldSelected('h1')" [ngClass]="{'field-selected': isFieldSelected('h1')}" class="field field-light" [ngStyle]="{'color': isWhite('h1') ? 'white' : 'black'}" style="top:560px; left:560px;">{{ this.getPieceAt("h1") }}</div>
 </div>

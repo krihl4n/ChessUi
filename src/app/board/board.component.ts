@@ -15,6 +15,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   positions = new Map<String, String>()
   private positionUpdates: Subject<FieldOccupation[]> | undefined
+  private selectedField: String | null = null
 
   ngOnInit(): void {
     this.positionUpdates = this.gameControlService.getPiecePositionUpdateSubscription()
@@ -37,6 +38,22 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   isWhite(field: String) {
     return this.getPieceAt(field).startsWith('W')
+  }
+
+  onFieldSelected(field: String) {
+    console.log(field)
+    if(this.selectedField == field) {
+      this.selectedField == null
+    } else if (this.selectedField == null) {
+      this.selectedField = field
+    } else {
+      this.gameControlService.movePiece1(this.selectedField, field)
+      this.selectedField = null
+    }
+  }
+
+  isFieldSelected(field: String) {
+    return field === this.selectedField
   }
 
   private getTokenFor(piece: Piece): String {

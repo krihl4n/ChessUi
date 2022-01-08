@@ -26,6 +26,10 @@ export class GameControlService {
     this.webSocketApiService.sendMoveMsg({"from": fields[0], "to":fields[1]});
   }
 
+  movePiece1(from: String, to: String) {
+    this.webSocketApiService.sendMoveMsg({"from": from, "to": to})
+  }
+
   startGame() {
     this.webSocketApiService.sendGameControlsMsg("start_game")
     this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
