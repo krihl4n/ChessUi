@@ -40,9 +40,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   onFieldSelected(field: String) {
-    console.log(field)
     if(this.selectedField == field) {
-      this.selectedField == null
+      this.selectedField = null
     } else if (this.selectedField == null) {
       this.selectedField = field
     } else {
