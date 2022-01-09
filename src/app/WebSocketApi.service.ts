@@ -17,7 +17,7 @@ export class WebSocketAPIService {
     topicGameControls: string = "/topic/gameControls";
     topicPiecePositions: string = "/topic/fieldsOccupation";
     stompClient: any;
-
+    stompClient1: any;
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
     movePerformedSubject: Subject<MoveResponse> = new Subject()
 
@@ -41,7 +41,29 @@ export class WebSocketAPIService {
             });
             //_this.stompClient.reconnect_delay = 2000;
         }, this.errorCallBack);
+
+
+        // tmp, needs cleanup
+        let socket1 = new SockJS('http://localhost:8080/secured/room'); 
+        this.stompClient1 = Stomp.over(socket1);
+        this.stompClient1.connect({}, (frame: any) => {
+
+         var url = _this.stompClient1.ws._transport.url;
+         url = url.replace(
+           "ws://localhost:8080/secured/room/",  "");
+         url = url.replace("/websocket", "");
+         url = url.replace(/^[0-9]+\//, "");
+         console.log("Your current session is: " + url);
+
+            _this.stompClient.subscribe('/secured/user/queue/specific-user'  + '-user' + url, function (sdkEvent: any) {
+                console.log("user " + url + " received a message")
+            });
+            //_this.stompClient.reconnect_delay = 2000;
+        }, this.errorCallBack);
+
     };
+
+// "ws://localhost:8080/secured/room/645/3xv2euby/websocket"
 
     disconnect() {
         if (this.stompClient !== null) {
@@ -59,7 +81,8 @@ export class WebSocketAPIService {
     }
 
     sendMoveMsg(message: MoveRequest) {
-        this.stompClient.send("/chessApp/move", {}, JSON.stringify(message));
+      //  this.stompClient.send("/chessApp/move", {}, JSON.stringify(message));
+       this.stompClient1.send("/chessApp/secured/chat", {}, "aaa")
     }
 
     sendGameControlsMsg(message: String) {
