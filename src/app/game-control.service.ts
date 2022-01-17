@@ -26,13 +26,13 @@ export class GameControlService {
   startGame() {
     this.webSocketApiService.sendGameControlsMsg("start_game")
     this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
-
-    this.webSocketApiService.movePerformedSubject.subscribe((move: MoveResponse) => { // todo check how to handle subscriptions in the course project
-      this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
-    })
   }
 
   getPiecePositionUpdateSubscription(): Subject<FieldOccupation[]> {
     return this.webSocketApiService.piecePositionsReceivedSubject
+  }
+
+  getMovePerformedSubscription(): Subject<MoveResponse> {
+    return this.webSocketApiService.movePerformedSubject
   }
 }
