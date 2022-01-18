@@ -35,10 +35,10 @@ export class WebSocketAPIService {
             _this.stompClient.subscribe("/user/queue/moves" + '-user' + url, function (sdkEvent: any) {
                 _this.onMoveReceived(sdkEvent);
             });
-            _this.stompClient.subscribe('/user/queue/gameControls' + '-user' + url, function (sdkEvent: any) {
-                _this.onMessageReceivedDifferentTopic(sdkEvent);
+            _this.stompClient.subscribe('/user/queue/game-controls' + '-user' + url, function (sdkEvent: any) {
+                _this.gameControlsMsgReceived(sdkEvent);
             });
-            _this.stompClient.subscribe('/user/queue/fieldsOccupation' + '-user' + url, function (sdkEvent: any) {
+            _this.stompClient.subscribe('/user/queue/fields-occupation' + '-user' + url, function (sdkEvent: any) {
                 _this.onPiecePositionsReceived(sdkEvent);
             });
             //_this.stompClient.reconnect_delay = 2000;
@@ -62,15 +62,15 @@ export class WebSocketAPIService {
     }
 
     sendMoveMsg(message: MoveRequest) {
-       this.stompClient.send("/chessApp/move", {}, JSON.stringify(message));
+       this.stompClient.send("/chess-app/move", {}, JSON.stringify(message));
     }
 
     sendGameControlsMsg(message: String) {
-        this.stompClient.send("/chessApp/gameControls", {}, JSON.stringify(message));
+        this.stompClient.send("/chess-app/game-controls", {}, JSON.stringify(message));
     }
 
     sendRequestPiecePositionsMsg(message: String) {
-        this.stompClient.send("/chessApp/fieldsOccupation", {}, JSON.stringify(message));
+        this.stompClient.send("/chess-app/fields-occupation", {}, JSON.stringify(message));
     }
 
     onMoveReceived(message: Stomp.Frame) {
@@ -79,7 +79,7 @@ export class WebSocketAPIService {
         this.movePerformedSubject.next(value)
     }
 
-    onMessageReceivedDifferentTopic(message: any) {
+    gameControlsMsgReceived(message: any) {
         console.log("DifferentTopic Message Recieved from Server :: " + message);
     }
 
