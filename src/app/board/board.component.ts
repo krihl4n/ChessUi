@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GameControlService } from '../game-control.service';
 import { FieldOccupation, Piece } from '../FieldOccupation';
-import { MoveResponse } from '../MoveResponse';
+import { PiecePositionUpdate } from '../PiecePositionUpdate';
 
 @Component({
   selector: 'app-board',
@@ -14,29 +14,35 @@ export class BoardComponent implements OnInit, OnDestroy {
   constructor(private gameControlService: GameControlService) { }
 
   positions = new Map<String, String>() // todo move this to a service
-  private positionUpdates: Subject<FieldOccupation[]> | undefined
-  private moveUpdates: Subject<MoveResponse> | undefined
+  private positionsUpdates: Subject<FieldOccupation[]> | undefined
+  private piecePositionUpdates: Subject<PiecePositionUpdate> | undefined
 
   private selectedField: String | null = null
 
   ngOnInit(): void {
-    this.positionUpdates = this.gameControlService.getPiecePositionUpdateSubscription()
-    this.positionUpdates.subscribe((piecePositions: FieldOccupation[]) => {
+    this.positionsUpdates = this.gameControlService.getPiecePositionsSubscription()
+    this.positionsUpdates.subscribe((piecePositions: FieldOccupation[]) => {
       for (let i = 0; i < piecePositions.length; i++) {
         this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece))
       }
     })
 
-    this.moveUpdates = this.gameControlService.getMovePerformedSubscription()
-    this.moveUpdates.subscribe((move: MoveResponse) => {
-      var piece = this.positions.get(move.from) || 'ERR' 
-      this.positions.delete(move.from)
-      this.positions.set(move.to, piece)
+    this.piecePositionUpdates = this.gameControlService.getPiecePositionUpdatesSubscription();
+    this.piecePositionUpdates.subscribe((update: PiecePositionUpdate) => {
+      let piece = this.positions.get(update.primaryMove.from)
+      this.positions.delete(update.primaryMove.from)
+      this.positions.set(update.primaryMove.to, piece || "X_X") // todo something better than X_X
+
+      if(update.secondaryMove) {
+        let piece = this.positions.get(update.secondaryMove.from)
+        this.positions.delete(update.secondaryMove.from)
+        this.positions.set(update.secondaryMove.to, piece || "X_X") // todo something better than X_X
+      }
     })
   }
 
   ngOnDestroy(): void {
-    this.positionUpdates?.unsubscribe();
+    this.positionsUpdates?.unsubscribe();
   }
 
   getPieceAt(field: String): String {

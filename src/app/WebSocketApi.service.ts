@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { MoveRequest } from './MoveRequest';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from './FieldOccupation';
-import { MoveResponse } from './MoveResponse';
+import { PiecePositionUpdate } from './PiecePositionUpdate';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -15,7 +15,7 @@ export class WebSocketAPIService {
     webSocketEndPoint: string = 'http://localhost:8080/game';
     stompClient: any;
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
-    movePerformedSubject: Subject<MoveResponse> = new Subject()
+    piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
 
     constructor(){
     }
@@ -32,9 +32,11 @@ export class WebSocketAPIService {
             url = url.replace("/websocket", "");
             url = url.replace(/^[0-9]+\//, "");
             console.log("Your current session is: " + url);
-            _this.stompClient.subscribe("/user/queue/moves" + '-user' + url, function (sdkEvent: any) {
-                _this.onMoveReceived(sdkEvent);
+
+            _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
+                _this.onPiecePositionUpdate(sdkEvent);
             });
+
             _this.stompClient.subscribe('/user/queue/game-controls' + '-user' + url, function (sdkEvent: any) {
                 _this.gameControlsMsgReceived(sdkEvent);
             });
@@ -73,10 +75,9 @@ export class WebSocketAPIService {
         this.stompClient.send("/chess-app/fields-occupation", {}, JSON.stringify(message));
     }
 
-    onMoveReceived(message: Stomp.Frame) {
-        console.log("Move Message Recieved from Server :: " + message);
+    onPiecePositionUpdate(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
-        this.movePerformedSubject.next(value)
+        this.piecePositionUpdateSubject.next(value)
     }
 
     gameControlsMsgReceived(message: any) {

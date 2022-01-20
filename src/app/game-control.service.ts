@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from './FieldOccupation';
-import { MoveResponse } from './MoveResponse';
+import { PiecePositionUpdate } from './PiecePositionUpdate';
 import { WebSocketAPIService } from './WebSocketApi.service';
 
 @Injectable({
@@ -28,11 +28,11 @@ export class GameControlService {
     this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
   }
 
-  getPiecePositionUpdateSubscription(): Subject<FieldOccupation[]> {
+  getPiecePositionsSubscription(): Subject<FieldOccupation[]> {
     return this.webSocketApiService.piecePositionsReceivedSubject
   }
-
-  getMovePerformedSubscription(): Subject<MoveResponse> {
-    return this.webSocketApiService.movePerformedSubject
+  
+  getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate>{
+    return this.webSocketApiService.piecePositionUpdateSubject
   }
 }
