@@ -28,10 +28,14 @@ export class GameControlService {
     this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
   }
 
+  undoMove() {
+    this.webSocketApiService.sendGameControlsMsg("undo_move")
+  }
+
   getPiecePositionsSubscription(): Subject<FieldOccupation[]> {
     return this.webSocketApiService.piecePositionsReceivedSubject
   }
-  
+
   getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate>{
     return this.webSocketApiService.piecePositionUpdateSubject
   }

@@ -68,7 +68,7 @@ export class WebSocketAPIService {
     }
 
     sendGameControlsMsg(message: String) {
-        this.stompClient.send("/chess-app/game-controls", {}, JSON.stringify(message));
+        this.stompClient.send("/chess-app/game-controls", {}, message);
     }
 
     sendRequestPiecePositionsMsg(message: String) {

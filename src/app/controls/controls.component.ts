@@ -30,4 +30,8 @@ export class ControlsComponent implements OnInit {
   onGameFinish() {
 
   }
+
+  onUndo() {
+    this.gameControlService.undoMove()
+  }
 }
