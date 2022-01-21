@@ -1,9 +1,20 @@
 export interface PiecePositionUpdate {
     primaryMove: Move,
-    secondaryMove: Move | null
+    secondaryMove: Move | null,
+    positionCapture: PieceCapture | null
 }
 
 interface Move {
     from: String,
     to: String
+}
+
+interface Piece {
+    color: String,
+    type: String
+}
+
+interface PieceCapture {
+    field: String,
+    capturedPiece: Piece
 }
