@@ -2,6 +2,7 @@ export interface PiecePositionUpdate {
     primaryMove: Move,
     secondaryMove: Move | null,
     positionCapture: PieceCapture | null
+    reverted: Boolean,
 }
 
 interface Move {

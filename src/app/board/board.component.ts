@@ -29,14 +29,26 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.piecePositionUpdates = this.gameControlService.getPiecePositionUpdatesSubscription();
     this.piecePositionUpdates.subscribe((update: PiecePositionUpdate) => {
-      let piece = this.positions.get(update.primaryMove.from)
-      this.positions.delete(update.primaryMove.from)
-      this.positions.set(update.primaryMove.to, piece || "X_X") // todo something better than X_X
-
-      if(update.secondaryMove) {
-        let piece = this.positions.get(update.secondaryMove.from)
-        this.positions.delete(update.secondaryMove.from)
-        this.positions.set(update.secondaryMove.to, piece || "X_X") // todo something better than X_X
+      if(!update.reverted) {
+        let piece = this.positions.get(update.primaryMove.from)
+        this.positions.delete(update.primaryMove.from)
+        this.positions.set(update.primaryMove.to, piece || "X_X") // todo something better than X_X
+  
+        if(update.secondaryMove) {
+          let piece = this.positions.get(update.secondaryMove.from)
+          this.positions.delete(update.secondaryMove.from)
+          this.positions.set(update.secondaryMove.to, piece || "X_X") // todo something better than X_X
+        }
+      } else {
+        let piece = this.positions.get(update.primaryMove.to)
+        this.positions.delete(update.primaryMove.to)
+        this.positions.set(update.primaryMove.from, piece || "X_X") // todo something better than X_X
+  
+        if(update.secondaryMove) {
+          let piece = this.positions.get(update.secondaryMove.to)
+          this.positions.delete(update.secondaryMove.to)
+          this.positions.set(update.secondaryMove.from, piece || "X_X") // todo something better than X_X
+        }
       }
     })
   }
