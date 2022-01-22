@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { GameControlService } from '../game-control.service';
+import { GameControlService } from '../services/game-control.service';
 
 @Component({
   selector: 'app-controls',

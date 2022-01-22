@@ -1,3 +1,5 @@
+import { Piece } from "./piece.model";
+
 export interface PiecePositionUpdate {
     primaryMove: Move,
     secondaryMove: Move | null,
@@ -8,11 +10,6 @@ export interface PiecePositionUpdate {
 interface Move {
     from: String,
     to: String
-}
-
-interface Piece {
-    color: String,
-    type: String
 }
 
 interface PieceCapture {

@@ -1,10 +1,10 @@
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { Injectable } from '@angular/core';
-import { MoveRequest } from './MoveRequest';
+import { MoveRequest } from '../model/move-request.model';
 import { Subject } from 'rxjs';
-import { FieldOccupation } from './FieldOccupation';
-import { PiecePositionUpdate } from './PiecePositionUpdate';
+import { FieldOccupation } from '../model/field-occupation.model';
+import { PiecePositionUpdate } from '../model/piece-position-update.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 

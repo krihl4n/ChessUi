@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { FieldOccupation } from './FieldOccupation';
-import { PiecePositionUpdate } from './PiecePositionUpdate';
-import { WebSocketAPIService } from './WebSocketApi.service';
+import { FieldOccupation } from '../model/field-occupation.model';
+import { PiecePositionUpdate } from '../model/piece-position-update.model';
+import { WebSocketAPIService } from './web-socket-api.service';
 
 @Injectable({
   providedIn: 'root'

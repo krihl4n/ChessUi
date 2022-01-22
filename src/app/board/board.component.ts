@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { GameControlService } from '../game-control.service';
-import { FieldOccupation, Piece } from '../FieldOccupation';
-import { PiecePositionUpdate } from '../PiecePositionUpdate';
+import { GameControlService } from '../services/game-control.service';
+import { FieldOccupation } from '../model/field-occupation.model';
+import { Piece } from '../model/piece.model';
+import { PiecePositionUpdate } from '../model/piece-position-update.model';
 
 @Component({
   selector: 'app-board',
