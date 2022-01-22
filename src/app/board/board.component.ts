@@ -55,6 +55,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.positionsUpdates?.unsubscribe();
+    this.piecePositionUpdates?.unsubscribe();
   }
 
   getPieceAt(field: String): String {
