@@ -72,6 +72,7 @@ export class GameTrackerService {
 
     if (update.pieceCapture) {
       this.captures.pop()
+      this.positions.set(update.pieceCapture.field, this.getTokenFor(update.pieceCapture.capturedPiece))
     }
   }
 
