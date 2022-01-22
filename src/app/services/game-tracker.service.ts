@@ -44,6 +44,11 @@ export class GameTrackerService {
   }
 
   private handleMove(update: PiecePositionUpdate) {
+    if (update.pieceCapture) {
+      this.positions.delete(update.pieceCapture.field)
+      this.captures.push(this.getTokenFor(update.pieceCapture.capturedPiece))
+    }
+
     let piece = this.positions.get(update.primaryMove.from);
     this.positions.delete(update.primaryMove.from);
     this.positions.set(update.primaryMove.to, piece || this.unknownPiece);
@@ -52,10 +57,6 @@ export class GameTrackerService {
       let piece = this.positions.get(update.secondaryMove.from);
       this.positions.delete(update.secondaryMove.from);
       this.positions.set(update.secondaryMove.to, piece || this.unknownPiece);
-    }
-
-    if (update.pieceCapture) {
-      this.captures.push(this.getTokenFor(update.pieceCapture.capturedPiece))
     }
   }
 
