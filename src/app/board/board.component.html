@@ -17,8 +17,8 @@
     <label style="position: absolute; top:650px; left:540px;">g</label>
     <label style="position: absolute; top:650px; left:620px;">h</label>
 
-    <div id="a8" (click)="onFieldSelected('a8')" [ngClass]="{'field-selected': isFieldSelected('a8')}" class="field field-light" [ngStyle]="{'color': isWhite('a8') ? 'white' : 'black'}" style="top:0px; left:0px;">{{ this.getPieceAt("a8") }}</div>
-    <div id="b8" (click)="onFieldSelected('b8')" [ngClass]="{'field-selected': isFieldSelected('b8')}" class="field field-dark field-selected" [ngStyle]="{'color': isWhite('b8') ? 'white' : 'black'}" style="top:0px; left:80px;">{{ this.getPieceAt("b8") }}</div>
+    <div id="a8" (click)="onFieldSelected('a8')" [ngClass]="{'field-selected': isFieldSelected('a8')}" class="field field-light" [ngStyle]="{'color': isWhite('a8') ? 'white' : 'black'}" style="top:0px; left:0px;">{{ this.getPieceAt("a8") }}</div><div class="field-possible-move" (click)="onFieldSelected('a8')" style="top:0px; left:0px;"></div>
+    <div id="b8" (click)="onFieldSelected('b8')" [ngClass]="{'field-selected': isFieldSelected('b8')}" class="field field-dark" [ngStyle]="{'color': isWhite('b8') ? 'white' : 'black'}" style="top:0px; left:80px;">{{ this.getPieceAt("b8") }}</div><div class="field-possible-move" (click)="onFieldSelected('b8')" style="top:0px; left:80px;"></div>
     <div id="c8" (click)="onFieldSelected('c8')" [ngClass]="{'field-selected': isFieldSelected('c8')}" class="field field-light" [ngStyle]="{'color': isWhite('c8') ? 'white' : 'black'}" style="top:0px; left:160px;">{{ this.getPieceAt("c8") }}</div>
     <div id="d8" (click)="onFieldSelected('d8')" [ngClass]="{'field-selected': isFieldSelected('d8')}" class="field field-dark" [ngStyle]="{'color': isWhite('d8') ? 'white' : 'black'}" style="top:0px; left:240px;">{{ this.getPieceAt("d8") }}</div>
     <div id="e8" (click)="onFieldSelected('e8')" [ngClass]="{'field-selected': isFieldSelected('e8')}" class="field field-light" [ngStyle]="{'color': isWhite('e8') ? 'white' : 'black'}" style="top:0px; left:320px;">{{ this.getPieceAt("e8") }}</div>
