@@ -5,6 +5,7 @@ import { MoveRequest } from '../model/move-request.model';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
+import { PossibleMoves } from '../model/possible-moves.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -16,6 +17,7 @@ export class WebSocketAPIService {
     stompClient: any;
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
     piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
+    possibleMovesSubject: Subject<PossibleMoves> = new Subject()
 
     constructor(){
     }
@@ -43,10 +45,12 @@ export class WebSocketAPIService {
             _this.stompClient.subscribe('/user/queue/fields-occupation' + '-user' + url, function (sdkEvent: any) {
                 _this.onPiecePositionsReceived(sdkEvent);
             });
+            _this.stompClient.subscribe('/user/queue/possible-moves' + '-user' + url, function (sdkEvent: any) {
+                _this.onPossibleMovesReceived(sdkEvent);
+            });
             //_this.stompClient.reconnect_delay = 2000;
         }, this.errorCallBack);
-
-    };
+    }
 
     disconnect() {
         if (this.stompClient !== null) {
@@ -75,6 +79,10 @@ export class WebSocketAPIService {
         this.stompClient.send("/chess-app/fields-occupation", {}, JSON.stringify(message));
     }
 
+    sendRequestPossibleMovesRequest(message: String) {
+        this.stompClient.send("/chess-app/possible-moves", {}, message);
+    }
+
     onPiecePositionUpdate(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.piecePositionUpdateSubject.next(value)
@@ -87,5 +95,10 @@ export class WebSocketAPIService {
     onPiecePositionsReceived(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.piecePositionsReceivedSubject.next(value)
+    }
+
+    onPossibleMovesReceived(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
+        this.possibleMovesSubject.next(value)
     }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { Piece } from '../model/piece.model';
+import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
 
 @Injectable({
@@ -11,8 +12,8 @@ export class GameTrackerService {
 
   private unknownPiece = "X_X"
   captures: String[] = []
-
   positions = new Map<String, String>()
+  private fieldsMarkedForMove: String[]= []
 
   constructor(private gameControlService: GameControlService) {
     this.init()
@@ -22,6 +23,15 @@ export class GameTrackerService {
     // TODO learn about ngrx and observables and subjects and do it better
     this.subscribeToFieldOccupationUpdates();
     this.subscribeToPiecePositionUpdates();
+    this.subscribeToPossibleMovesUpdates();
+  }
+
+  clearFieldsMarkedForMove() {
+    this.fieldsMarkedForMove = []
+  }
+
+  fieldMarkedForMove(field:String) {
+    return this.fieldsMarkedForMove.includes(field)
   }
 
   private subscribeToFieldOccupationUpdates() {
@@ -39,6 +49,13 @@ export class GameTrackerService {
       } else {
         this.handleMoveReverted(update);
       }
+    });
+  }
+
+  private subscribeToPossibleMovesUpdates() {
+    this.gameControlService.getPossibleMovesSubscription().subscribe((moves: PossibleMoves) => {
+      this.fieldsMarkedForMove = []
+      this.fieldsMarkedForMove.push(...moves.to)
     });
   }
 

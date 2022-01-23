@@ -22,10 +22,15 @@ export class BoardComponent {
   }
 
   onFieldSelected(field: String) {
+    this.gameTracker.clearFieldsMarkedForMove()
+
     if(this.selectedField == field) {
       this.selectedField = null
     } else if (this.selectedField == null) {
-      this.selectedField = field  // todo select only if piece is on the field?
+      if(this.gameTracker.positions.get(field)){
+        this.selectedField = field
+        this.gameControlService.requestPossibleMoves(field)
+      }
     } else {
       this.gameControlService.movePiece(this.selectedField, field)
       this.selectedField = null
@@ -34,5 +39,9 @@ export class BoardComponent {
 
   isFieldSelected(field: String) {
     return field === this.selectedField
+  }
+
+  isMarkedForMove(field:String) {
+    return this.gameTracker.fieldMarkedForMove(field)
   }
 }
