@@ -25,7 +25,7 @@ export class BoardComponent {
     if(this.selectedField == field) {
       this.selectedField = null
     } else if (this.selectedField == null) {
-      this.selectedField = field
+      this.selectedField = field  // todo select only if piece is on the field?
     } else {
       this.gameControlService.movePiece(this.selectedField, field)
       this.selectedField = null

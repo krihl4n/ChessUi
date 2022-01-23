@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { Piece } from '../model/piece.model';
@@ -49,7 +48,7 @@ export class GameTrackerService {
       this.captures.push(this.getTokenFor(update.pieceCapture.capturedPiece))
     }
 
-    let piece = this.positions.get(update.primaryMove.from);
+    let piece = this.positions.get(update.primaryMove.from) || this.unknownPiece;
     this.positions.delete(update.primaryMove.from);
     this.positions.set(update.primaryMove.to, piece || this.unknownPiece);
 
@@ -58,10 +57,14 @@ export class GameTrackerService {
       this.positions.delete(update.secondaryMove.from);
       this.positions.set(update.secondaryMove.to, piece || this.unknownPiece);
     }
+
+    if (update.convertToQueen) {
+      this.positions.set(update.primaryMove.to, this.convertTokenToQueen(piece))
+    }
   }
 
   private handleMoveReverted(update: PiecePositionUpdate) {
-    let piece = this.positions.get(update.primaryMove.to);
+    let piece = this.positions.get(update.primaryMove.to) || this.unknownPiece;
     this.positions.delete(update.primaryMove.to);
     this.positions.set(update.primaryMove.from, piece || this.unknownPiece);
 
@@ -75,6 +78,18 @@ export class GameTrackerService {
       this.captures.pop()
       this.positions.set(update.pieceCapture.field, this.getTokenFor(update.pieceCapture.capturedPiece))
     }
+
+    if (update.convertToQueen) {
+      this.positions.set(update.primaryMove.from, this.convertTokenToPawn(piece))
+    }
+  }
+
+  private convertTokenToQueen(token: String) {
+    return token.replace('P', 'Q')
+  }
+
+  private convertTokenToPawn(token: String) {
+    return token.replace('Q', 'P')
   }
 
   private getTokenFor(piece: Piece): String {
