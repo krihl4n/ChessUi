@@ -22,7 +22,7 @@ export class WebSocketAPIService {
     constructor(){
     }
 
-    connect() {
+    connect(callback: () => any) {
         console.log("Initialize WebSocket Connection");
         let ws = new SockJS(this.webSocketEndPoint);
         this.stompClient = Stomp.over(ws);
@@ -49,6 +49,8 @@ export class WebSocketAPIService {
                 _this.onPossibleMovesReceived(sdkEvent);
             });
             //_this.stompClient.reconnect_delay = 2000;
+            //callback.connected();
+            callback()
         }, this.errorCallBack);
     }
 
@@ -61,10 +63,10 @@ export class WebSocketAPIService {
 
     // on error, schedule a reconnection attempt
     errorCallBack(error: any) {
-        console.log("errorCallBack -> " + error)
-        setTimeout(() => {
-            this.connect();
-        }, 5000);
+        // console.log("errorCallBack -> " + error)
+        // setTimeout(() => {
+        //     this.connect();
+        // }, 5000); <= todo fix that
     }
 
     sendMoveMsg(message: MoveRequest) {

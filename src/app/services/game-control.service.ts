@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
@@ -12,7 +12,9 @@ export class GameControlService {
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
   connect() {
-      this.webSocketApiService.connect();
+      this.webSocketApiService.connect(() => {
+        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
+      });
   }
 
   disconnect() {
@@ -25,7 +27,6 @@ export class GameControlService {
 
   startGame() {
     this.webSocketApiService.sendGameControlsMsg("start_game")
-    this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
   }
 
   undoMove() {
