@@ -12,9 +12,9 @@ export class GameControlService {
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
   connect() {
-      this.webSocketApiService.connect(() => {
-        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
-      });
+    this.webSocketApiService.connect(() => {
+      this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
+    });
   }
 
   disconnect() {
@@ -22,11 +22,11 @@ export class GameControlService {
   }
 
   movePiece(from: String, to: String) {
-    this.webSocketApiService.sendMoveMsg({"from": from, "to": to})
+    this.webSocketApiService.sendMoveMsg({ "from": from, "to": to })
   }
 
-  startGame() {
-    this.webSocketApiService.sendGameControlsMsg("start_game")
+  startGame(mode: String) {
+    this.webSocketApiService.sendGameControlsMsg("start_" + mode)
   }
 
   undoMove() {
@@ -45,11 +45,11 @@ export class GameControlService {
     return this.webSocketApiService.piecePositionsReceivedSubject
   }
 
-  getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate>{
+  getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate> {
     return this.webSocketApiService.piecePositionUpdateSubject
   }
 
-  getPossibleMovesSubscription() : Subject<PossibleMoves>{
+  getPossibleMovesSubscription(): Subject<PossibleMoves> {
     return this.webSocketApiService.possibleMovesSubject
   }
 }

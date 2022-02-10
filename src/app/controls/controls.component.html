@@ -1,24 +1,30 @@
 <div>
-    <button 
+    <!-- <button 
       class="btn btn-primary"
       (click)="onConnect()">connect</button> &nbsp;
     <button 
         class="btn btn-danger"
         (click)="onDisconnect()">disconnect</button> 
-    <br><br>
+    <br><br> -->
     <button 
-        class="btn btn-primary"
-        (click)="onGameStart()">start game</button> &nbsp;
+      class="btn btn-primary"    
+      (click)="onGameStart('free_mode')">free mode</button>
+      &nbsp;
     <button 
-      class="btn btn-danger"    
-      (click)="onGameFinish()">finish game</button>
+      class="btn btn-primary"    
+      (click)="onGameStart('hot_seat')">hot seat</button>
+      &nbsp;
+    <button 
+      class="btn btn-primary"    
+      (click)="onGameStart('vs_computer')">vs computer</button>
       &nbsp;
     <br><br>
+    
     <button 
       class="btn btn-primary"    
-      (click)="onUndo()">undo move</button>&nbsp;
+      (click)="onUndo()"><-</button>&nbsp;
     <button 
       class="btn btn-primary"    
-      (click)="onRedo()">redo move</button>
+      (click)="onRedo()">-></button>
     <br><br> 
 </div>

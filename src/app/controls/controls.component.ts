@@ -23,8 +23,8 @@ export class ControlsComponent implements OnInit {
     this.gameControlService.disconnect();
   }
 
-  onGameStart() {
-    this.gameControlService.startGame()
+  onGameStart(mode: String) {
+    this.gameControlService.startGame(mode)
   }
 
   onGameFinish() {
