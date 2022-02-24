@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
 import { ControlsComponent } from './controls/controls.component';
 import { CapturesComponent } from './captures/captures.component';
+import { GameFinishedDialogComponent } from './game-finished-dialog/game-finished-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
     ControlsComponent,
-    CapturesComponent
+    CapturesComponent,
+    GameFinishedDialogComponent
   ],
   imports: [
     BrowserModule,
