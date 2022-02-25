@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
+import { GameStateUpdate } from '../model/game-state-update.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -17,6 +18,7 @@ export class WebSocketAPIService {
     stompClient: any;
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
     piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
+    gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
 
     constructor(){
@@ -35,10 +37,13 @@ export class WebSocketAPIService {
             url = url.replace(/^[0-9]+\//, "");
             console.log("Your current session is: " + url);
 
+            // todo can this be simplified/
+            _this.stompClient.subscribe("/user/queue/game-state-updates" + '-user' + url, function (sdkEvent: any) {
+                _this.onGameStateUpdate(sdkEvent);
+            });
             _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
                 _this.onPiecePositionUpdate(sdkEvent);
             });
-
             _this.stompClient.subscribe('/user/queue/game-controls' + '-user' + url, function (sdkEvent: any) {
                 _this.gameControlsMsgReceived(sdkEvent);
             });
@@ -83,6 +88,11 @@ export class WebSocketAPIService {
 
     sendRequestPossibleMovesRequest(message: String) {
         this.stompClient.send("/chess-app/possible-moves", {}, message);
+    }
+
+    onGameStateUpdate(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
+        this.gameStateUpdateSubject.next(value)
     }
 
     onPiecePositionUpdate(message: Stomp.Frame) {
