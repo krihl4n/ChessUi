@@ -38,4 +38,8 @@ export class ControlsComponent implements OnInit {
   onRedo() {
     this.gameControlService.redoMove()
   }
+
+  onResign() {
+    this.gameControlService.resign()
+  }
 }

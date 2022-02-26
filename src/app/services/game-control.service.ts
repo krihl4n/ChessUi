@@ -11,6 +11,7 @@ import { WebSocketAPIService } from './web-socket-api.service';
   providedIn: 'root'
 })
 export class GameControlService {
+
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
   connect() {
@@ -39,6 +40,10 @@ export class GameControlService {
     this.webSocketApiService.sendGameControlsMsg("redo_move")
   }
 
+  resign() {
+    this.webSocketApiService.sendGameControlsMsg("resign")
+  }
+  
   requestPossibleMoves(field: String) {
     this.webSocketApiService.sendRequestPossibleMovesRequest(field)
   }
