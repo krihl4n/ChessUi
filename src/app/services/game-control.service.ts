@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
+import { GameResult } from '../model/game-result.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
@@ -56,5 +57,9 @@ export class GameControlService {
 
   getPossibleMovesSubscription(): Subject<PossibleMoves> {
     return this.webSocketApiService.possibleMovesSubject
+  }
+
+  getGameResultSubscription(): Subject<GameResult> {
+    return this.webSocketApiService.gameResultSubject
   }
 }

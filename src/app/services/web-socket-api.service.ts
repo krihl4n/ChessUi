@@ -7,6 +7,7 @@ import { FieldOccupation } from '../model/field-occupation.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
+import { GameResult } from '../model/game-result.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -19,6 +20,7 @@ export class WebSocketAPIService {
     piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
     piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
     gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
+    gameResultSubject: Subject<GameResult> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
 
     constructor(){
@@ -40,6 +42,9 @@ export class WebSocketAPIService {
             // todo can this be simplified/
             _this.stompClient.subscribe("/user/queue/game-state-updates" + '-user' + url, function (sdkEvent: any) {
                 _this.onGameStateUpdate(sdkEvent);
+            });
+            _this.stompClient.subscribe("/user/queue/game-result" + '-user' + url, function (sdkEvent: any) {
+                _this.onGameResultReceived(sdkEvent);
             });
             _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
                 _this.onPiecePositionUpdate(sdkEvent);
@@ -112,5 +117,10 @@ export class WebSocketAPIService {
     onPossibleMovesReceived(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.possibleMovesSubject.next(value)
+    }
+
+    onGameResultReceived(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
+        this.gameResultSubject.next(value)
     }
 }
