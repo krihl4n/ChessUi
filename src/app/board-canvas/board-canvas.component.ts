@@ -12,7 +12,9 @@ export class BoardCanvasComponent implements OnInit {
 
   canvasSize = 700;
   private boardFlipped = false;
-  private boardSize = this.canvasSize
+  
+  private boardSize = this.canvasSize;
+  private fieldSize = this.boardSize/8;
   private fieldColorLight = "#EBD1A6";
   private fieldColorDark = "#A27551";
 
@@ -27,16 +29,69 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawBackground() {
-    let fieldSize = this.boardSize / 8;
 
     let currentColor = this.fieldColorLight;
     for (let col = 0; col < 8; col++) {
       for (let row = 0; row < 8; row++) {
-        this.fillRectangle(col * fieldSize, row * fieldSize, fieldSize, fieldSize, currentColor)
+        let colPos = col * this.fieldSize;
+        let rowPos = row * this.fieldSize;
+        this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+        
+        if(col == 7) {
+          this.fillText(
+            this.determineRowAtPos(rowPos), 
+            this.oppositeOf(currentColor),
+            colPos + this.fieldSize - this.fieldSize * 0.1, 
+            rowPos + this.fieldSize - this.fieldSize * 0.85);
+        }
+        if(row == 7) {
+          this.fillText(
+            this.determineColAtPos(colPos),
+            this.oppositeOf(currentColor),
+            colPos + this.fieldSize - this.fieldSize * 0.95, 
+            rowPos + this.fieldSize - this.fieldSize * 0.05);
+        }
         currentColor = this.oppositeOf(currentColor)
       }
       currentColor = this.oppositeOf(currentColor)
     }
+  }
+
+  private determineRowAtPos(y: number) : string {
+    let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
+
+    if(this.boardFlipped) {
+      rows.reverse();
+    }
+
+    for(let i = 0; i<8; i++) {
+      if(y >= i * this.fieldSize && y < i * this.fieldSize + this.fieldSize) {
+        return rows[i]
+      }
+    }
+    return "x";
+  }
+
+
+  private determineColAtPos(x: number) : string {
+    let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+    if(this.boardFlipped) {
+      cols.reverse();
+    }
+
+    for(let i = 0; i<8; i++) {
+      if(x >= i * this.fieldSize && x < i * this.fieldSize + this.fieldSize) {
+        return cols[i]
+      }
+    }
+    return "x";
+  }
+
+  private fillText(txt: string, color: string, x: number, y: number) {
+      this.context.fillStyle = color;
+      this.context.font = "12px Georgia"; // todo scale 
+      this.context.fillText(txt, x, y);
   }
 
   private oppositeOf(color: string): string {
