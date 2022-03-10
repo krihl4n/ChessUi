@@ -7,6 +7,9 @@ import { BoardComponent } from './board/board.component';
 import { ControlsComponent } from './controls/controls.component';
 import { CapturesComponent } from './captures/captures.component';
 import { GameFinishedDialogComponent } from './game-finished-dialog/game-finished-dialog.component';
+import { BoardCanvasComponent } from './board-canvas/board-canvas.component';
+import { AppRoutingModule } from './app-routing.module';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
@@ -14,11 +17,14 @@ import { GameFinishedDialogComponent } from './game-finished-dialog/game-finishe
     BoardComponent,
     ControlsComponent,
     CapturesComponent,
-    GameFinishedDialogComponent
+    GameFinishedDialogComponent,
+    BoardCanvasComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
