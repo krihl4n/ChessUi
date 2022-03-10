@@ -19,6 +19,8 @@ export class BoardCanvasComponent implements OnInit {
   private fieldColorLight = "#EBD1A6";
   private fieldColorDark = "#A27551";
 
+  private markedFields: string[] = []
+
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     let framesPerSecond = 30;
@@ -29,7 +31,7 @@ export class BoardCanvasComponent implements OnInit {
     let boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
     this.canvas.nativeElement.addEventListener('contextmenu', (evt: MouseEvent) => {
-       evt.preventDefault(); // todo check if works on other OSes
+      evt.preventDefault(); // todo check if works on other OSes
     })
 
     this.canvas.nativeElement.addEventListener('mouseup', (evt: MouseEvent) => {
@@ -39,14 +41,24 @@ export class BoardCanvasComponent implements OnInit {
       let leftClick = 0; // todo check other OSes
       let rightClick = 2;
 
-      if(evt.button == rightClick) {
+      if (evt.button == rightClick) {
         this.markField(xOnBoard, yOnBoard);
       }
     })
   }
 
   private markField(x: number, y: number) {
-    console.log(`mark field at ${x},${y}`)
+    let field: string = this.determineFieldAtPos(x, y);
+    const index = this.markedFields.indexOf(field, 0);
+    if (index > -1) {
+      this.markedFields.splice(index, 1);
+    } else {
+      this.markedFields.push(field)
+    }
+  }
+
+  private determineFieldAtPos(x: number, y: number) {
+    return this.determineColAtPos(x) + this.determineRowAtPos(y);
   }
 
   private drawEverything() {
@@ -61,6 +73,13 @@ export class BoardCanvasComponent implements OnInit {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
         this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+
+        if (this.markedFields.includes(this.determineFieldAtPos(colPos, rowPos))) {
+          this.context.fillStyle = 'green';
+          this.context.beginPath();
+          this.context.arc(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 0, Math.PI * 2, true);
+          this.context.fill();
+        }
 
         if (col == 7) {
           this.fillText(
