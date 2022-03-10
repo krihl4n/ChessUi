@@ -4,7 +4,7 @@ import { BoardCanvasComponent } from "./board-canvas/board-canvas.component";
 import { GameComponent } from "./game/game.component";
 
 const appRoutes: Routes = [
-    { path: '', redirectTo: '/game', pathMatch: 'full'},
+    { path: '', redirectTo: '/board', pathMatch: 'full'},
     { path: 'game', component: GameComponent},
     { path: 'board', component: BoardCanvasComponent }
 ]
