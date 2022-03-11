@@ -51,7 +51,7 @@ export class BoardCanvasComponent implements OnInit {
     this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
 
-    let framesPerSecond = 1024;
+    let framesPerSecond = 120;
     setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
 
 
@@ -137,7 +137,7 @@ export class BoardCanvasComponent implements OnInit {
 
   private drawPieceOnTheMove() {
     if (this.pieceOnTheMove) {
-      let baseSpeed = 10;
+      let baseSpeed = 32;
       let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
       let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
 
