@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { DrawingService } from './drawing.service';
 
 @Component({
   selector: 'app-board-canvas',
@@ -8,9 +9,8 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/co
 export class BoardCanvasComponent implements OnInit {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
-  private context: CanvasRenderingContext2D;
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private drawingService: DrawingService) {
   }
 
   canvasSize = 700;
@@ -37,8 +37,7 @@ export class BoardCanvasComponent implements OnInit {
   private pieceOnTheMoveDestination: Point;
 
   ngOnInit(): void {
-    this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-
+    this.drawingService.setCanvasContext(this.canvas.nativeElement.getContext('2d'))
     this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
@@ -197,7 +196,7 @@ export class BoardCanvasComponent implements OnInit {
         this.pieceOnTheMoveLocation.y = this.pieceOnTheMoveLocation.y + ySpeed;
       }
 
-      this.drawPiecePicture(
+      this.drawingService.drawPicture(
         this.pieceOnTheMove,
         this.pieceOnTheMoveLocation.x,
         this.pieceOnTheMoveLocation.y
@@ -214,17 +213,10 @@ export class BoardCanvasComponent implements OnInit {
   private drawPiecePictureAtField(pic: HTMLImageElement, field: string) {
     let fieldLocation = this.fieldLocations.get(field);
     if (fieldLocation) {
-      this.drawPiecePicture(pic,
+      this.drawingService.drawPicture(pic,
         fieldLocation.x + this.fieldSize / 2 - pic.width / 2,
         fieldLocation.y + this.fieldSize / 2 - pic.height / 2)
     }
-  }
-
-  private drawPiecePicture(pic: HTMLImageElement, x: number, y: number) {
-    this.context.save();
-    this.context.translate(x, y);
-    this.context.drawImage(pic, 0, 0);
-    this.context.restore();
   }
 
   private drawBackground() {
@@ -234,30 +226,27 @@ export class BoardCanvasComponent implements OnInit {
       for (let row = 0; row < 8; row++) {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
-        this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+        this.drawingService.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
         let field = this.determineFieldAtPos(colPos, rowPos);
         this.fieldLocations.set(field, { x: colPos, y: rowPos });
 
         if (this.markedFields.includes(field)) {
-          this.context.fillStyle = 'green';
-          this.context.beginPath();
-          this.context.arc(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 0, Math.PI * 2, true);
-          this.context.fill();
+          this.drawingService.fillCircle(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 'green')
         }
 
         if (this.pieceSelectedAtField == field) {
-          this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, 'yellow')
+          this.drawingService.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, 'yellow')
         }
 
         if (col == 7) {
-          this.fillText(
+          this.drawingService.fillText(
             this.determineRowAtPos(rowPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.1,
             rowPos + this.fieldSize - this.fieldSize * 0.85);
         }
         if (row == 7) {
-          this.fillText(
+          this.drawingService.fillText(
             this.determineColAtPos(colPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.95,
@@ -299,23 +288,12 @@ export class BoardCanvasComponent implements OnInit {
     return "x";
   }
 
-  private fillText(txt: string, color: string, x: number, y: number) {
-    this.context.fillStyle = color;
-    this.context.font = "12px Georgia"; // todo scale 
-    this.context.fillText(txt, x, y);
-  }
-
   private oppositeOf(color: string): string {
     if (color == this.fieldColorLight) {
       return this.fieldColorDark
     } else {
       return this.fieldColorLight
     }
-  }
-
-  private fillRectangle(x: number, y: number, w: number, h: number, color: string) {
-    this.context.fillStyle = color;
-    this.context.fillRect(x, y, w, h);
   }
 }
 
