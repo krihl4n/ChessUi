@@ -31,6 +31,11 @@ export class BoardCanvasComponent implements OnInit {
 
   private fieldOccupations = new Map<string, HTMLImageElement>()
 
+  private pieceOnTheMove: HTMLImageElement | null; // todo will need to be a collection
+  private pieceOnTheMoveLocation: Point;
+  private pieceOnTheMoveStart: Point;
+  private pieceOnTheMoveDestination: Point;
+
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
@@ -46,7 +51,7 @@ export class BoardCanvasComponent implements OnInit {
     this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
 
-    let framesPerSecond = 30;
+    let framesPerSecond = 1024;
     setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
 
 
@@ -80,16 +85,33 @@ export class BoardCanvasComponent implements OnInit {
         this.pieceSelectedAtField = field;
       }
     } else {
-      this.movePiece(this.pieceSelectedAtField, field)
+      this.initiatePieceMovement(this.pieceSelectedAtField, field)
       this.pieceSelectedAtField = null;
     }
   }
 
-  private movePiece(fromField: string, toField: string) {
+  private initiatePieceMovement(fromField: string, toField: string) {
     let piece = this.fieldOccupations.get(fromField);
-    if(piece) {
+    if (piece) {
+      if (fromField == toField) {
+        return
+      }
       this.fieldOccupations.delete(fromField);
-      this.fieldOccupations.set(toField, piece);
+      this.pieceOnTheMove = piece;
+      let fromLocation = this.fieldLocations.get(fromField)
+      let toLocation = this.fieldLocations.get(toField)
+
+      if (fromLocation && toLocation) {
+        fromLocation.x = fromLocation.x + this.fieldSize / 2 - piece.width / 2;
+        fromLocation.y = fromLocation.y + this.fieldSize / 2 - piece.height / 2;
+
+        toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
+        toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
+
+        this.pieceOnTheMoveLocation = fromLocation;
+        this.pieceOnTheMoveStart = { x: fromLocation.x, y: fromLocation.y };
+        this.pieceOnTheMoveDestination = toLocation;
+      }
     }
   }
 
@@ -110,6 +132,59 @@ export class BoardCanvasComponent implements OnInit {
   private drawEverything() {
     this.drawBackground();
     this.drawPieces();
+    this.drawPieceOnTheMove();
+  }
+
+  private drawPieceOnTheMove() {
+    if (this.pieceOnTheMove) {
+      let baseSpeed = 10;
+      let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
+      let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
+
+      let xyDistance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+      let steps = xyDistance / baseSpeed;
+
+      let xSpeed = xDistance / steps;
+      let ySpeed = yDistance / steps;
+
+      let dstXAchieved = false
+      let dstYAchieved = false
+
+      if (xSpeed == 0 ||
+        xSpeed > 0 && this.pieceOnTheMoveLocation.x + baseSpeed >= this.pieceOnTheMoveDestination.x ||
+        xSpeed < 0 && this.pieceOnTheMoveLocation.x - baseSpeed <= this.pieceOnTheMoveDestination.x
+      ) {
+        dstXAchieved = true
+      }
+
+      if (ySpeed == 0 ||
+        ySpeed > 0 && this.pieceOnTheMoveLocation.y + baseSpeed >= this.pieceOnTheMoveDestination.y ||
+        ySpeed < 0 && this.pieceOnTheMoveLocation.y - baseSpeed <= this.pieceOnTheMoveDestination.y
+      ) {
+        dstYAchieved = true
+      }
+
+      if (dstXAchieved && dstYAchieved) {
+        let field = this.determineFieldAtPos(this.pieceOnTheMoveDestination.x, this.pieceOnTheMoveDestination.y)
+        this.fieldOccupations.set(field, this.pieceOnTheMove);
+        this.pieceOnTheMove = null
+        return;
+      }
+
+      if (!dstXAchieved) {
+        this.pieceOnTheMoveLocation.x = this.pieceOnTheMoveLocation.x + xSpeed;
+      }
+
+      if (!dstYAchieved) {
+        this.pieceOnTheMoveLocation.y = this.pieceOnTheMoveLocation.y + ySpeed;
+      }
+
+      this.drawPiecePicture(
+        this.pieceOnTheMove,
+        this.pieceOnTheMoveLocation.x,
+        this.pieceOnTheMoveLocation.y
+      )
+    }
   }
 
   private drawPieces() {
