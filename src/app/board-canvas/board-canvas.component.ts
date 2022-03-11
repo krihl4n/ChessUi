@@ -1,7 +1,4 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { debug } from 'console';
-import { threadId } from 'worker_threads';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-board-canvas',
@@ -12,6 +9,9 @@ export class BoardCanvasComponent implements OnInit {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
   private context: CanvasRenderingContext2D;
+
+  constructor(private renderer: Renderer2) {
+  }
 
   canvasSize = 700;
   private boardFlipped = false;
@@ -29,17 +29,21 @@ export class BoardCanvasComponent implements OnInit {
 
   private markedFields: string[] = []
 
+  private fieldOccupations = new Map<string, HTMLImageElement>()
+
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
     this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
-    this.whitePawnImg = document.createElement("img");
-    this.whitePawnImg.onload = () => { 
-      console.log("img loaded")
+    this.whitePawnImg = this.renderer.createElement('img');
+    this.whitePawnImg.onload = () => {
+      console.log("img loaded") // todo start game when all images are loaded
+      this.fieldOccupations.set("d4", this.whitePawnImg);
+      this.fieldOccupations.set("g2", this.whitePawnImg)
     };
-    this.whitePawnImg.src = "assets/white_pawn.png";
+    this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
 
     let framesPerSecond = 30;
@@ -60,7 +64,33 @@ export class BoardCanvasComponent implements OnInit {
       if (evt.button == rightClick) {
         this.markField(xOnBoard, yOnBoard);
       }
+
+      if (evt.button == leftClick) {
+        this.selectOrMovePiece(xOnBoard, yOnBoard);
+      }
     })
+  }
+
+  pieceSelectedAtField: string | null
+
+  private selectOrMovePiece(x: number, y: number) {
+    let field = this.determineFieldAtPos(x, y);
+    if (!this.pieceSelectedAtField) {
+      if (this.fieldOccupations.has(field)) {
+        this.pieceSelectedAtField = field;
+      }
+    } else {
+      this.movePiece(this.pieceSelectedAtField, field)
+      this.pieceSelectedAtField = null;
+    }
+  }
+
+  private movePiece(fromField: string, toField: string) {
+    let piece = this.fieldOccupations.get(fromField);
+    if(piece) {
+      this.fieldOccupations.delete(fromField);
+      this.fieldOccupations.set(toField, piece);
+    }
   }
 
   private markField(x: number, y: number) {
@@ -83,16 +113,17 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawPieces() {
-    //this.drawPiecePicture(this.whitePawnImg, 0 + this.fieldSize/2, 0 + this.fieldSize/2);
-    this.drawPiecePictureAtField(this.whitePawnImg, "a1");
+    this.fieldOccupations.forEach((img: HTMLImageElement, field: string) => {
+      this.drawPiecePictureAtField(img, field);
+    })
   }
 
   private drawPiecePictureAtField(pic: HTMLImageElement, field: string) {
     let fieldLocation = this.fieldLocations.get(field);
-    if(fieldLocation){
-      this.drawPiecePicture(pic, 
-        fieldLocation.x + this.fieldSize/2 - pic.width/2, 
-        fieldLocation.y + this.fieldSize/2 - pic.height/2)
+    if (fieldLocation) {
+      this.drawPiecePicture(pic,
+        fieldLocation.x + this.fieldSize / 2 - pic.width / 2,
+        fieldLocation.y + this.fieldSize / 2 - pic.height / 2)
     }
   }
 
@@ -112,13 +143,17 @@ export class BoardCanvasComponent implements OnInit {
         let rowPos = row * this.fieldSize;
         this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
         let field = this.determineFieldAtPos(colPos, rowPos);
-        this.fieldLocations.set(field, {x:colPos, y:rowPos});
+        this.fieldLocations.set(field, { x: colPos, y: rowPos });
 
         if (this.markedFields.includes(field)) {
           this.context.fillStyle = 'green';
           this.context.beginPath();
           this.context.arc(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 0, Math.PI * 2, true);
           this.context.fill();
+        }
+
+        if (this.pieceSelectedAtField == field) {
+          this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, 'yellow')
         }
 
         if (col == 7) {
