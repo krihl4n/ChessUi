@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DrawingService } from './drawing.service';
+import { FieldUtilsService } from './field-utils.service';
+import { Point } from './point.model';
 
 @Component({
   selector: 'app-board-canvas',
@@ -10,7 +12,7 @@ export class BoardCanvasComponent implements OnInit {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
-  constructor(private renderer: Renderer2, private drawingService: DrawingService) {
+  constructor(private renderer: Renderer2, private drawingService: DrawingService, private locationUtilsService: FieldUtilsService) {
   }
 
   canvasSize = 700;
@@ -38,6 +40,7 @@ export class BoardCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.drawingService.setCanvasContext(this.canvas.nativeElement.getContext('2d'))
+    this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize);
     this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
@@ -78,7 +81,7 @@ export class BoardCanvasComponent implements OnInit {
   pieceSelectedAtField: string | null
 
   private selectOrMovePiece(x: number, y: number) {
-    let field = this.determineFieldAtPos(x, y);
+    let field = this.locationUtilsService.determineFieldAtPos(x, y);
     if (!this.pieceSelectedAtField) {
       if (this.fieldOccupations.has(field)) {
         this.pieceSelectedAtField = field;
@@ -115,17 +118,13 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private markField(x: number, y: number) {
-    let field: string = this.determineFieldAtPos(x, y);
+    let field: string = this.locationUtilsService.determineFieldAtPos(x, y);
     const index = this.markedFields.indexOf(field, 0);
     if (index > -1) {
       this.markedFields.splice(index, 1);
     } else {
       this.markedFields.push(field)
     }
-  }
-
-  private determineFieldAtPos(x: number, y: number) {
-    return this.determineColAtPos(x) + this.determineRowAtPos(y);
   }
 
   private drawEverything() {
@@ -182,7 +181,7 @@ export class BoardCanvasComponent implements OnInit {
       }
 
       if (dstXAchieved && dstYAchieved) {
-        let field = this.determineFieldAtPos(this.pieceOnTheMoveDestination.x, this.pieceOnTheMoveDestination.y)
+        let field = this.locationUtilsService.determineFieldAtPos(this.pieceOnTheMoveDestination.x, this.pieceOnTheMoveDestination.y)
         this.fieldOccupations.set(field, this.pieceOnTheMove);
         this.pieceOnTheMove = null
         return;
@@ -227,7 +226,7 @@ export class BoardCanvasComponent implements OnInit {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
         this.drawingService.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
-        let field = this.determineFieldAtPos(colPos, rowPos);
+        let field = this.locationUtilsService.determineFieldAtPos(colPos, rowPos);
         this.fieldLocations.set(field, { x: colPos, y: rowPos });
 
         if (this.markedFields.includes(field)) {
@@ -240,14 +239,14 @@ export class BoardCanvasComponent implements OnInit {
 
         if (col == 7) {
           this.drawingService.fillText(
-            this.determineRowAtPos(rowPos),
+            this.locationUtilsService.determineRowAtPos(rowPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.1,
             rowPos + this.fieldSize - this.fieldSize * 0.85);
         }
         if (row == 7) {
           this.drawingService.fillText(
-            this.determineColAtPos(colPos),
+            this.locationUtilsService.determineColAtPos(colPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.95,
             rowPos + this.fieldSize - this.fieldSize * 0.05);
@@ -258,36 +257,6 @@ export class BoardCanvasComponent implements OnInit {
     }
   }
 
-  private determineRowAtPos(y: number): string {
-    let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
-
-    if (this.boardFlipped) {
-      rows.reverse();
-    }
-
-    for (let i = 0; i < 8; i++) {
-      if (y >= i * this.fieldSize && y < i * this.fieldSize + this.fieldSize) {
-        return rows[i]
-      }
-    }
-    return "x";
-  }
-
-  private determineColAtPos(x: number): string {
-    let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-    if (this.boardFlipped) {
-      cols.reverse();
-    }
-
-    for (let i = 0; i < 8; i++) {
-      if (x >= i * this.fieldSize && x < i * this.fieldSize + this.fieldSize) {
-        return cols[i]
-      }
-    }
-    return "x";
-  }
-
   private oppositeOf(color: string): string {
     if (color == this.fieldColorLight) {
       return this.fieldColorDark
@@ -295,9 +264,4 @@ export class BoardCanvasComponent implements OnInit {
       return this.fieldColorLight
     }
   }
-}
-
-interface Point {
-  x: number,
-  y: number
 }
