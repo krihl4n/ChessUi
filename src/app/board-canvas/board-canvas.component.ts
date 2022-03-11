@@ -1,5 +1,7 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { debug } from 'console';
+import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-board-canvas',
@@ -19,24 +21,38 @@ export class BoardCanvasComponent implements OnInit {
   private fieldColorLight = "#EBD1A6";
   private fieldColorDark = "#A27551";
 
+  private boardX: number;
+  private boardY: number;
+
+  private fieldLocations = new Map<string, Point>();
+  private whitePawnImg: HTMLImageElement;
+
   private markedFields: string[] = []
 
   ngOnInit(): void {
     this.context = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    let framesPerSecond = 30;
 
+    this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
+    this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
+
+    this.whitePawnImg = document.createElement("img");
+    this.whitePawnImg.onload = () => { 
+      console.log("img loaded")
+    };
+    this.whitePawnImg.src = "assets/white_pawn.png";
+
+
+    let framesPerSecond = 30;
     setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
 
-    let boardX = this.canvas.nativeElement.getBoundingClientRect().x
-    let boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
     this.canvas.nativeElement.addEventListener('contextmenu', (evt: MouseEvent) => {
       evt.preventDefault(); // todo check if works on other OSes
     })
 
     this.canvas.nativeElement.addEventListener('mouseup', (evt: MouseEvent) => {
-      let xOnBoard = evt.clientX - boardX
-      let yOnBoard = evt.clientY - boardY
+      let xOnBoard = evt.clientX - this.boardX
+      let yOnBoard = evt.clientY - this.boardY
 
       let leftClick = 0; // todo check other OSes
       let rightClick = 2;
@@ -62,7 +78,29 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawEverything() {
-    this.drawBackground()
+    this.drawBackground();
+    this.drawPieces();
+  }
+
+  private drawPieces() {
+    //this.drawPiecePicture(this.whitePawnImg, 0 + this.fieldSize/2, 0 + this.fieldSize/2);
+    this.drawPiecePictureAtField(this.whitePawnImg, "a1");
+  }
+
+  private drawPiecePictureAtField(pic: HTMLImageElement, field: string) {
+    let fieldLocation = this.fieldLocations.get(field);
+    if(fieldLocation){
+      this.drawPiecePicture(pic, 
+        fieldLocation.x + this.fieldSize/2 - pic.width/2, 
+        fieldLocation.y + this.fieldSize/2 - pic.height/2)
+    }
+  }
+
+  private drawPiecePicture(pic: HTMLImageElement, x: number, y: number) {
+    this.context.save();
+    this.context.translate(x, y);
+    this.context.drawImage(pic, 0, 0);
+    this.context.restore();
   }
 
   private drawBackground() {
@@ -73,8 +111,10 @@ export class BoardCanvasComponent implements OnInit {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
         this.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+        let field = this.determineFieldAtPos(colPos, rowPos);
+        this.fieldLocations.set(field, {x:colPos, y:rowPos});
 
-        if (this.markedFields.includes(this.determineFieldAtPos(colPos, rowPos))) {
+        if (this.markedFields.includes(field)) {
           this.context.fillStyle = 'green';
           this.context.beginPath();
           this.context.arc(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 0, Math.PI * 2, true);
@@ -149,4 +189,9 @@ export class BoardCanvasComponent implements OnInit {
     this.context.fillStyle = color;
     this.context.fillRect(x, y, w, h);
   }
+}
+
+interface Point {
+  x: number,
+  y: number
 }
