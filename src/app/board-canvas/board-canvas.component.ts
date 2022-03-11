@@ -147,19 +147,37 @@ export class BoardCanvasComponent implements OnInit {
       let xSpeed = xDistance / steps;
       let ySpeed = yDistance / steps;
 
+      let xDistanceLeft = Math.abs(this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveLocation.x)
+      if(xDistanceLeft < Math.abs(xSpeed)) {
+        if(xSpeed < 0) {
+          xSpeed = xDistanceLeft;
+        } else {
+          xSpeed = -xDistanceLeft
+        }
+      }
+
+      let yDistanceLeft = Math.abs(this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveLocation.y)
+      if(yDistanceLeft < Math.abs(ySpeed)) {
+        if(ySpeed < 0) {
+          ySpeed = yDistanceLeft;
+        } else {
+          ySpeed = -yDistanceLeft
+        }
+      }
+
       let dstXAchieved = false
       let dstYAchieved = false
 
       if (xSpeed == 0 ||
-        xSpeed > 0 && this.pieceOnTheMoveLocation.x + baseSpeed >= this.pieceOnTheMoveDestination.x ||
-        xSpeed < 0 && this.pieceOnTheMoveLocation.x - baseSpeed <= this.pieceOnTheMoveDestination.x
+        xSpeed > 0 && this.pieceOnTheMoveLocation.x >= this.pieceOnTheMoveDestination.x ||
+        xSpeed < 0 && this.pieceOnTheMoveLocation.x <= this.pieceOnTheMoveDestination.x
       ) {
         dstXAchieved = true
       }
 
       if (ySpeed == 0 ||
-        ySpeed > 0 && this.pieceOnTheMoveLocation.y + baseSpeed >= this.pieceOnTheMoveDestination.y ||
-        ySpeed < 0 && this.pieceOnTheMoveLocation.y - baseSpeed <= this.pieceOnTheMoveDestination.y
+        ySpeed > 0 && this.pieceOnTheMoveLocation.y >= this.pieceOnTheMoveDestination.y ||
+        ySpeed < 0 && this.pieceOnTheMoveLocation.y <= this.pieceOnTheMoveDestination.y
       ) {
         dstYAchieved = true
       }
