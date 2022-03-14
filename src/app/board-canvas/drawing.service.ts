@@ -5,43 +5,34 @@ import { Injectable } from '@angular/core';
 })
 export class DrawingService {
 
-  private context: CanvasRenderingContext2D;
 
-  constructor() { }
-
-  setCanvasContext(context: CanvasRenderingContext2D | null) {
-    if(!context == null) {
-      console.error("Cannot initialize canvas context");
-    }
-    this.context = context as CanvasRenderingContext2D;
+  clearEverything(ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, 700, 700);
   }
 
-  clearEverything() {
-    this.context.clearRect(0, 0, 700, 700);
+  fillRectangle(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
   }
 
-  fillRectangle(x: number, y: number, w: number, h: number, color: string) {
-    this.context.fillStyle = color;
-    this.context.fillRect(x, y, w, h);
+  fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number) {
+    ctx.fillStyle = color;
+    ctx.font = "12px Georgia"; // todo scale 
+    ctx.fillText(txt, x, y);
   }
 
-  fillText(txt: string, color: string, x: number, y: number) {
-    this.context.fillStyle = color;
-    this.context.font = "12px Georgia"; // todo scale 
-    this.context.fillText(txt, x, y);
+  drawPicture(ctx: CanvasRenderingContext2D, pic: HTMLImageElement, x: number, y: number) {
+    console.log("draw picture at " + x + "," + y)
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.drawImage(pic, 0, 0);
+    ctx.restore();
   }
 
-  drawPicture(pic: HTMLImageElement, x: number, y: number) {
-    this.context.save();
-    this.context.translate(x, y);
-    this.context.drawImage(pic, 0, 0);
-    this.context.restore();
-  }
-
-  fillCircle(x:number, y:number, radius:number, color:string) {
-    this.context.fillStyle = color;
-    this.context.beginPath();
-    this.context.arc(x, y, radius, 0, Math.PI * 2, true);
-    this.context.fill();
+  fillCircle(ctx: CanvasRenderingContext2D, x:number, y:number, radius:number, color:string) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+    ctx.fill();
   }
 }

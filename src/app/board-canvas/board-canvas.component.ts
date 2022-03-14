@@ -11,6 +11,7 @@ import { Point } from './point.model';
 export class BoardCanvasComponent implements OnInit {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
+  canvasContext: CanvasRenderingContext2D;
 
   constructor(private renderer: Renderer2, private drawingService: DrawingService, private locationUtilsService: FieldUtilsService) {
   }
@@ -42,7 +43,8 @@ export class BoardCanvasComponent implements OnInit {
   oldTimeStamp = 0;
 
   ngOnInit(): void {
-    this.drawingService.setCanvasContext(this.canvas.nativeElement.getContext('2d'))
+    this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize);
     this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
@@ -55,7 +57,7 @@ export class BoardCanvasComponent implements OnInit {
     };
     this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
-
+    window.requestAnimationFrame( this.drawBackground.bind(this));
     //let framesPerSecond = 100;
     //setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
     window.requestAnimationFrame(this.drawEverything.bind(this));
@@ -103,12 +105,18 @@ export class BoardCanvasComponent implements OnInit {
       }
       this.fieldOccupations.delete(fromField);
       this.pieceOnTheMove = piece;
-      let fromLocation = this.fieldLocations.get(fromField)
-      let toLocation = this.fieldLocations.get(toField)
+      let fromLocation = {
+        x: this.fieldLocations.get(fromField)?.x || 0,
+        y: this.fieldLocations.get(fromField)?.y || 0
+      }
+      let toLocation = {
+        x: this.fieldLocations.get(toField)?.x || 0,
+        y: this.fieldLocations.get(toField)?.y || 0,
+      }
 
       if (fromLocation && toLocation) {
-        fromLocation.x = fromLocation.x + this.fieldSize / 2 - piece.width / 2;
-        fromLocation.y = fromLocation.y + this.fieldSize / 2 - piece.height / 2;
+        fromLocation.x = fromLocation?.x + this.fieldSize / 2 - piece.width / 2;
+        fromLocation.y = fromLocation?.y + this.fieldSize / 2 - piece.height / 2;
 
         toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
         toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
@@ -144,7 +152,7 @@ export class BoardCanvasComponent implements OnInit {
 
   private drawPieceOnTheMove() {
     if (this.pieceOnTheMove) {
-      let baseSpeed = 1500;
+      let baseSpeed = 750;
       let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
       let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
 
@@ -154,8 +162,6 @@ export class BoardCanvasComponent implements OnInit {
       let xSpeed = (xDistance / steps) * this.secondsPassed;
       let ySpeed = (yDistance / steps) * this.secondsPassed;
 
-    //  let xSpeed = 30;
-     // let ySpeed = 0;
       console.log('xSpeed: ' + xSpeed);
       console.log('ySpeed:' + ySpeed);
 
@@ -210,6 +216,7 @@ export class BoardCanvasComponent implements OnInit {
       }
 
       this.drawingService.drawPicture(
+        this.canvasContext,
         this.pieceOnTheMove,
         this.pieceOnTheMoveLocation.x,
         this.pieceOnTheMoveLocation.y
@@ -226,33 +233,33 @@ export class BoardCanvasComponent implements OnInit {
   private drawPiecePictureAtField(pic: HTMLImageElement, field: string) {
     let fieldLocation = this.fieldLocations.get(field);
     if (fieldLocation) {
-      this.drawingService.drawPicture(pic,
+      this.drawingService.drawPicture(this.canvasContext, pic,
         fieldLocation.x + this.fieldSize / 2 - pic.width / 2,
         fieldLocation.y + this.fieldSize / 2 - pic.height / 2)
     }
   }
 
   private drawBackground() {
-  //  this.drawingService.fillRectangle(0,0,700,700,this.fieldColorLight)
     let currentColor = this.fieldColorLight;
     for (let col = 0; col < 8; col++) {
       for (let row = 0; row < 8; row++) {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
-        this.drawingService.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+        this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
         let field = this.locationUtilsService.determineFieldAtPos(colPos, rowPos);
         this.fieldLocations.set(field, { x: colPos, y: rowPos });
 
         if (this.markedFields.includes(field)) {
-          this.drawingService.fillCircle(colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 'green')
+          this.drawingService.fillCircle(this.canvasContext, colPos + this.fieldSize / 2, rowPos + this.fieldSize / 2, this.fieldSize / 4, 'green')
         }
 
         if (this.pieceSelectedAtField == field) {
-          this.drawingService.fillRectangle(colPos, rowPos, this.fieldSize, this.fieldSize, 'yellow')
+          this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.fieldSize, this.fieldSize, 'yellow')
         }
 
         if (col == 7) {
           this.drawingService.fillText(
+            this.canvasContext,
             this.locationUtilsService.determineRowAtPos(rowPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.1,
@@ -260,6 +267,7 @@ export class BoardCanvasComponent implements OnInit {
         }
         if (row == 7) {
           this.drawingService.fillText(
+            this.canvasContext,
             this.locationUtilsService.determineColAtPos(colPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.95,
@@ -269,6 +277,7 @@ export class BoardCanvasComponent implements OnInit {
       }
       currentColor = this.oppositeOf(currentColor)
     }
+   // window.requestAnimationFrame(this.drawBackground.bind(this))
   }
 
   private oppositeOf(color: string): string {
