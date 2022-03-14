@@ -16,6 +16,10 @@ export class DrawingService {
     this.context = context as CanvasRenderingContext2D;
   }
 
+  clearEverything() {
+    this.context.clearRect(0, 0, 700, 700);
+  }
+
   fillRectangle(x: number, y: number, w: number, h: number, color: string) {
     this.context.fillStyle = color;
     this.context.fillRect(x, y, w, h);

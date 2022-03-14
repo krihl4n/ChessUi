@@ -38,6 +38,9 @@ export class BoardCanvasComponent implements OnInit {
   private pieceOnTheMoveStart: Point;
   private pieceOnTheMoveDestination: Point;
 
+  secondsPassed = 0;
+  oldTimeStamp = 0;
+
   ngOnInit(): void {
     this.drawingService.setCanvasContext(this.canvas.nativeElement.getContext('2d'))
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize);
@@ -53,9 +56,9 @@ export class BoardCanvasComponent implements OnInit {
     this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
 
-    let framesPerSecond = 120;
-    setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
-
+    //let framesPerSecond = 100;
+    //setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
+    window.requestAnimationFrame(this.drawEverything.bind(this));
 
     this.canvas.nativeElement.addEventListener('contextmenu', (evt: MouseEvent) => {
       evt.preventDefault(); // todo check if works on other OSes
@@ -127,23 +130,34 @@ export class BoardCanvasComponent implements OnInit {
     }
   }
 
-  private drawEverything() {
+  private drawEverything(timeStamp: any) {
+
+    this.secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
+    this.oldTimeStamp = timeStamp;
+   // this.drawingService.clearEverything();
     this.drawBackground();
     this.drawPieces();
     this.drawPieceOnTheMove();
+
+    window.requestAnimationFrame(this.drawEverything.bind(this))
   }
 
   private drawPieceOnTheMove() {
     if (this.pieceOnTheMove) {
-      let baseSpeed = 32;
+      let baseSpeed = 1500;
       let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
       let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
 
       let xyDistance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
       let steps = xyDistance / baseSpeed;
 
-      let xSpeed = xDistance / steps;
-      let ySpeed = yDistance / steps;
+      let xSpeed = (xDistance / steps) * this.secondsPassed;
+      let ySpeed = (yDistance / steps) * this.secondsPassed;
+
+    //  let xSpeed = 30;
+     // let ySpeed = 0;
+      console.log('xSpeed: ' + xSpeed);
+      console.log('ySpeed:' + ySpeed);
 
       let xDistanceLeft = Math.abs(this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveLocation.x)
       if(xDistanceLeft < Math.abs(xSpeed)) {
@@ -219,7 +233,7 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawBackground() {
-
+  //  this.drawingService.fillRectangle(0,0,700,700,this.fieldColorLight)
     let currentColor = this.fieldColorLight;
     for (let col = 0; col < 8; col++) {
       for (let row = 0; row < 8; row++) {
