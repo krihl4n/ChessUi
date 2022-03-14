@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { release } from 'os';
 import { DrawingService } from './drawing.service';
 import { FieldUtilsService } from './field-utils.service';
+import { PieceDrag } from './piece-drag';
 import { PieceMovement } from './piece-movement';
 import { Point } from './point.model';
 
@@ -53,13 +55,25 @@ export class BoardCanvasComponent implements OnInit {
     };
     this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
 
-    window.requestAnimationFrame( this.drawBackground.bind(this));
+    window.requestAnimationFrame(this.drawBackground.bind(this));
     //let framesPerSecond = 100;
     //setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
     window.requestAnimationFrame(this.drawEverything.bind(this));
 
     this.canvas.nativeElement.addEventListener('contextmenu', (evt: MouseEvent) => {
       evt.preventDefault(); // todo check if works on other OSes
+    })
+
+    this.canvas.nativeElement.addEventListener('mousedown', (evt: MouseEvent) => {
+      let xOnBoard = evt.clientX - this.boardX
+      let yOnBoard = evt.clientY - this.boardY
+
+      let leftClick = 0; // todo check other OSes
+
+      if (evt.button == leftClick) {
+        this.mouseDownAtField = this.locationUtilsService.determineFieldAtPos(xOnBoard, yOnBoard);
+        this.dragPiece(xOnBoard, yOnBoard);
+      }
     })
 
     this.canvas.nativeElement.addEventListener('mouseup', (evt: MouseEvent) => {
@@ -74,9 +88,53 @@ export class BoardCanvasComponent implements OnInit {
       }
 
       if (evt.button == leftClick) {
-        this.selectOrMovePiece(xOnBoard, yOnBoard);
+        if (this.pieceDrag) {
+          this.releasePiece();
+          this.pieceSelectedAtField = null;
+        }
+        if(this.mouseDownAtField == this.locationUtilsService.determineFieldAtPos(xOnBoard, yOnBoard)) {
+          this.selectOrMovePiece(xOnBoard, yOnBoard);
+        }
       }
     })
+
+    this.canvas.nativeElement.addEventListener('mousemove', (evt: MouseEvent) => {
+      let xOnBoard = evt.clientX - this.boardX
+      let yOnBoard = evt.clientY - this.boardY
+
+      this.pieceDrag?.updateMouseLocation(xOnBoard, yOnBoard)
+    })
+  }
+
+  mouseDownAtField: string 
+  pieceDrag: PieceDrag | null;
+
+  private dragPiece(x: number, y: number) {
+    let field = this.locationUtilsService.determineFieldAtPos(x, y);
+    if (this.fieldOccupations.has(field)) {
+      let piece = this.fieldOccupations.get(field);
+      this.pieceDrag = new PieceDrag(piece as HTMLImageElement, {x, y});
+      this.fieldOccupations.delete(field)
+    }
+  }
+
+  private releasePiece() {
+    if(this.pieceDrag){
+      let field = this.locationUtilsService.determineFieldAtPos(this.pieceDrag.mouseLocation.x, this.pieceDrag.mouseLocation.y);
+      this.fieldOccupations.set(field, this.pieceDrag.piece);
+      this.pieceDrag = null;
+    }
+  }
+
+  private drawDraggedPiece() {
+    if(this.pieceDrag) {
+      this.drawingService.drawPicture(
+        this.canvasContext,
+        this.pieceDrag.piece,
+        this.pieceDrag.getPieceLocation().x,
+        this.pieceDrag.getPieceLocation().y
+      )
+    }
   }
 
   pieceSelectedAtField: string | null
@@ -118,7 +176,7 @@ export class BoardCanvasComponent implements OnInit {
         toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
         toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
 
-        this.pieceMovement = new PieceMovement(piece,fromLocation, toLocation);
+        this.pieceMovement = new PieceMovement(piece, fromLocation, toLocation);
       }
     }
   }
@@ -141,20 +199,20 @@ export class BoardCanvasComponent implements OnInit {
     this.drawBackground();
     this.drawPieces();
     this.drawPieceOnTheMove();
-
+    this.drawDraggedPiece();
     window.requestAnimationFrame(this.drawEverything.bind(this))
   }
 
   private drawPieceOnTheMove() {
-     if (this.pieceMovement) {
-        this.pieceMovement.updatePieceOnTheMove(this.secondsPassed);
-      if(this.pieceMovement.destinationAchieved === true) {
+    if (this.pieceMovement) {
+      this.pieceMovement.updatePieceOnTheMove(this.secondsPassed);
+      if (this.pieceMovement.destinationAchieved === true) {
         let field = this.locationUtilsService.determineFieldAtPos(this.pieceMovement.destination.x, this.pieceMovement.destination.y)
         this.fieldOccupations.set(field, this.pieceMovement.pieceOnTheMove);
         this.pieceMovement = null
       }
 
-      if(this.pieceMovement) {
+      if (this.pieceMovement) {
         this.drawingService.drawPicture(
           this.canvasContext,
           this.pieceMovement.pieceOnTheMove,
