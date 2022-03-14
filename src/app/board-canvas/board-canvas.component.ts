@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DrawingService } from './drawing.service';
 import { FieldUtilsService } from './field-utils.service';
+import { PieceMovement } from './piece-movement';
 import { Point } from './point.model';
 
 @Component({
@@ -33,11 +34,6 @@ export class BoardCanvasComponent implements OnInit {
   private markedFields: string[] = []
 
   private fieldOccupations = new Map<string, HTMLImageElement>()
-
-  private pieceOnTheMove: HTMLImageElement | null; // todo will need to be a collection
-  private pieceOnTheMoveLocation: Point;
-  private pieceOnTheMoveStart: Point;
-  private pieceOnTheMoveDestination: Point;
 
   secondsPassed = 0;
   oldTimeStamp = 0;
@@ -97,6 +93,8 @@ export class BoardCanvasComponent implements OnInit {
     }
   }
 
+  pieceMovement: PieceMovement | null; // will need to be a collection
+
   private initiatePieceMovement(fromField: string, toField: string) {
     let piece = this.fieldOccupations.get(fromField);
     if (piece) {
@@ -104,7 +102,6 @@ export class BoardCanvasComponent implements OnInit {
         return
       }
       this.fieldOccupations.delete(fromField);
-      this.pieceOnTheMove = piece;
       let fromLocation = {
         x: this.fieldLocations.get(fromField)?.x || 0,
         y: this.fieldLocations.get(fromField)?.y || 0
@@ -121,9 +118,7 @@ export class BoardCanvasComponent implements OnInit {
         toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
         toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
 
-        this.pieceOnTheMoveLocation = fromLocation;
-        this.pieceOnTheMoveStart = { x: fromLocation.x, y: fromLocation.y };
-        this.pieceOnTheMoveDestination = toLocation;
+        this.pieceMovement = new PieceMovement(piece,fromLocation, toLocation);
       }
     }
   }
@@ -142,7 +137,7 @@ export class BoardCanvasComponent implements OnInit {
 
     this.secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
     this.oldTimeStamp = timeStamp;
-   // this.drawingService.clearEverything();
+
     this.drawBackground();
     this.drawPieces();
     this.drawPieceOnTheMove();
@@ -151,76 +146,22 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawPieceOnTheMove() {
-    if (this.pieceOnTheMove) {
-      let baseSpeed = 750;
-      let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
-      let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
-
-      let xyDistance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-      let steps = xyDistance / baseSpeed;
-
-      let xSpeed = (xDistance / steps) * this.secondsPassed;
-      let ySpeed = (yDistance / steps) * this.secondsPassed;
-
-      console.log('xSpeed: ' + xSpeed);
-      console.log('ySpeed:' + ySpeed);
-
-      let xDistanceLeft = Math.abs(this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveLocation.x)
-      if(xDistanceLeft < Math.abs(xSpeed)) {
-        if(xSpeed < 0) {
-          xSpeed = xDistanceLeft;
-        } else {
-          xSpeed = -xDistanceLeft
-        }
+     if (this.pieceMovement) {
+        this.pieceMovement.updatePieceOnTheMove(this.secondsPassed);
+      if(this.pieceMovement.destinationAchieved === true) {
+        let field = this.locationUtilsService.determineFieldAtPos(this.pieceMovement.destination.x, this.pieceMovement.destination.y)
+        this.fieldOccupations.set(field, this.pieceMovement.pieceOnTheMove);
+        this.pieceMovement = null
       }
 
-      let yDistanceLeft = Math.abs(this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveLocation.y)
-      if(yDistanceLeft < Math.abs(ySpeed)) {
-        if(ySpeed < 0) {
-          ySpeed = yDistanceLeft;
-        } else {
-          ySpeed = -yDistanceLeft
-        }
+      if(this.pieceMovement) {
+        this.drawingService.drawPicture(
+          this.canvasContext,
+          this.pieceMovement.pieceOnTheMove,
+          this.pieceMovement.currentLocation.x,
+          this.pieceMovement.currentLocation.y
+        )
       }
-
-      let dstXAchieved = false
-      let dstYAchieved = false
-
-      if (xSpeed == 0 ||
-        xSpeed > 0 && this.pieceOnTheMoveLocation.x >= this.pieceOnTheMoveDestination.x ||
-        xSpeed < 0 && this.pieceOnTheMoveLocation.x <= this.pieceOnTheMoveDestination.x
-      ) {
-        dstXAchieved = true
-      }
-
-      if (ySpeed == 0 ||
-        ySpeed > 0 && this.pieceOnTheMoveLocation.y >= this.pieceOnTheMoveDestination.y ||
-        ySpeed < 0 && this.pieceOnTheMoveLocation.y <= this.pieceOnTheMoveDestination.y
-      ) {
-        dstYAchieved = true
-      }
-
-      if (dstXAchieved && dstYAchieved) {
-        let field = this.locationUtilsService.determineFieldAtPos(this.pieceOnTheMoveDestination.x, this.pieceOnTheMoveDestination.y)
-        this.fieldOccupations.set(field, this.pieceOnTheMove);
-        this.pieceOnTheMove = null
-        return;
-      }
-
-      if (!dstXAchieved) {
-        this.pieceOnTheMoveLocation.x = this.pieceOnTheMoveLocation.x + xSpeed;
-      }
-
-      if (!dstYAchieved) {
-        this.pieceOnTheMoveLocation.y = this.pieceOnTheMoveLocation.y + ySpeed;
-      }
-
-      this.drawingService.drawPicture(
-        this.canvasContext,
-        this.pieceOnTheMove,
-        this.pieceOnTheMoveLocation.x,
-        this.pieceOnTheMoveLocation.y
-      )
     }
   }
 
@@ -277,7 +218,6 @@ export class BoardCanvasComponent implements OnInit {
       }
       currentColor = this.oppositeOf(currentColor)
     }
-   // window.requestAnimationFrame(this.drawBackground.bind(this))
   }
 
   private oppositeOf(color: string): string {

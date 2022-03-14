@@ -22,7 +22,6 @@ export class DrawingService {
   }
 
   drawPicture(ctx: CanvasRenderingContext2D, pic: HTMLImageElement, x: number, y: number) {
-    console.log("draw picture at " + x + "," + y)
     ctx.save();
     ctx.translate(x, y);
     ctx.drawImage(pic, 0, 0);
