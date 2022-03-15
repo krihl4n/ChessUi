@@ -169,14 +169,24 @@ export class BoardCanvasComponent implements OnInit {
       }
 
       if (fromLocation && toLocation) {
-        fromLocation.x = fromLocation?.x + this.fieldSize / 2 - piece.width / 2;
-        fromLocation.y = fromLocation?.y + this.fieldSize / 2 - piece.height / 2;
+        // fromLocation.x = fromLocation?.x + this.fieldSize / 2 - piece.width / 2;
+        // fromLocation.y = fromLocation?.y + this.fieldSize / 2 - piece.height / 2;
 
-        toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
-        toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
+        // toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
+        // toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
 
-        this.pieceMovement = new PieceMovement(piece, fromLocation, toLocation);
+        this.pieceMovement = new PieceMovement(piece, 
+          this.transalteFieldLocationToPieceOnFieldLocation(fromLocation, piece), 
+          this.transalteFieldLocationToPieceOnFieldLocation(toLocation, piece)
+          );
       }
+    }
+  }
+
+  private transalteFieldLocationToPieceOnFieldLocation(fieldLocation: Point, piece: HTMLImageElement): Point {
+    return {
+      x: fieldLocation.x + this.fieldSize / 2 - piece.width / 2,
+      y: fieldLocation.y + this.fieldSize / 2 - piece.height / 2
     }
   }
 
@@ -231,9 +241,9 @@ export class BoardCanvasComponent implements OnInit {
   private drawPiecePictureAtField(pic: HTMLImageElement, field: string) {
     let fieldLocation = this.fieldLocations.get(field);
     if (fieldLocation) {
+      let pieceLocation = this.transalteFieldLocationToPieceOnFieldLocation(fieldLocation, pic);
       this.drawingService.drawPicture(this.canvasContext, pic,
-        fieldLocation.x + this.fieldSize / 2 - pic.width / 2,
-        fieldLocation.y + this.fieldSize / 2 - pic.height / 2)
+        pieceLocation.x, pieceLocation.y)
     }
   }
 
