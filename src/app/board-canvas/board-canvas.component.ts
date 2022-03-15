@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { release } from 'os';
 import { DrawingService } from './drawing.service';
 import { FieldUtilsService } from './field-utils.service';
 import { PieceDrag } from './piece-drag';

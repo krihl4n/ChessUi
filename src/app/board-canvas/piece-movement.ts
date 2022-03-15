@@ -50,19 +50,14 @@ export class PieceMovement {
         let xSpeed = this.xBaseSpeed * secondsPassed;
         let ySpeed = this.yBaseSpeed * secondsPassed;
 
-        xSpeed = this.recalculateSpeedForLastStep(xSpeed, 
-            Math.abs(this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveLocation.x));
-
-        ySpeed = this.recalculateSpeedForLastStep(ySpeed, 
-            Math.abs(this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveLocation.y));
-
-        //  console.log('xSpeed: ' + xSpeed);
+        //  console.log('xSpeed:' + xSpeed);
         //  console.log('ySpeed:' + ySpeed);
 
         let dstXAchieved = false
         let dstYAchieved = false
 
-        if (xSpeed == 0 ||
+        if (xSpeed == 0 || 
+            Math.abs(this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveLocation.x) <= Math.abs(xSpeed) ||
             xSpeed > 0 && this.pieceOnTheMoveLocation.x >= this.pieceOnTheMoveDestination.x ||
             xSpeed < 0 && this.pieceOnTheMoveLocation.x <= this.pieceOnTheMoveDestination.x
         ) {
@@ -70,6 +65,7 @@ export class PieceMovement {
         }
 
         if (ySpeed == 0 ||
+            Math.abs(this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveLocation.y) <= Math.abs(ySpeed) ||
             ySpeed > 0 && this.pieceOnTheMoveLocation.y >= this.pieceOnTheMoveDestination.y ||
             ySpeed < 0 && this.pieceOnTheMoveLocation.y <= this.pieceOnTheMoveDestination.y
         ) {
@@ -89,17 +85,5 @@ export class PieceMovement {
             this.pieceOnTheMoveLocation.y = this.pieceOnTheMoveLocation.y + ySpeed;
         }
 
-    }
-
-    private recalculateSpeedForLastStep(speed: number, distanceLeft: number): number {
-        if (distanceLeft < Math.abs(speed)) {
-            if (speed < 0) {
-                return distanceLeft;
-            } else {
-                return -distanceLeft
-            }
-        } else {
-            return speed
-        }
     }
 }
