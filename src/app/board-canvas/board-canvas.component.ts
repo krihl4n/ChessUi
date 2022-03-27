@@ -1,4 +1,6 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { debug } from 'console';
 import { DrawingService } from './drawing.service';
 import { FieldUtilsService } from './field-utils.service';
 import { PieceDrag } from './piece-drag';
@@ -46,17 +48,14 @@ export class BoardCanvasComponent implements OnInit {
     this.boardX = this.canvas.nativeElement.getBoundingClientRect().x
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
-    this.whitePawnImg = this.renderer.createElement('img');
+    this.whitePawnImg = new Image();
     this.whitePawnImg.onload = () => {
-      console.log("img loaded") // todo start game when all images are loaded
       this.fieldOccupations.set("d4", this.whitePawnImg);
       this.fieldOccupations.set("g2", this.whitePawnImg)
     };
-    this.whitePawnImg.src = "assets/white_pawn.png"; // todo other pieces
+    
+    this.whitePawnImg.src = "assets/pawn.svg";
 
-    window.requestAnimationFrame(this.drawBackground.bind(this));
-    //let framesPerSecond = 100;
-    //setInterval(this.drawEverything.bind(this), 1000 / framesPerSecond);
     window.requestAnimationFrame(this.drawEverything.bind(this));
 
     this.canvas.nativeElement.addEventListener('contextmenu', (evt: MouseEvent) => {
@@ -102,6 +101,14 @@ export class BoardCanvasComponent implements OnInit {
       let yOnBoard = evt.clientY - this.boardY
 
       this.pieceDrag?.updateMouseLocation(xOnBoard, yOnBoard)
+    })
+
+    this.canvas.nativeElement.addEventListener('mouseout', (evt: MouseEvent) => {
+      console.log("mouse out")
+    })
+
+    window.addEventListener('mouseup', (evt: MouseEvent) => {
+      console.log("window mouse up")
     })
   }
 
@@ -169,12 +176,6 @@ export class BoardCanvasComponent implements OnInit {
       }
 
       if (fromLocation && toLocation) {
-        // fromLocation.x = fromLocation?.x + this.fieldSize / 2 - piece.width / 2;
-        // fromLocation.y = fromLocation?.y + this.fieldSize / 2 - piece.height / 2;
-
-        // toLocation.x = toLocation.x + this.fieldSize / 2 - piece.width / 2;
-        // toLocation.y = toLocation.y + this.fieldSize / 2 - piece.height / 2;
-
         this.pieceMovement = new PieceMovement(piece, 
           this.transalteFieldLocationToPieceOnFieldLocation(fromLocation, piece), 
           this.transalteFieldLocationToPieceOnFieldLocation(toLocation, piece)
@@ -201,10 +202,6 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private drawEverything(timeStamp: any) {
-
-    this.secondsPassed = (timeStamp - this.oldTimeStamp) / 1000;
-    this.oldTimeStamp = timeStamp;
-
     this.drawBackground();
     this.drawPieces();
     this.drawPieceOnTheMove();
@@ -214,7 +211,7 @@ export class BoardCanvasComponent implements OnInit {
 
   private drawPieceOnTheMove() {
     if (this.pieceMovement) {
-      this.pieceMovement.updatePieceOnTheMove(this.secondsPassed);
+      this.pieceMovement.updatePieceOnTheMove();
       if (this.pieceMovement.destinationAchieved === true) {
         let field = this.locationUtilsService.determineFieldAtPos(this.pieceMovement.destination.x, this.pieceMovement.destination.y)
         this.fieldOccupations.set(field, this.pieceMovement.pieceOnTheMove);

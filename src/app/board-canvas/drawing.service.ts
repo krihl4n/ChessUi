@@ -22,10 +22,7 @@ export class DrawingService {
   }
 
   drawPicture(ctx: CanvasRenderingContext2D, pic: HTMLImageElement, x: number, y: number) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.drawImage(pic, 0, 0);
-    ctx.restore();
+    ctx.drawImage(pic, x, y);
   }
 
   fillCircle(ctx: CanvasRenderingContext2D, x:number, y:number, radius:number, color:string) {

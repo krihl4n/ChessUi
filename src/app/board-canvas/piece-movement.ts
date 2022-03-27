@@ -21,7 +21,7 @@ export class PieceMovement {
     }
 
     private initializeBaseSpeed() {
-        let baseSpeed = 750;
+        let baseSpeed = 20;
         let xDistance = this.pieceOnTheMoveDestination.x - this.pieceOnTheMoveStart.x;
         let yDistance = this.pieceOnTheMoveDestination.y - this.pieceOnTheMoveStart.y;
 
@@ -46,12 +46,9 @@ export class PieceMovement {
         }
     }
 
-    updatePieceOnTheMove(secondsPassed: number) {
-        let xSpeed = this.xBaseSpeed * secondsPassed;
-        let ySpeed = this.yBaseSpeed * secondsPassed;
-
-        //  console.log('xSpeed:' + xSpeed);
-        //  console.log('ySpeed:' + ySpeed);
+    updatePieceOnTheMove() {
+        let xSpeed = this.xBaseSpeed;
+        let ySpeed = this.yBaseSpeed;
 
         let dstXAchieved = false
         let dstYAchieved = false
