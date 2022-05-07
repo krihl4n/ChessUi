@@ -25,14 +25,15 @@ export class BoardCanvasComponent implements OnInit {
 
   private boardSize = this.canvasSize;
   private fieldSize = this.boardSize / 8;
-  private fieldColorLight = "#EBD1A6";
-  private fieldColorDark = "#A27551";
+  private fieldColorLight = "#D2C3C3";
+  private fieldColorDark = "#75352B";
 
   private boardX: number;
   private boardY: number;
 
   private fieldLocations = new Map<string, Point>();
   private whitePawnImg: HTMLImageElement;
+  private blackPawnImg: HTMLImageElement;
 
   private markedFields: string[] = []
 
@@ -49,12 +50,15 @@ export class BoardCanvasComponent implements OnInit {
     this.boardY = this.canvas.nativeElement.getBoundingClientRect().y
 
     this.whitePawnImg = new Image();
+    this.blackPawnImg = new Image();
+    this.blackPawnImg.onload = () => {
+      this.fieldOccupations.set("d4", this.blackPawnImg);
+    };
     this.whitePawnImg.onload = () => {
-      this.fieldOccupations.set("d4", this.whitePawnImg);
       this.fieldOccupations.set("g2", this.whitePawnImg)
     };
-    
-    this.whitePawnImg.src = "assets/pawn.svg";
+    this.blackPawnImg.src = "assets/black_pawn_1.svg";
+    this.whitePawnImg.src = "assets/white_pawn_1.svg";
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
 
