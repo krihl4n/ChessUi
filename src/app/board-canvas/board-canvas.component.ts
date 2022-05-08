@@ -116,6 +116,16 @@ export class BoardCanvasComponent implements OnInit {
     })
   }
 
+  leftPos="100px"
+
+
+  onImageClick() {
+    if(this.leftPos === "100px") {
+      this.leftPos = "1000px"; 
+    } else {
+      this.leftPos = "100px"
+    }
+  }
   mouseDownAtField: string 
   pieceDrag: PieceDrag | null;
 
