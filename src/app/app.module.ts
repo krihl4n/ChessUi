@@ -10,6 +10,7 @@ import { GameFinishedDialogComponent } from './game-finished-dialog/game-finishe
 import { BoardCanvasComponent } from './board-canvas/board-canvas.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
+import { SvgTestComponent } from './svg-test/svg-test.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { GameComponent } from './game/game.component';
     CapturesComponent,
     GameFinishedDialogComponent,
     BoardCanvasComponent,
-    GameComponent
+    GameComponent,
+    SvgTestComponent
   ],
   imports: [
     BrowserModule,
