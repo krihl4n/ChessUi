@@ -14,11 +14,12 @@ export class FieldUtilsService {
     this.boardFlipped = boardFlipped;
   }
 
-  determineFieldAtPos(x: number, y: number) {
-    return this.determineColAtPos(x) + this.determineRowAtPos(y);
+
+  determineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string {
+    return this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
   }
 
-  determineRowAtPos(y: number): string {
+determineRowAtPos(y: number, fieldSize: number = this.fieldSize): string {
     let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
 
     if (this.boardFlipped) {
@@ -26,14 +27,14 @@ export class FieldUtilsService {
     }
 
     for (let i = 0; i < 8; i++) {
-      if (y >= i * this.fieldSize && y < i * this.fieldSize + this.fieldSize) {
+      if (y >= i * fieldSize && y < i * fieldSize + fieldSize) {
         return rows[i]
       }
     }
     return "x";
   }
 
-  determineColAtPos(x: number): string {
+  determineColAtPos(x: number, fieldSize: number = this.fieldSize): string {
     let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
     if (this.boardFlipped) {
@@ -41,7 +42,7 @@ export class FieldUtilsService {
     }
 
     for (let i = 0; i < 8; i++) {
-      if (x >= i * this.fieldSize && x < i * this.fieldSize + this.fieldSize) {
+      if (x >= i * fieldSize && x < i * fieldSize + fieldSize) {
         return cols[i]
       }
     }

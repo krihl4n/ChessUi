@@ -15,9 +15,9 @@ export class DrawingService {
     ctx.fillRect(x, y, w, h);
   }
 
-  fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number) {
+  fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number, font: number) {
     ctx.fillStyle = color;
-    ctx.font = "12px Georgia"; // todo scale 
+    ctx.font = font + "px Georgia"; // todo scale 
     ctx.fillText(txt, x, y);
   }
 

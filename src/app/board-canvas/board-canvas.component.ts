@@ -282,7 +282,8 @@ export class BoardCanvasComponent implements OnInit {
             this.locationUtilsService.determineRowAtPos(rowPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.1,
-            rowPos + this.fieldSize - this.fieldSize * 0.85);
+            rowPos + this.fieldSize - this.fieldSize * 0.85,
+            12);
         }
         if (row == 7) {
           this.drawingService.fillText(
@@ -290,7 +291,8 @@ export class BoardCanvasComponent implements OnInit {
             this.locationUtilsService.determineColAtPos(colPos),
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.95,
-            rowPos + this.fieldSize - this.fieldSize * 0.05);
+            rowPos + this.fieldSize - this.fieldSize * 0.05,
+            12);
         }
         currentColor = this.oppositeOf(currentColor)
       }

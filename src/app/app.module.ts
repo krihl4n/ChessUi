@@ -11,6 +11,7 @@ import { BoardCanvasComponent } from './board-canvas/board-canvas.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { SvgTestComponent } from './svg-test/svg-test.component';
+import { BoardCanvasWithCssAnimationsComponent } from './board-canvas-with-css-animations/board-canvas-with-css-animations.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SvgTestComponent } from './svg-test/svg-test.component';
     GameFinishedDialogComponent,
     BoardCanvasComponent,
     GameComponent,
-    SvgTestComponent
+    SvgTestComponent,
+    BoardCanvasWithCssAnimationsComponent
   ],
   imports: [
     BrowserModule,
