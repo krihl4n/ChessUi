@@ -13,26 +13,28 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
   canvasContext: CanvasRenderingContext2D;
-  
-  fieldSize =  (window.innerHeight-50)/8
-  canvasSize = this.fieldSize*8
 
+  private fieldSize: number;
+  canvasSize: number;
   private fieldColorLight = "#D2C3C3";
   private fieldColorDark = "#75352B";
   private boardFlipped = false;
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.fieldSize = (window.innerHeight-100)/8
-    this.canvasSize = this.fieldSize*8
-    //this.innerWidth = window.innerWidth;
-    console.log(this.fieldSize)
+    this.setupBoardSize(window.outerHeight)
+  }
+
+  private setupBoardSize(windowHeight: number) {
+    this.fieldSize = (windowHeight-200)/8
+    this.canvasSize = this.fieldSize*8  
   }
 
   private drawEverything() {
