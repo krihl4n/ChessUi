@@ -45,33 +45,34 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit, AfterViewI
     // const factory = this.componentFactoryResolver.resolveComponentFactory(ChessPieceComponent)
     // const componentRef = this.container.createComponent(factory)
 
-    //  const el = document.createElement("img");
-    //  el.setAttribute('src', 'assets/white_bishop.svg')
-    //  el.setAttribute('left', "200px")
-    //  document.getElementById("boardcontainter")?.appendChild(el)
-
     const el = this.renderer.createElement('img')
     this.renderer.setAttribute(el, 'id', 'white_bishop');
     this.renderer.setAttribute(el, 'src', 'assets/white_bishop.svg');
     this.renderer.setStyle(el, 'left', this.leftPos)
-    this.renderer.listen(el, 'click', (evt) => {
-      console.log("image clicked")
-      this.onImageClick()
-      this.renderer.setStyle(el, 'left', this.leftPos)
-    })
-    
+
     this.renderer.appendChild(this.boardContainer.nativeElement, el)
     const el1 = this.renderer.createElement('img')
     this.renderer.setAttribute(el1, 'id', 'black_bishop');
     this.renderer.setAttribute(el1, 'src', 'assets/black_bishop.svg');
     this.renderer.setStyle(el1, 'left', this.leftPos1)
+    this.renderer.appendChild(this.boardContainer.nativeElement, el1)
+
+    this.renderer.listen(el, 'click', (evt) => {
+      console.log("image clicked")
+      this.renderer.setStyle(el, 'z-index', 999);
+      this.renderer.setStyle(el1, 'z-index', 1);
+      this.onImageClick()
+      this.renderer.setStyle(el, 'left', this.leftPos)
+    })
+    
     this.renderer.listen(el1, 'click', (evt) => {
       console.log("image clicked")
+      this.renderer.setStyle(el, 'z-index', 1);
+      this.renderer.setStyle(el1, 'z-index', 999);
       this.onImageClick1()
       this.renderer.setStyle(el1, 'left', this.leftPos1)
     })
 
-    this.renderer.appendChild(this.boardContainer.nativeElement, el1)
     this.renderer.listen("document", 'animationend', () => {
       console.log("animation")
     })
@@ -86,23 +87,23 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit, AfterViewI
     this.setupBoardSize(window.outerHeight)
   }
 
-  leftPos="100px"
-  leftPos1="200px"
+  leftPos="200px"
+  leftPos1="100px"
   onImageClick() {
     console.log("click")
-    if(this.leftPos === "100px") {
-      this.leftPos = "500px"; 
+    if(this.leftPos === "200px") {
+      this.leftPos = "600px"; 
     } else {
-      this.leftPos = "100px"
+      this.leftPos = "200px"
     }
   }
 
   onImageClick1() {
     console.log("click1")
-    if(this.leftPos1 === "200px") {
-      this.leftPos1 = "300px"; 
+    if(this.leftPos1 === "100px") {
+      this.leftPos1 = "400px"; 
     } else {
-      this.leftPos1 = "200px"
+      this.leftPos1 = "100px"
     }
   }
   
