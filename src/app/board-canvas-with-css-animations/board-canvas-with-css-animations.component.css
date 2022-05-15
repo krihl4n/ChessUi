@@ -2,4 +2,13 @@ app-chess-piece {
     position: absolute;
     transition: all 500ms ease;
     user-select: none;
+    border: 1px solid green
+}
+
+img {
+    position: absolute;
+    transition: all 500ms ease;
+    user-select: none;
+    border: 1px solid green;
+    cursor: pointer;
 }

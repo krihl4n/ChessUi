@@ -1,5 +1,11 @@
-<div style="width: 100px; height: 700px; float:left;"></div>
-<div style="margin: 20px;">
-    <canvas #canvas [width]="canvasSize" [height]="canvasSize" style="cursor: pointer"></canvas>
-    <app-chess-piece (click)="onImageClick()" [ngStyle]="{'left':leftPos}" ></app-chess-piece>
+<div #boardcontainer id="boardcontainter" style="margin: 20px;">
+    <canvas #canvas [width]="canvasSize" [height]="canvasSize" style="position:absolute;cursor: pointer"></canvas>
+
+   <!-- <img id="piece" 
+        src="assets/white_bishop.svg" 
+        draggable="false" 
+        [ngStyle]="{'left':leftPos}"
+        (click)="onImageClick()"
+    > -->
+      <!-- <app-chess-piece (click)="onImageClick()" [ngStyle]="{'left':leftPos}" ></app-chess-piece>-->
 </div>
