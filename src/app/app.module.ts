@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { SvgTestComponent } from './svg-test/svg-test.component';
 import { BoardCanvasWithCssAnimationsComponent } from './board-canvas-with-css-animations/board-canvas-with-css-animations.component';
+import { ChessPieceComponent } from './board-canvas-with-css-animations/chess-piece/chess-piece.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { BoardCanvasWithCssAnimationsComponent } from './board-canvas-with-css-a
     BoardCanvasComponent,
     GameComponent,
     SvgTestComponent,
-    BoardCanvasWithCssAnimationsComponent
+    BoardCanvasWithCssAnimationsComponent,
+    ChessPieceComponent
   ],
   imports: [
     BrowserModule,

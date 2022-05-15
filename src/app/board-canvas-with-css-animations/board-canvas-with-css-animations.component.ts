@@ -32,6 +32,20 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.setupBoardSize(window.outerHeight)
   }
 
+
+  leftPos="100px"
+
+
+  onImageClick() {
+    console.log("click")
+    if(this.leftPos === "100px") {
+      this.leftPos = "500px"; 
+    } else {
+      this.leftPos = "100px"
+    }
+  }
+  
+
   private setupBoardSize(windowHeight: number) {
     this.fieldSize = (windowHeight-200)/8
     this.canvasSize = this.fieldSize*8  
@@ -55,7 +69,6 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
           this.drawingService.fillText(
             this.canvasContext,
             this.locationUtilsService.determineRowAtPos(rowPos, this.fieldSize),
-           // "a",
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.1,
             rowPos + this.fieldSize - this.fieldSize * 0.85,
@@ -65,7 +78,6 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
           this.drawingService.fillText(
             this.canvasContext,
             this.locationUtilsService.determineColAtPos(colPos, this.fieldSize),
-           // "a",
             this.oppositeOf(currentColor),
             colPos + this.fieldSize - this.fieldSize * 0.95,
             rowPos + this.fieldSize - this.fieldSize * 0.05,
