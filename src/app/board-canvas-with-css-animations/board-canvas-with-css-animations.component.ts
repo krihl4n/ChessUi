@@ -1,17 +1,16 @@
-import { AfterContentInit, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
-import { ChessPieceComponent } from './chess-piece/chess-piece.component';
 
 @Component({
   selector: 'app-board-canvas-with-css-animations',
   templateUrl: './board-canvas-with-css-animations.component.html',
   styleUrls: ['./board-canvas-with-css-animations.component.css']
 })
-export class BoardCanvasWithCssAnimationsComponent implements OnInit, AfterViewInit {
+export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
     private drawingService: DrawingService, 
     private locationUtilsService: FieldUtilsService,
     private renderer: Renderer2) { }
@@ -33,87 +32,59 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit, AfterViewI
   private fieldColorDark = "#75352B";
   private boardFlipped = false;
 
+  loaded = false
+  image = new Image();
+
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
+
+    this.image.onload = () => {
+      this.loaded = true
+      console.log("image laoded")
+    }
+    this.image.src = 'assets/black_queen.svg'
+
+    const myImg = this.renderer.createElement('img');
+    this.renderer.setAttribute(myImg, 'src', "assets/white_bishop.svg")
+    this.renderer.setAttribute(myImg, 'draggable', 'false')
+    this.renderer.setStyle(myImg, 'left', '100px')
+    this.renderer.setStyle(myImg, 'top', '100px')
+
+    this.renderer.appendChild(this.boardContainer.nativeElement, myImg)
+         
+    setTimeout(() => {
+      this.renderer.setStyle(myImg, 'left', '600px')
+    }, 2000)
+         
+    setTimeout(() => {
+      this.renderer.setStyle(myImg, 'top', '600px')
+    }, 4000)
+
     window.requestAnimationFrame(this.drawEverything.bind(this));
-  }
-
-  ngAfterViewInit(): void {
-    
-    // const factory = this.componentFactoryResolver.resolveComponentFactory(ChessPieceComponent)
-    // const componentRef = this.container.createComponent(factory)
-
-    const el = this.renderer.createElement('img')
-    this.renderer.setAttribute(el, 'id', 'white_bishop');
-    this.renderer.setAttribute(el, 'src', 'assets/white_bishop.svg');
-    this.renderer.setStyle(el, 'left', this.leftPos)
-
-    this.renderer.appendChild(this.boardContainer.nativeElement, el)
-    const el1 = this.renderer.createElement('img')
-    this.renderer.setAttribute(el1, 'id', 'black_bishop');
-    this.renderer.setAttribute(el1, 'src', 'assets/black_bishop.svg');
-    this.renderer.setStyle(el1, 'left', this.leftPos1)
-    this.renderer.appendChild(this.boardContainer.nativeElement, el1)
-
-    this.renderer.listen(el, 'click', (evt) => {
-      console.log("image clicked")
-      this.renderer.setStyle(el, 'z-index', 999);
-      this.renderer.setStyle(el1, 'z-index', 1);
-      this.onImageClick()
-      this.renderer.setStyle(el, 'left', this.leftPos)
-    })
-    
-    this.renderer.listen(el1, 'click', (evt) => {
-      console.log("image clicked")
-      this.renderer.setStyle(el, 'z-index', 1);
-      this.renderer.setStyle(el1, 'z-index', 999);
-      this.onImageClick1()
-      this.renderer.setStyle(el1, 'left', this.leftPos1)
-    })
-
-    this.renderer.listen("document", 'animationend', () => {
-      console.log("animation")
-    })
-    this.renderer.listen(el1, 'mousedown', () => {
-      console.log("mousedown")
-    })
-    this.renderer.selectRootElement
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.setupBoardSize(window.outerHeight)
   }
-
-  leftPos="200px"
-  leftPos1="100px"
-  onImageClick() {
-    console.log("click")
-    if(this.leftPos === "200px") {
-      this.leftPos = "600px"; 
-    } else {
-      this.leftPos = "200px"
-    }
-  }
-
-  onImageClick1() {
-    console.log("click1")
-    if(this.leftPos1 === "100px") {
-      this.leftPos1 = "400px"; 
-    } else {
-      this.leftPos1 = "100px"
-    }
-  }
   
   private setupBoardSize(windowHeight: number) {
     this.fieldSize = (windowHeight-200)/8
-    this.canvasSize = this.fieldSize*8  
+    this.canvasSize = this.fieldSize*8  // scale pieces as well?
   }
 
   private drawEverything() {
     this.drawBackground();
+
+    if(this.loaded) {
+      let factor = 1.1
+
+      this.canvasContext.drawImage(this.image, 300, 300, this.image.width * factor, this.image.height * factor)
+
+    }
+    
     window.requestAnimationFrame(this.drawEverything.bind(this))
   }
 
