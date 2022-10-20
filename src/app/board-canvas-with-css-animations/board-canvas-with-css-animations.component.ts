@@ -50,17 +50,33 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     const myImg = this.renderer.createElement('img');
     this.renderer.setAttribute(myImg, 'src', "assets/white_bishop.svg")
     this.renderer.setAttribute(myImg, 'draggable', 'false')
-    this.renderer.setStyle(myImg, 'left', '100px')
-    this.renderer.setStyle(myImg, 'top', '100px')
+    
+    setTimeout(() => {
+      const fieldLocation = this.fieldUtils.determineFieldLocation("b3", this.fieldSize)
+      const pieceLocation = {
+        x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
+        y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
+      }
+       
+      this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
+      this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
+  
+      this.renderer.appendChild(this.boardContainer.nativeElement, myImg)
+    }, 1000)
 
-    this.renderer.appendChild(this.boardContainer.nativeElement, myImg)
-         
     setTimeout(() => {
-      this.renderer.setStyle(myImg, 'left', '600px')
+      const fieldLocation = this.fieldUtils.determineFieldLocation("h3", this.fieldSize)
+      const pieceLocation = {
+        x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
+        y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
+      }
+       
+      this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
+      this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
     }, 2000)
-         
+
     setTimeout(() => {
-      this.renderer.setStyle(myImg, 'top', '600px')
+      this.renderer.removeChild(this.boardContainer.nativeElement, myImg)
     }, 4000)
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
@@ -76,8 +92,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
     const boardX = e.x - x;
     const boardY = e.y - y;
-    console.log(`(${boardX}, ${boardY})`)  
-    console.log(this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize))
+    const field = this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize)
+    console.log(field)
   }
 
   private setupBoardSize(windowHeight: number) {

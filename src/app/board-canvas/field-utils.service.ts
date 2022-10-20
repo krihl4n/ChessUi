@@ -14,12 +14,29 @@ export class FieldUtilsService {
     this.boardFlipped = boardFlipped;
   }
 
+  determineFieldLocation(field: string, fieldSize: number): {x: number, y: number} {
+    const col = field.charAt(0)
+    let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    if (this.boardFlipped) {
+      cols.reverse();
+    }
+    const x = cols.indexOf(col) * fieldSize
+    
+    const row = field.charAt(1)
+    let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
+    if (this.boardFlipped) {
+      rows.reverse();
+    }
+    const y = rows.indexOf(row) * fieldSize
+    
+    return {x, y}
+  }
 
   determineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string {
     return this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
   }
 
-determineRowAtPos(y: number, fieldSize: number = this.fieldSize): string {
+  determineRowAtPos(y: number, fieldSize: number = this.fieldSize): string {
     let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
 
     if (this.boardFlipped) {
