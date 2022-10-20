@@ -13,7 +13,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   constructor(
     private drawingService: DrawingService, 
     private locationUtilsService: FieldUtilsService,
-    private renderer: Renderer2) { }
+    private renderer: Renderer2,
+    private fieldUtils: FieldUtilsService) { }
 
   @ViewChild('canvas', { static: true }) 
   canvas: ElementRef;
@@ -70,6 +71,15 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.setupBoardSize(window.outerHeight)
   }
   
+  onBoardClicked(event: Event) {
+    const e: PointerEvent = event as PointerEvent
+    const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
+    const boardX = e.x - x;
+    const boardY = e.y - y;
+    console.log(`(${boardX}, ${boardY})`)  
+    console.log(this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize))
+  }
+
   private setupBoardSize(windowHeight: number) {
     this.fieldSize = (windowHeight-200)/8
     this.canvasSize = this.fieldSize*8  // scale pieces as well?
