@@ -14,6 +14,14 @@ export class FieldUtilsService {
     this.boardFlipped = boardFlipped;
   }
 
+  determinePieceLocationAtField(field: string, fieldSize: number) : {x: number, y: number} {
+    const fieldLocation = this.determineFieldLocation(field, fieldSize)
+    return {
+      x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
+      y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
+    }   
+  }
+
   determineFieldLocation(field: string, fieldSize: number): {x: number, y: number} {
     const col = field.charAt(0)
     let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];

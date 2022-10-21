@@ -43,21 +43,16 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     this.image.onload = () => {
       this.loaded = true
-      console.log("image laoded")
+      console.log("image loaded")
     }
-    this.image.src = 'assets/black_queen.svg'
+    this.image.src = 'assets/white_bishop.svg'
 
     const myImg = this.renderer.createElement('img');
     this.renderer.setAttribute(myImg, 'src', "assets/white_bishop.svg")
     this.renderer.setAttribute(myImg, 'draggable', 'false')
     
     setTimeout(() => {
-      const fieldLocation = this.fieldUtils.determineFieldLocation("b3", this.fieldSize)
-      const pieceLocation = {
-        x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
-        y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
-      }
-       
+      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("b3", this.fieldSize)
       this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
       this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
   
@@ -65,12 +60,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }, 1000)
 
     setTimeout(() => {
-      const fieldLocation = this.fieldUtils.determineFieldLocation("h3", this.fieldSize)
-      const pieceLocation = {
-        x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
-        y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
-      }
-       
+      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("h3", this.fieldSize)
       this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
       this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
     }, 2000)
@@ -105,10 +95,9 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.drawBackground();
 
     if(this.loaded) {
-      let factor = 1.1
-
-      this.canvasContext.drawImage(this.image, 300, 300, this.image.width * factor, this.image.height * factor)
-
+      let factor = 1.0
+      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("b3", this.fieldSize)
+      this.canvasContext.drawImage(this.image, pieceLocation.x, pieceLocation.y, this.image.width * factor, this.image.height * factor)
     }
     
     window.requestAnimationFrame(this.drawEverything.bind(this))
