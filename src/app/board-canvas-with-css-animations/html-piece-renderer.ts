@@ -8,6 +8,20 @@ export class HtmlPieceReneder {
         private boardNativeElement: any,
         private fieldSize: number) {}
 
+    renderPieceMovement(from: string, to: string, piece: Piece) {
+      const pieceImageElement = this.renderer.createElement('img');
+      this.renderer.setAttribute(pieceImageElement, 'src', `assets/${piece.color}_${piece.type}.svg`)
+      this.renderer.setAttribute(pieceImageElement, 'draggable', 'false')
+
+      this.setRenderedLocation(pieceImageElement, this.getPieceLocation(from))
+      this.renderer.appendChild(this.boardNativeElement, pieceImageElement)
+      setTimeout(() => {
+        this.setRenderedLocation(pieceImageElement, this.getPieceLocation(to))
+      }, 1)
+
+      // remove when canvas part is ready
+    }
+
     renderPiece() {
         const pieceImageElement = this.renderer.createElement('img');
         this.renderer.setAttribute(pieceImageElement, 'src', "assets/white_bishop.svg")
@@ -35,4 +49,9 @@ export class HtmlPieceReneder {
     private getPieceLocation(field: string) {
         return this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize) 
     }
+}
+
+export class Piece {
+  color: string
+  type: string
 }

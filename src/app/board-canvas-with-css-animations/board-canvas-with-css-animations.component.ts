@@ -50,7 +50,10 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }
     this.image.src = 'assets/white_bishop.svg'
 
-    this.htmlPieceRender.renderPiece();
+    this.htmlPieceRender.renderPieceMovement("a1", "h1", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("d7", "d4", {color:"white", type:"knight"})
+    this.htmlPieceRender.renderPieceMovement("a2", "a8", {color:"white", type:"pawn"})
+
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
