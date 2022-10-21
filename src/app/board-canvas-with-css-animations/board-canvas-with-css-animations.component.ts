@@ -85,6 +85,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.setupBoardSize(window.outerHeight)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
   }
   
   onBoardClicked(event: Event) {
