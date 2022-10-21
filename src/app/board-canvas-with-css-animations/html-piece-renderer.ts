@@ -1,7 +1,7 @@
 import { Renderer2 } from "@angular/core";
 import { FieldUtilsService } from "../board-canvas/field-utils.service";
 
-export class PieceReneder {
+export class HtmlPieceReneder {
     constructor(
         private renderer: Renderer2, 
         private fieldUtils: FieldUtilsService, 

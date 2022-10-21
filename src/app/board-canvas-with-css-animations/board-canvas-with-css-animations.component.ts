@@ -2,7 +2,7 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
-import { PieceReneder } from './piece-renderer';
+import { HtmlPieceReneder } from './html-piece-renderer';
 
 @Component({
   selector: 'app-board-canvas-with-css-animations',
@@ -37,12 +37,12 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   loaded = false
   image = new Image();
   
-  private pieceRender: PieceReneder
+  private pieceRender: HtmlPieceReneder
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
-    this.pieceRender = new PieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+    this.pieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
 
     this.image.onload = () => {
       this.loaded = true
