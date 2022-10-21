@@ -2,7 +2,9 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
+import { Piece } from '../model/piece.model';
 import { HtmlPieceReneder } from './html-piece-renderer';
+import { Pieces } from './pieces';
 
 @Component({
   selector: 'app-board-canvas-with-css-animations',
@@ -34,31 +36,32 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   private fieldColorDark = "#75352B";
   private boardFlipped = false;
 
-  loaded = false
-  image = new Image();
+  readyForDrawing = false
   
   private htmlPieceRender: HtmlPieceReneder
+
+  private pieces = new Pieces()
+  private fieldOccupations = new Map<string, Piece>() 
+
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+    this.pieces.initialize(() => {
+      this.readyForDrawing = true
+    })
 
-    this.image.onload = () => {
-      this.loaded = true
-      console.log("image loaded")
-    }
-    this.image.src = 'assets/white_bishop.svg'
-
-
-    this.htmlPieceRender.renderPieceMovement("a1", "a5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("b1", "b5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("c1", "c5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("d1", "d5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("e1", "e5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("f1", "f5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("g1", "g5", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("h1", "h5", {color:"white", type:"bishop"})
+    setTimeout(() => {
+      this.htmlPieceRender.renderPieceMovement("a1", "a5", this.pieces.blackBishop)
+      this.htmlPieceRender.renderPieceMovement("b1", "b5", this.pieces.whiteBishop)
+      this.htmlPieceRender.renderPieceMovement("c1", "c5", this.pieces.blackBishop)
+      this.htmlPieceRender.renderPieceMovement("d1", "d5", this.pieces.whiteBishop)
+      this.htmlPieceRender.renderPieceMovement("e1", "e5", this.pieces.blackBishop)
+      this.htmlPieceRender.renderPieceMovement("f1", "f5", this.pieces.whiteBishop)
+      this.htmlPieceRender.renderPieceMovement("g1", "g5", this.pieces.blackBishop)
+      this.htmlPieceRender.renderPieceMovement("h1", "h5", this.pieces.whiteBishop)
+    }, 1000)
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
@@ -85,10 +88,11 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   private drawEverything() {
     this.drawBackground();
 
-    if(this.loaded) {
+    if(this.readyForDrawing) {
       let factor = 1.0
       const pieceLocation = this.fieldUtils.determinePieceLocationAtField("b3", this.fieldSize)
-      this.canvasContext.drawImage(this.image, pieceLocation.x, pieceLocation.y, this.image.width * factor, this.image.height * factor)
+      const pieceImage = this.pieces.blackBishop.image
+      this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor)
     }
     
     window.requestAnimationFrame(this.drawEverything.bind(this))

@@ -1,5 +1,6 @@
 import { Renderer2 } from "@angular/core";
 import { FieldUtilsService } from "../board-canvas/field-utils.service";
+import { Piece } from "./piece.model";
 
 export class HtmlPieceReneder {
     constructor(
@@ -10,14 +11,14 @@ export class HtmlPieceReneder {
 
     renderPieceMovement(from: string, to: string, piece: Piece) {
       const pieceImageElement = this.renderer.createElement('img');
-      this.renderer.setAttribute(pieceImageElement, 'src', `assets/${piece.color}_${piece.type}.svg`)
+      this.renderer.setAttribute(pieceImageElement, 'src', piece.imagePath)
       this.renderer.setAttribute(pieceImageElement, 'draggable', 'false')
 
       this.setRenderedLocation(pieceImageElement, this.getPieceLocation(from))
       this.renderer.appendChild(this.boardNativeElement, pieceImageElement)
       setTimeout(() => {
         this.setRenderedLocation(pieceImageElement, this.getPieceLocation(to))
-      }, 1)
+      }, 10)
 
       // remove when canvas part is ready
     }
@@ -49,9 +50,4 @@ export class HtmlPieceReneder {
     private getPieceLocation(field: string) {
         return this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize) 
     }
-}
-
-export class Piece {
-  color: string
-  type: string
 }
