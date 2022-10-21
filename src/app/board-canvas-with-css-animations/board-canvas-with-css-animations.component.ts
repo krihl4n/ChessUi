@@ -2,6 +2,7 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
+import { PieceReneder } from './piece-renderer';
 
 @Component({
   selector: 'app-board-canvas-with-css-animations',
@@ -35,11 +36,13 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   loaded = false
   image = new Image();
-
+  
+  private pieceRender: PieceReneder
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
+    this.pieceRender = new PieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
 
     this.image.onload = () => {
       this.loaded = true
@@ -47,28 +50,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }
     this.image.src = 'assets/white_bishop.svg'
 
-    const myImg = this.renderer.createElement('img');
-    this.renderer.setAttribute(myImg, 'src', "assets/white_bishop.svg")
-    this.renderer.setAttribute(myImg, 'draggable', 'false')
-    
-    setTimeout(() => {
-      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("b3", this.fieldSize)
-      this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
-      this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
-  
-      this.renderer.appendChild(this.boardContainer.nativeElement, myImg)
-    }, 1000)
-
-    setTimeout(() => {
-      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("h3", this.fieldSize)
-      this.renderer.setStyle(myImg, 'left', pieceLocation.x + 'px')
-      this.renderer.setStyle(myImg, 'top', pieceLocation.y + 'px')
-    }, 2000)
-
-    setTimeout(() => {
-      this.renderer.removeChild(this.boardContainer.nativeElement, myImg)
-    }, 4000)
-
+    this.pieceRender.renderPiece();
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
@@ -143,5 +125,4 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       return this.fieldColorLight
     }
   }
-
 }
