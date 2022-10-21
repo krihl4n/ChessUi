@@ -50,9 +50,15 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }
     this.image.src = 'assets/white_bishop.svg'
 
-    this.htmlPieceRender.renderPieceMovement("a1", "h1", {color:"white", type:"bishop"})
-    this.htmlPieceRender.renderPieceMovement("d7", "d4", {color:"white", type:"knight"})
-    this.htmlPieceRender.renderPieceMovement("a2", "a8", {color:"white", type:"pawn"})
+
+    this.htmlPieceRender.renderPieceMovement("a1", "a5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("b1", "b5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("c1", "c5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("d1", "d5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("e1", "e5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("f1", "f5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("g1", "g5", {color:"white", type:"bishop"})
+    this.htmlPieceRender.renderPieceMovement("h1", "h5", {color:"white", type:"bishop"})
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }

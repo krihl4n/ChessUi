@@ -22,7 +22,7 @@ export class HtmlPieceReneder {
       // remove when canvas part is ready
     }
 
-    renderPiece() {
+/*    renderPiece() { // just for testing
         const pieceImageElement = this.renderer.createElement('img');
         this.renderer.setAttribute(pieceImageElement, 'src', "assets/white_bishop.svg")
         this.renderer.setAttribute(pieceImageElement, 'draggable', 'false')
@@ -39,7 +39,7 @@ export class HtmlPieceReneder {
         setTimeout(() => {
           this.renderer.removeChild(this.boardNativeElement, pieceImageElement)
         }, 4000)
-    }
+    }*/
 
     private setRenderedLocation(pieceImageElement: any, pieceLocation: {x: number, y: number}) {
         this.renderer.setStyle(pieceImageElement, 'left', pieceLocation.x + 'px')
