@@ -37,12 +37,12 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   loaded = false
   image = new Image();
   
-  private pieceRender: HtmlPieceReneder
+  private htmlPieceRender: HtmlPieceReneder
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.setupBoardSize(window.outerHeight)
     this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
-    this.pieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
 
     this.image.onload = () => {
       this.loaded = true
@@ -50,7 +50,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }
     this.image.src = 'assets/white_bishop.svg'
 
-    this.pieceRender.renderPiece();
+    this.htmlPieceRender.renderPiece();
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
