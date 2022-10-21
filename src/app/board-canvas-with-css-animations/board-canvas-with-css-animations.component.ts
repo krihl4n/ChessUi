@@ -1,5 +1,6 @@
 import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { ECDH } from 'crypto';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
 import { HtmlPieceReneder } from './html-piece-renderer';
@@ -54,6 +55,65 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       this.fieldOccupations.set("a2", this.pieces.blackBishop)
     })
 
+    // this.testPieceMovement()
+
+    this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
+      let leftClick = 0; // todo check other OSes
+
+      if (e.button == leftClick) {
+        const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
+        const boardX = e.x - x;
+        const boardY = e.y - y;
+        const field = this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize)
+
+        const piece = this.fieldOccupations.get(field)
+
+        if(piece) {
+          this.pieceDraggedFromField = field
+          this.draggedPiece = piece
+          this.fieldOccupations.delete(field)
+          this.htmlPieceRender.renderDraggedPiece(e.x, e.y, this.draggedPiece)
+        }
+      }
+    })
+
+    window.addEventListener('mouseup', (e: MouseEvent) => {
+      const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
+      const boardX = e.x - x;
+      const boardY = e.y - y;
+      const field = this.fieldUtils.nullableDetermineFieldAtPos(boardX, boardY, this.fieldSize)
+
+      if(this.draggedPiece) {
+        if(!field) {
+          this.fieldOccupations.set(this.pieceDraggedFromField, this.draggedPiece)
+        } else {
+          this.fieldOccupations.set(field, this.draggedPiece)
+        }
+        this.draggedPiece = null
+        this.htmlPieceRender.clearDraggedPiece()
+      }
+    })
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      if(this.draggedPiece) {
+        this.htmlPieceRender.renderDraggedPiece(e.x, e.y, this.draggedPiece)
+      }
+    })
+
+    window.requestAnimationFrame(this.drawEverything.bind(this));
+  }
+
+  private pieceDraggedFromField: string
+  private draggedPiece: Piece | null
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setupBoardSize(window.outerHeight)
+    this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+  }
+  
+  private testPieceMovement() {
     let from1 = "a2"
     let to1 = "h2"
 
@@ -78,17 +138,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
         to2 = tmp
       })
     }, 3000)
-
-    window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.setupBoardSize(window.outerHeight)
-    this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
-    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
-  }
-  
   onBoardClicked(event: Event) {
     const e: PointerEvent = event as PointerEvent
     const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
@@ -111,7 +162,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       this.fieldOccupations.forEach((piece, field) => {
         const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize)
         const pieceImage = piece.image
-        this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor)
+        this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor) // todo just use html rendering?
       })
     }
     

@@ -40,6 +40,14 @@ export class FieldUtilsService {
     return {x, y}
   }
 
+  nullableDetermineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string | null {
+    const field = this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
+    if(field.includes('x')) {
+      return null
+    }
+    return field
+  }
+
   determineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string {
     return this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
   }
