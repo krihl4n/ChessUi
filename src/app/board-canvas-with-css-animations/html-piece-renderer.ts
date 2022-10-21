@@ -9,7 +9,11 @@ export class HtmlPieceReneder {
         private boardNativeElement: any,
         private fieldSize: number) {}
 
-    renderPieceMovement(from: string, to: string, piece: Piece) {
+    renderPieceMovement(from: string, to: string, piece: Piece | undefined, moveFinished: (piece: Piece) => void) {
+      if(!piece) {
+        return
+      }
+
       const pieceImageElement = this.renderer.createElement('img');
       this.renderer.setAttribute(pieceImageElement, 'src', piece.imagePath)
       this.renderer.setAttribute(pieceImageElement, 'draggable', 'false')
@@ -18,9 +22,12 @@ export class HtmlPieceReneder {
       this.renderer.appendChild(this.boardNativeElement, pieceImageElement)
       setTimeout(() => {
         this.setRenderedLocation(pieceImageElement, this.getPieceLocation(to))
-      }, 10)
+      }, 100)
 
-      // remove when canvas part is ready
+      setTimeout(() => {
+        this.renderer.removeChild(this.boardNativeElement, pieceImageElement)
+        moveFinished(piece)
+      }, 600)
     }
 
 /*    renderPiece() { // just for testing

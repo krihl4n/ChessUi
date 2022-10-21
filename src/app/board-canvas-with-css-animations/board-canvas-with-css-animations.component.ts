@@ -50,20 +50,34 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
     this.pieces.initialize(() => {
       this.readyForDrawing = true
-      this.fieldOccupations.set("a2", this.pieces.whiteBishop)
-      this.fieldOccupations.set("h4", this.pieces.blackBishop)
+      this.fieldOccupations.set("h3", this.pieces.whiteBishop)
+      this.fieldOccupations.set("a2", this.pieces.blackBishop)
     })
 
-    setTimeout(() => {
-      this.htmlPieceRender.renderPieceMovement("a1", "a5", this.pieces.blackBishop)
-      this.htmlPieceRender.renderPieceMovement("b1", "b5", this.pieces.whiteBishop)
-      this.htmlPieceRender.renderPieceMovement("c1", "c5", this.pieces.blackBishop)
-      this.htmlPieceRender.renderPieceMovement("d1", "d5", this.pieces.whiteBishop)
-      this.htmlPieceRender.renderPieceMovement("e1", "e5", this.pieces.blackBishop)
-      this.htmlPieceRender.renderPieceMovement("f1", "f5", this.pieces.whiteBishop)
-      this.htmlPieceRender.renderPieceMovement("g1", "g5", this.pieces.blackBishop)
-      this.htmlPieceRender.renderPieceMovement("h1", "h5", this.pieces.whiteBishop)
-    }, 1000)
+    let from1 = "a2"
+    let to1 = "h2"
+
+    let from2 = "h3"
+    let to2 = "a3"
+    setInterval(() => {
+      const piece1 = this.fieldOccupations.get(from1) 
+      this.fieldOccupations.delete(from1)
+      this.htmlPieceRender.renderPieceMovement(from1, to1, piece1, (piece) => {
+        this.fieldOccupations.set(to1, piece)
+        let tmp = from1
+        from1 = to1
+        to1 = tmp
+      })
+
+      const piece2 = this.fieldOccupations.get(from2) 
+      this.fieldOccupations.delete(from2)
+      this.htmlPieceRender.renderPieceMovement(from2, to2, piece2, (piece) => {
+        this.fieldOccupations.set(to2, piece)
+        let tmp = from2
+        from2 = to2
+        to2 = tmp
+      })
+    }, 3000)
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
