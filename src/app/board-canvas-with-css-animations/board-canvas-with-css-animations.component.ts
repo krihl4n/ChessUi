@@ -2,8 +2,8 @@ import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
-import { Piece } from '../model/piece.model';
 import { HtmlPieceReneder } from './html-piece-renderer';
+import { Piece } from './piece.model';
 import { Pieces } from './pieces';
 
 @Component({
@@ -50,6 +50,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
     this.pieces.initialize(() => {
       this.readyForDrawing = true
+      this.fieldOccupations.set("a2", this.pieces.whiteBishop)
+      this.fieldOccupations.set("h4", this.pieces.blackBishop)
     })
 
     setTimeout(() => {
@@ -90,9 +92,11 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     if(this.readyForDrawing) {
       let factor = 1.0
-      const pieceLocation = this.fieldUtils.determinePieceLocationAtField("b3", this.fieldSize)
-      const pieceImage = this.pieces.blackBishop.image
-      this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor)
+      this.fieldOccupations.forEach((piece, field) => {
+        const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize)
+        const pieceImage = piece.image
+        this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor)
+      })
     }
     
     window.requestAnimationFrame(this.drawEverything.bind(this))
