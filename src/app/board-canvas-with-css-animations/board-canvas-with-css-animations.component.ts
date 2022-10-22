@@ -3,6 +3,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, 
 import { ECDH } from 'crypto';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
+import { CoordinationsUtil } from './coordinations-utils';
 import { HtmlPieceReneder } from './html-piece-renderer';
 import { Piece } from './piece.model';
 import { Pieces } from './pieces';
@@ -55,17 +56,14 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       this.fieldOccupations.set("a2", this.pieces.blackBishop)
     })
 
-    // this.testPieceMovement()
+    this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       let leftClick = 0; // todo check other OSes
 
       if (e.button == leftClick) {
-        const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
-        const boardX = e.x - x;
-        const boardY = e.y - y;
-        const field = this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize)
-
+        const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+        const field = this.fieldUtils.determineFieldAtPos(x, y, this.fieldSize)
         const piece = this.fieldOccupations.get(field)
 
         if(piece) {
@@ -78,10 +76,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
-      const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
-      const boardX = e.x - x;
-      const boardY = e.y - y;
-      const field = this.fieldUtils.nullableDetermineFieldAtPos(boardX, boardY, this.fieldSize)
+      const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+      const field = this.fieldUtils.nullableDetermineFieldAtPos(x, y, this.fieldSize)
 
       if(this.draggedPiece) {
         if(!field) {
@@ -142,10 +138,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   onBoardClicked(event: Event) {
     const e: PointerEvent = event as PointerEvent
-    const {x, y} = this.boardContainer.nativeElement.getBoundingClientRect(); // position of board container
-    const boardX = e.x - x;
-    const boardY = e.y - y;
-    const field = this.fieldUtils.determineFieldAtPos(boardX, boardY, this.fieldSize)
+    const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+    const field = this.fieldUtils.determineFieldAtPos(x, y, this.fieldSize)
     console.log(field)
   }
 
