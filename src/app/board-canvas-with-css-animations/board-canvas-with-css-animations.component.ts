@@ -1,8 +1,10 @@
 import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { ECDH } from 'crypto';
+import { threadId } from 'worker_threads';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
+import { BoardSetup } from './board-setup';
 import { CoordinationsUtil } from './coordinations-utils';
 import { HtmlPieceReneder } from './html-piece-renderer';
 import { Piece } from './piece.model';
@@ -32,11 +34,11 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
-  private fieldSize: number;
   canvasSize: number;
   private fieldColorLight = "#D2C3C3";
   private fieldColorDark = "#75352B";
   private boardFlipped = false;
+  private boardSetup: BoardSetup;
 
   readyForDrawing = false
   
@@ -47,9 +49,10 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    this.setupBoardSize(window.outerHeight)
-    this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
-    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+    this.boardSetup = new BoardSetup(false, window.outerHeight)
+    this.canvasSize = this.boardSetup.boardSize
+    this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.pieces.initialize(() => {
       this.readyForDrawing = true
       this.fieldOccupations.set("h3", this.pieces.whiteBishop)
@@ -63,7 +66,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
       if (e.button == leftClick) {
         const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-        const field = this.fieldUtils.determineFieldAtPos(x, y, this.fieldSize)
+        const field = this.fieldUtils.determineFieldAtPos(x, y, this.boardSetup.fieldSize)
         const piece = this.fieldOccupations.get(field)
 
         if(piece) {
@@ -77,7 +80,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
       const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-      const field = this.fieldUtils.nullableDetermineFieldAtPos(x, y, this.fieldSize)
+      const field = this.fieldUtils.nullableDetermineFieldAtPos(x, y, this.boardSetup.fieldSize)
 
       if(this.draggedPiece) {
         if(!field) {
@@ -104,9 +107,9 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.setupBoardSize(window.outerHeight)
-    this.locationUtilsService.initialize(this.boardFlipped, this.fieldSize)
-    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.fieldSize)
+    this.boardSetup.windowHeightUpdated(window.outerHeight)
+    this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
   }
   
   private testPieceMovement() {
@@ -139,13 +142,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   onBoardClicked(event: Event) {
     const e: PointerEvent = event as PointerEvent
     const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-    const field = this.fieldUtils.determineFieldAtPos(x, y, this.fieldSize)
+    const field = this.fieldUtils.determineFieldAtPos(x, y, this.boardSetup.fieldSize)
     console.log(field)
-  }
-
-  private setupBoardSize(windowHeight: number) {
-    this.fieldSize = (windowHeight-200)/8
-    this.canvasSize = this.fieldSize*8  // scale pieces as well?
   }
 
   private drawEverything() {
@@ -154,7 +152,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     if(this.readyForDrawing) {
       let factor = 1.0
       this.fieldOccupations.forEach((piece, field) => {
-        const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize)
+        const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.boardSetup.fieldSize)
         const pieceImage = piece.image
         this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor) // todo just use html rendering?
       })
@@ -168,27 +166,27 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     let currentColor = this.fieldColorLight;
     for (let col = 0; col < 8; col++) {
       for (let row = 0; row < 8; row++) {
-        let colPos = col * this.fieldSize;
-        let rowPos = row * this.fieldSize;
-        this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
+        let colPos = col * this.boardSetup.fieldSize;
+        let rowPos = row * this.boardSetup.fieldSize;
+        this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, currentColor)
 
         if (col == 7) {
           this.drawingService.fillText(
             this.canvasContext,
-            this.locationUtilsService.determineRowAtPos(rowPos, this.fieldSize),
+            this.locationUtilsService.determineRowAtPos(rowPos, this.boardSetup.fieldSize),
             this.oppositeOf(currentColor),
-            colPos + this.fieldSize - this.fieldSize * 0.1,
-            rowPos + this.fieldSize - this.fieldSize * 0.85,
-            Math.floor(this.fieldSize / 6));
+            colPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.1,
+            rowPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.85,
+            Math.floor(this.boardSetup.fieldSize / 6));
         }
         if (row == 7) {
           this.drawingService.fillText(
             this.canvasContext,
-            this.locationUtilsService.determineColAtPos(colPos, this.fieldSize),
+            this.locationUtilsService.determineColAtPos(colPos, this.boardSetup.fieldSize),
             this.oppositeOf(currentColor),
-            colPos + this.fieldSize - this.fieldSize * 0.95,
-            rowPos + this.fieldSize - this.fieldSize * 0.05,
-            Math.floor(this.fieldSize / 6));
+            colPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.95,
+            rowPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.05,
+            Math.floor(this.boardSetup.fieldSize / 6));
         }
         currentColor = this.oppositeOf(currentColor)
       }
