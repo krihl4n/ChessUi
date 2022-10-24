@@ -1,12 +1,11 @@
-import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
-import { ECDH } from 'crypto';
-import { threadId } from 'worker_threads';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from '../board-canvas/drawing.service';
 import { FieldUtilsService } from '../board-canvas/field-utils.service';
+import { PiecesLocations } from '../board-canvas/pieces-locations';
 import { BoardSetup } from './board-setup';
 import { CoordinationsUtil } from './coordinations-utils';
 import { HtmlPieceReneder } from './html-piece-renderer';
+import { PieceDragHandler } from './piece-drag-handler';
 import { Piece } from './piece.model';
 import { Pieces } from './pieces';
 
@@ -45,7 +44,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   private htmlPieceRender: HtmlPieceReneder
 
   private pieces = new Pieces()
-  private fieldOccupations = new Map<string, Piece>() 
+  private piecesLocations = new PiecesLocations()
+  private dragHandler: PieceDragHandler;
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -53,10 +53,12 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.canvasSize = this.boardSetup.boardSize
     this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
+    this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
+    
     this.pieces.initialize(() => {
       this.readyForDrawing = true
-      this.fieldOccupations.set("h3", this.pieces.whiteBishop)
-      this.fieldOccupations.set("a2", this.pieces.blackBishop)
+      this.piecesLocations.set("h3", this.pieces.whiteBishop)
+      this.piecesLocations.set("a2", this.pieces.blackBishop)
     })
 
     this.testPieceMovement()
@@ -66,44 +68,21 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
       if (e.button == leftClick) {
         const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-        const field = this.fieldUtils.determineFieldAtPos(x, y, this.boardSetup.fieldSize)
-        const piece = this.fieldOccupations.get(field)
-
-        if(piece) {
-          this.pieceDraggedFromField = field
-          this.draggedPiece = piece
-          this.fieldOccupations.delete(field)
-          this.htmlPieceRender.renderDraggedPiece(e.x, e.y, this.draggedPiece)
-        }
+        this.dragHandler.notifyMouseDownLeftClickEvent(x, y, e.x, e.y)
       }
     })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
       const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-      const field = this.fieldUtils.nullableDetermineFieldAtPos(x, y, this.boardSetup.fieldSize)
-
-      if(this.draggedPiece) {
-        if(!field) {
-          this.fieldOccupations.set(this.pieceDraggedFromField, this.draggedPiece)
-        } else {
-          this.fieldOccupations.set(field, this.draggedPiece)
-        }
-        this.draggedPiece = null
-        this.htmlPieceRender.clearDraggedPiece()
-      }
+      this.dragHandler.notifyMouseUpEvent(x, y)
     })
 
     window.addEventListener('mousemove', (e: MouseEvent) => {
-      if(this.draggedPiece) {
-        this.htmlPieceRender.renderDraggedPiece(e.x, e.y, this.draggedPiece)
-      }
+      this.dragHandler.notifyMouseMove(e.x, e.y)
     })
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
-
-  private pieceDraggedFromField: string
-  private draggedPiece: Piece | null
 
   @HostListener('window:resize', ['$event'])
   onResize() {
@@ -119,19 +98,19 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     let from2 = "h3"
     let to2 = "a3"
     setInterval(() => {
-      const piece1 = this.fieldOccupations.get(from1) 
-      this.fieldOccupations.delete(from1)
+      const piece1 = this.piecesLocations.get(from1) 
+      this.piecesLocations.delete(from1)
       this.htmlPieceRender.renderPieceMovement(from1, to1, piece1, (piece) => {
-        this.fieldOccupations.set(to1, piece)
+        this.piecesLocations.set(to1, piece)
         let tmp = from1
         from1 = to1
         to1 = tmp
       })
 
-      const piece2 = this.fieldOccupations.get(from2) 
-      this.fieldOccupations.delete(from2)
+      const piece2 = this.piecesLocations.get(from2) 
+      this.piecesLocations.delete(from2)
       this.htmlPieceRender.renderPieceMovement(from2, to2, piece2, (piece) => {
-        this.fieldOccupations.set(to2, piece)
+        this.piecesLocations.set(to2, piece)
         let tmp = from2
         from2 = to2
         to2 = tmp
@@ -151,7 +130,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     if(this.readyForDrawing) {
       let factor = 1.0
-      this.fieldOccupations.forEach((piece, field) => {
+      this.piecesLocations.getAll().forEach((piece, field) => {
         const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.boardSetup.fieldSize)
         const pieceImage = piece.image
         this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor) // todo just use html rendering?

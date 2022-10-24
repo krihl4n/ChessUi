@@ -8,8 +8,7 @@ export class FieldUtilsService {
   private fieldSize: number;
   private boardFlipped: boolean;
   
-
-  initialize(boardFlipped: boolean, fieldSize: number) { // figure out a better way
+  initialize(boardFlipped: boolean, fieldSize: number) { // figure out a better way (maybe pass boardSetup object)
     this.fieldSize = fieldSize;
     this.boardFlipped = boardFlipped;
   }
