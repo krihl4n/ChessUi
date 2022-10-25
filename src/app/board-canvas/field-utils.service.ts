@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Point } from './point.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,8 @@ export class FieldUtilsService {
     return {x, y}
   }
 
-  nullableDetermineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string | null {
-    const field = this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
+  nullableDetermineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | null {
+    const field = this.determineColAtPos(point.x, fieldSize) + this.determineRowAtPos(point.y, fieldSize);
     if(field.includes('x')) {
       return null
     }

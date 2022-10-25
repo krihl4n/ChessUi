@@ -1,5 +1,6 @@
 import { FieldUtilsService } from "../board-canvas/field-utils.service";
 import { PiecesLocations } from "../board-canvas/pieces-locations";
+import { Point } from "../board-canvas/point.model";
 import { BoardSetup } from "./board-setup";
 import { HtmlPieceReneder } from "./html-piece-renderer";
 import { Piece } from "./piece.model";
@@ -15,8 +16,8 @@ export class PieceDragHandler {
         private piecesLocations: PiecesLocations, 
         private htmlPieceRenderer: HtmlPieceReneder) {}
 
-    notifyMouseDownLeftClickEvent(xOnBoard: number, yOnBoard: number) {
-        const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+    notifyMouseDownLeftClickEvent(p: Point) {
+        const field = this.fieldUtils.determineFieldAtPos(p.x, p.y, this.boardSetup.fieldSize)
         const piece = this.piecesLocations.get(field)
         if(!piece) {
             return
@@ -25,11 +26,11 @@ export class PieceDragHandler {
         this.pieceDraggedFromField = field
         this.draggedPiece = piece
         this.piecesLocations.delete(field)
-        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, piece)
+        this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, piece)
     }
 
-    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, piece: Piece | null = null) {
-        const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+    notifyMouseDownOnPieceEvent(p: Point, piece: Piece | null = null) {
+        const field = this.fieldUtils.determineFieldAtPos(p.x, p.y, this.boardSetup.fieldSize)
         const checkedPiece = piece || this.piecesLocations.get(field)
         if(!checkedPiece) {
             return
@@ -37,17 +38,17 @@ export class PieceDragHandler {
         this.pieceDraggedFromField = field
         this.draggedPiece = checkedPiece
         this.piecesLocations.delete(field)
-        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, checkedPiece)
+        this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, checkedPiece)
     }
 
-    notifyMouseMove(xOnBoard: number, yOnBoard: number) {
+    notifyMouseMove(p: Point) {
       if(this.draggedPiece) {
-       this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, this.draggedPiece)
+       this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, this.draggedPiece)
       }
     }
 
-    notifyMouseUpEvent(xOnBoard: number, yOnBoard: number) {
-        const field = this.fieldUtils.nullableDetermineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+    notifyMouseUpEvent(p: Point) {
+        const field = this.fieldUtils.nullableDetermineFieldAtPos(p, this.boardSetup.fieldSize)
 
       if(this.draggedPiece) {
         if(!field) {
