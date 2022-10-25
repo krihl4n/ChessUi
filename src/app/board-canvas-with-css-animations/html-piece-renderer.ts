@@ -8,46 +8,38 @@ export class HtmlPieceReneder {
         private fieldUtils: FieldUtilsService, 
         private boardNativeElement: any,
         private fieldSize: number) {}
-
-
-    private pieceImageElement: any
-    renderDraggedPiece(mouseX: number, mouseY: number, piece: Piece) {
-
-      if(!this.pieceImageElement) {
-        this.pieceImageElement = this.renderer.createElement('img');
-        this.renderer.setAttribute(this.pieceImageElement, 'src', piece.imagePath)
-        this.renderer.setAttribute(this.pieceImageElement, 'draggable', 'false')
-
-        this.setRenderedLocation(this.pieceImageElement, {x: mouseX - 28, y: mouseY - 35}) // todo tune to piece size
-        this.renderer.appendChild(window.document.body, this.pieceImageElement)
-      } else {
-        this.setRenderedLocation(this.pieceImageElement, {x: mouseX - 28, y: mouseY - 35})
+    
+    renderPieceByCoursor(mouseX: number, mouseY: number, piece:Piece) {
+      if(!piece.htmlElement){
+        const htmlElement = this.renderer.createElement('img')
+        this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
+        this.renderer.setAttribute(htmlElement, 'draggable', 'false')
+        this.renderer.appendChild(this.boardNativeElement, htmlElement)
+        piece.setHtmlElement(htmlElement)
       }
-    }  
-
-    clearDraggedPiece() {
-      this.renderer.removeChild(window.document.body, this.pieceImageElement)
-      this.pieceImageElement = null
+      this.renderer.setStyle(piece.htmlElement, 'z-index', '999') 
+      this.setRenderedLocation(piece.htmlElement, {x: mouseX - 28, y: mouseY - 35}) // todo tune to piece size      
     }
 
-    renderPieceMovement(from: string, to: string, piece: Piece | undefined, moveFinished: (piece: Piece) => void) {
-      if(!piece) {
-        return
+    renderPieceAtField(field: string, piece: Piece) {
+      if(!piece.htmlElement){
+        const htmlElement = this.renderer.createElement('img')
+        this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
+        this.renderer.setAttribute(htmlElement, 'draggable', 'false')
+        this.renderer.appendChild(this.boardNativeElement, htmlElement)
+        piece.setHtmlElement(htmlElement)
       }
+      this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
+      this.setRenderedLocation(piece.htmlElement, this.getPieceLocationAtField(field)) // todo tune to piece size
+    }
 
-      const pieceImageElement = this.renderer.createElement('img');
-      this.renderer.setAttribute(pieceImageElement, 'src', piece.imagePath)
-      this.renderer.setAttribute(pieceImageElement, 'draggable', 'false')
-      this.renderer.setStyle(pieceImageElement, "transition", "all 500ms ease")
-      this.setRenderedLocation(pieceImageElement, this.getPieceLocation(from))
-      this.renderer.appendChild(this.boardNativeElement, pieceImageElement)
+    renderPieceMovement2(destinationField: string, piece: Piece) {
+      this.renderer.setStyle(piece.htmlElement, "transition", "all 500ms ease")
+      this.renderer.setStyle(piece.htmlElement, 'z-index', '999')
+      this.setRenderedLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField))
       setTimeout(() => {
-        this.setRenderedLocation(pieceImageElement, this.getPieceLocation(to))
-      }, 100)
-
-      setTimeout(() => {
-        this.renderer.removeChild(this.boardNativeElement, pieceImageElement)
-        moveFinished(piece)
+        this.renderer.setStyle(piece.htmlElement, "transition", "none")
+        this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
       }, 600)
     }
 
@@ -56,7 +48,7 @@ export class HtmlPieceReneder {
         this.renderer.setStyle(pieceImageElement, 'top', pieceLocation.y + 'px')
     }
 
-    private getPieceLocation(field: string) {
+    private getPieceLocationAtField(field: string) {
         return this.fieldUtils.determinePieceLocationAtField(field, this.fieldSize) 
     }
 }

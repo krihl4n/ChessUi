@@ -15,8 +15,8 @@ export class PieceDragHandler {
         private piecesLocations: PiecesLocations, 
         private htmlPieceRenderer: HtmlPieceReneder) {}
 
-    notifyMouseDownLeftClickEvent(xOnBoard: number, yOnBoard: number, absoluteX: number, absoluteY: number) {
-        const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+    notifyMouseDownLeftClickEvent(xOnBoard: number, yOnBoard: number, absoluteX: number, absoluteY: number) { // todo cleanup coords
+        const field = this.fieldUtils.determineFieldAtPos(absoluteX, absoluteY, this.boardSetup.fieldSize)
         const piece = this.piecesLocations.get(field)
         if(!piece) {
             return
@@ -25,12 +25,28 @@ export class PieceDragHandler {
         this.pieceDraggedFromField = field
         this.draggedPiece = piece
         this.piecesLocations.delete(field)
-        this.htmlPieceRenderer.renderDraggedPiece(absoluteX, absoluteY, this.draggedPiece)
+        console.log('debug location ' + absoluteX + " " + absoluteY)
+        this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, piece)
+    }
+
+    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, absoluteX: number, absoluteY: number, piece: any) { // todo cleanup coords
+        const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+        console.log("piece dragged from field: " + field)
+        if(!piece) {
+            return
+        }
+
+        this.pieceDraggedFromField = field
+        this.draggedPiece = piece
+        this.piecesLocations.delete(field)
+        console.log('debug location ' + absoluteX + " " + absoluteY)
+        this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, piece)
     }
 
     notifyMouseMove(absoluteX: number, absoluteY: number) {
+
       if(this.draggedPiece) {
-        this.htmlPieceRenderer.renderDraggedPiece(absoluteX, absoluteY, this.draggedPiece)
+       this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, this.draggedPiece)
       }
     }
 
@@ -40,23 +56,13 @@ export class PieceDragHandler {
       if(this.draggedPiece) {
         if(!field) {
           this.piecesLocations.set(this.pieceDraggedFromField, this.draggedPiece)
+          this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, this.draggedPiece)
         } else {
           this.piecesLocations.set(field, this.draggedPiece)
+          this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
         }
+
         this.draggedPiece = null
-        this.htmlPieceRenderer.clearDraggedPiece()
       }
-    }
-
-    initiatePieceDragMovement(startField: string, piece: Piece) {
-
-    }
-
-    updatePiecePosition() {
-
-    }
-
-    finishPieceDragMovement() {
-
     }
 }

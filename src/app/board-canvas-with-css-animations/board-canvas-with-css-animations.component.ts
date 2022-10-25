@@ -55,12 +55,12 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     
-    this.pieces.initialize(() => {
-      this.readyForDrawing = true
-      this.piecesLocations.set("h3", this.pieces.whiteBishop)
-      this.piecesLocations.set("a2", this.pieces.blackBishop)
-    })
+    this.pieces.initialize()
 
+    this.piecesLocations.set("h8", this.pieces.whiteBishop)
+    this.piecesLocations.set("a2", this.pieces.blackBishop)
+
+    this.renderPieces()
     this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
@@ -68,7 +68,8 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
       if (e.button == leftClick) {
         const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-        this.dragHandler.notifyMouseDownLeftClickEvent(x, y, e.x, e.y)
+        console.log("absolute board: " + x + " " + y)
+        this.dragHandler.notifyMouseDownLeftClickEvent(e.x, e.y, x, y)
       }
     })
 
@@ -78,10 +79,24 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     })
 
     window.addEventListener('mousemove', (e: MouseEvent) => {
-      this.dragHandler.notifyMouseMove(e.x, e.y)
+      const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+      this.dragHandler.notifyMouseMove(x, y)
     })
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
+  }
+
+  renderPieces() {
+    this.piecesLocations.getAll().forEach((piece, field) => {
+        this.htmlPieceRender.renderPieceAtField(field, piece)
+        piece.setMouseDownListener(this.notifyPieceClicked.bind(this))
+    })
+  }
+
+  notifyPieceClicked(e: MouseEvent, piece: Piece) {
+    const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+    console.log("absolute piece: " + x + " " + y)
+    this.dragHandler.notifyMouseDownOnPieceEvent(x, y, x, y, piece)
   }
 
   @HostListener('window:resize', ['$event'])
@@ -95,26 +110,28 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     let from1 = "a2"
     let to1 = "h2"
 
-    let from2 = "h3"
-    let to2 = "a3"
+    let from2 = "h8"
+    let to2 = "a1"
     setInterval(() => {
-      const piece1 = this.piecesLocations.get(from1) 
-      this.piecesLocations.delete(from1)
-      this.htmlPieceRender.renderPieceMovement(from1, to1, piece1, (piece) => {
-        this.piecesLocations.set(to1, piece)
+      const piece1 = this.piecesLocations.get(from1)
+      if(piece1) {
+        this.piecesLocations.delete(from1)
+        this.htmlPieceRender.renderPieceMovement2(to1, piece1)
+        this.piecesLocations.set(to1, piece1)
         let tmp = from1
         from1 = to1
         to1 = tmp
-      })
+      }
 
-      const piece2 = this.piecesLocations.get(from2) 
-      this.piecesLocations.delete(from2)
-      this.htmlPieceRender.renderPieceMovement(from2, to2, piece2, (piece) => {
-        this.piecesLocations.set(to2, piece)
+      const piece2 = this.piecesLocations.get(from2)
+      if(piece2) {
+        this.piecesLocations.delete(from2)
+        this.htmlPieceRender.renderPieceMovement2(to2, piece2)
+        this.piecesLocations.set(to2, piece2)
         let tmp = from2
         from2 = to2
         to2 = tmp
-      })
+      }
     }, 3000)
   }
 
@@ -127,16 +144,6 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   private drawEverything() {
     this.drawBackground();
-
-    if(this.readyForDrawing) {
-      let factor = 1.0
-      this.piecesLocations.getAll().forEach((piece, field) => {
-        const pieceLocation = this.fieldUtils.determinePieceLocationAtField(field, this.boardSetup.fieldSize)
-        const pieceImage = piece.image
-        this.canvasContext.drawImage(pieceImage, pieceLocation.x, pieceLocation.y, pieceImage.width * factor, pieceImage.height * factor) // todo just use html rendering?
-      })
-    }
-    
     window.requestAnimationFrame(this.drawEverything.bind(this))
   }
 
