@@ -6,6 +6,7 @@ import { BoardSetup } from './board-setup';
 import { CoordinationsUtil } from './coordinations-utils';
 import { HtmlPieceReneder } from './html-piece-renderer';
 import { PieceDragHandler } from './piece-drag-handler';
+import { PieceMoveHandler } from './piece-move-handler';
 import { Piece } from './piece.model';
 import { Pieces } from './pieces';
 
@@ -46,6 +47,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   private pieces = new Pieces()
   private piecesLocations = new PiecesLocations()
   private dragHandler: PieceDragHandler;
+  private pieceMoveHandler: PieceMoveHandler
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -54,7 +56,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
-    
+    this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
     this.pieces.initialize()
 
     this.piecesLocations.set("h8", this.pieces.whiteBishop)
@@ -112,33 +114,25 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     let from2 = "h8"
     let to2 = "a1"
+    
     setInterval(() => {
+      this.pieceMoveHandler.movePiece(from1, to1)
+      this.pieceMoveHandler.movePiece(from2, to2)
       const piece1 = this.piecesLocations.get(from1)
-      if(piece1) {
-        this.piecesLocations.delete(from1)
-        this.htmlPieceRender.renderPieceMovement(to1, piece1)
-        this.piecesLocations.set(to1, piece1)
-        let tmp = from1
-        from1 = to1
-        to1 = tmp
-      }
 
-      const piece2 = this.piecesLocations.get(from2)
-      if(piece2) {
-        this.piecesLocations.delete(from2)
-        this.htmlPieceRender.renderPieceMovement(to2, piece2)
-        this.piecesLocations.set(to2, piece2)
-        let tmp = from2
-        from2 = to2
-        to2 = tmp
-      }
+      let tmp = from1
+      from1 = to1
+      to1 = tmp
+      tmp = from2
+      from2 = to2
+      to2 = tmp
     }, 3000)
   }
 
   private getEventLocationOnBoard(e: MouseEvent): { x: number; y: number; } {
     return CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer);
   }
-  
+
   private drawEverything() {
     this.drawBackground();
     window.requestAnimationFrame(this.drawEverything.bind(this))
