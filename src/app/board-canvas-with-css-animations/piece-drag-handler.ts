@@ -15,8 +15,8 @@ export class PieceDragHandler {
         private piecesLocations: PiecesLocations, 
         private htmlPieceRenderer: HtmlPieceReneder) {}
 
-    notifyMouseDownLeftClickEvent(xOnBoard: number, yOnBoard: number, absoluteX: number, absoluteY: number) { // todo cleanup coords
-        const field = this.fieldUtils.determineFieldAtPos(absoluteX, absoluteY, this.boardSetup.fieldSize)
+    notifyMouseDownLeftClickEvent(xOnBoard: number, yOnBoard: number) {
+        const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
         const piece = this.piecesLocations.get(field)
         if(!piece) {
             return
@@ -25,28 +25,22 @@ export class PieceDragHandler {
         this.pieceDraggedFromField = field
         this.draggedPiece = piece
         this.piecesLocations.delete(field)
-        console.log('debug location ' + absoluteX + " " + absoluteY)
-        this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, piece)
+        console.log('debug location ' + xOnBoard + " " + yOnBoard)
+        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, piece)
     }
 
-    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, absoluteX: number, absoluteY: number, piece: any) { // todo cleanup coords
+    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, piece: Piece) {
         const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
-        console.log("piece dragged from field: " + field)
-        if(!piece) {
-            return
-        }
-
         this.pieceDraggedFromField = field
         this.draggedPiece = piece
         this.piecesLocations.delete(field)
-        console.log('debug location ' + absoluteX + " " + absoluteY)
-        this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, piece)
+        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, piece)
     }
 
-    notifyMouseMove(absoluteX: number, absoluteY: number) {
-
+    notifyMouseMove(xOnBoard: number, yOnBoard: number) {
       if(this.draggedPiece) {
-       this.htmlPieceRenderer.renderPieceByCoursor(absoluteX, absoluteY, this.draggedPiece)
+        console.log(xOnBoard + " " + yOnBoard)
+       this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, this.draggedPiece)
       }
     }
 

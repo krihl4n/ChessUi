@@ -68,8 +68,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
       if (e.button == leftClick) {
         const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-        console.log("absolute board: " + x + " " + y)
-        this.dragHandler.notifyMouseDownLeftClickEvent(e.x, e.y, x, y)
+        this.dragHandler.notifyMouseDownLeftClickEvent(x, y)
       }
     })
 
@@ -95,8 +94,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
     const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-    console.log("absolute piece: " + x + " " + y)
-    this.dragHandler.notifyMouseDownOnPieceEvent(x, y, x, y, piece)
+    this.dragHandler.notifyMouseDownOnPieceEvent(x, y, piece)
   }
 
   @HostListener('window:resize', ['$event'])
@@ -133,13 +131,6 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
         to2 = tmp
       }
     }, 3000)
-  }
-
-  onBoardClicked(event: Event) {
-    const e: PointerEvent = event as PointerEvent
-    const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-    const field = this.fieldUtils.determineFieldAtPos(x, y, this.boardSetup.fieldSize)
-    console.log(field)
   }
 
   private drawEverything() {
