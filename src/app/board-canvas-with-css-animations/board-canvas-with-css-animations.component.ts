@@ -65,20 +65,19 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       let leftClick = 0; // todo check other OSes
-
       if (e.button == leftClick) {
-        const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-        this.dragHandler.notifyMouseDownLeftClickEvent(x, y)
+        const {x, y} = this.getEventLocationOnBoard(e)
+        this.dragHandler.notifyMouseDownOnPieceEvent(x, y)
       }
     })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
-      const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+      const {x, y} = this.getEventLocationOnBoard(e)
       this.dragHandler.notifyMouseUpEvent(x, y)
     })
 
     window.addEventListener('mousemove', (e: MouseEvent) => {
-      const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
+      const {x, y} = this.getEventLocationOnBoard(e)
       this.dragHandler.notifyMouseMove(x, y)
     })
 
@@ -93,8 +92,11 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
   }
 
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
-    const {x, y} = CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer)
-    this.dragHandler.notifyMouseDownOnPieceEvent(x, y, piece)
+      let leftClick = 0; // todo check other OSes
+      if (e.button == leftClick) {
+        const {x, y} = this.getEventLocationOnBoard(e)
+        this.dragHandler.notifyMouseDownOnPieceEvent(x, y, piece)
+      }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -114,7 +116,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       const piece1 = this.piecesLocations.get(from1)
       if(piece1) {
         this.piecesLocations.delete(from1)
-        this.htmlPieceRender.renderPieceMovement2(to1, piece1)
+        this.htmlPieceRender.renderPieceMovement(to1, piece1)
         this.piecesLocations.set(to1, piece1)
         let tmp = from1
         from1 = to1
@@ -124,7 +126,7 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
       const piece2 = this.piecesLocations.get(from2)
       if(piece2) {
         this.piecesLocations.delete(from2)
-        this.htmlPieceRender.renderPieceMovement2(to2, piece2)
+        this.htmlPieceRender.renderPieceMovement(to2, piece2)
         this.piecesLocations.set(to2, piece2)
         let tmp = from2
         from2 = to2
@@ -133,6 +135,10 @@ export class BoardCanvasWithCssAnimationsComponent implements OnInit {
     }, 3000)
   }
 
+  private getEventLocationOnBoard(e: MouseEvent): { x: number; y: number; } {
+    return CoordinationsUtil.convertAbsoluteToBoardRelativeCoords(e.x, e.y, this.boardContainer);
+  }
+  
   private drawEverything() {
     this.drawBackground();
     window.requestAnimationFrame(this.drawEverything.bind(this))

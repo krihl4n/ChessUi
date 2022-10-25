@@ -25,21 +25,23 @@ export class PieceDragHandler {
         this.pieceDraggedFromField = field
         this.draggedPiece = piece
         this.piecesLocations.delete(field)
-        console.log('debug location ' + xOnBoard + " " + yOnBoard)
         this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, piece)
     }
 
-    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, piece: Piece) {
+    notifyMouseDownOnPieceEvent(xOnBoard: number, yOnBoard: number, piece: Piece | null = null) {
         const field = this.fieldUtils.determineFieldAtPos(xOnBoard, yOnBoard, this.boardSetup.fieldSize)
+        const checkedPiece = piece || this.piecesLocations.get(field)
+        if(!checkedPiece) {
+            return
+        }
         this.pieceDraggedFromField = field
-        this.draggedPiece = piece
+        this.draggedPiece = checkedPiece
         this.piecesLocations.delete(field)
-        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, piece)
+        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, checkedPiece)
     }
 
     notifyMouseMove(xOnBoard: number, yOnBoard: number) {
       if(this.draggedPiece) {
-        console.log(xOnBoard + " " + yOnBoard)
        this.htmlPieceRenderer.renderPieceByCoursor(xOnBoard, yOnBoard, this.draggedPiece)
       }
     }

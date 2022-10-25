@@ -11,7 +11,6 @@ export class Piece {
     setHtmlElement(htmlElement: any) {
         this.htmlElement = htmlElement
         this.htmlElement.addEventListener('mousedown', (e:MouseEvent)=> {
-            console.log("piece clicked")
             this.listener(e, this)
         })
     }
