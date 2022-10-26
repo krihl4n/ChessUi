@@ -73,7 +73,7 @@ export class BoardCanvasComponent implements OnInit {
       let leftClick = 0; // todo check other OSes
 
       if (evt.button == leftClick) {
-        this.mouseDownAtField = this.locationUtilsService.determineFieldAtPos(xOnBoard, yOnBoard);
+        this.mouseDownAtField = this.locationUtilsService.depracatedDetermineFieldAtPos(xOnBoard, yOnBoard);
         this.dragPiece(xOnBoard, yOnBoard);
       }
     })
@@ -94,7 +94,7 @@ export class BoardCanvasComponent implements OnInit {
           this.releasePiece();
           this.pieceSelectedAtField = null;
         }
-        if(this.mouseDownAtField == this.locationUtilsService.determineFieldAtPos(xOnBoard, yOnBoard)) {
+        if(this.mouseDownAtField == this.locationUtilsService.depracatedDetermineFieldAtPos(xOnBoard, yOnBoard)) {
           this.selectOrMovePiece(xOnBoard, yOnBoard);
         }
       }
@@ -130,7 +130,7 @@ export class BoardCanvasComponent implements OnInit {
   pieceDrag: PieceDrag | null;
 
   private dragPiece(x: number, y: number) {
-    let field = this.locationUtilsService.determineFieldAtPos(x, y);
+    let field = this.locationUtilsService.depracatedDetermineFieldAtPos(x, y);
     if (this.fieldOccupations.has(field)) {
       let piece = this.fieldOccupations.get(field);
       this.pieceDrag = new PieceDrag(piece as HTMLImageElement, {x, y});
@@ -140,7 +140,7 @@ export class BoardCanvasComponent implements OnInit {
 
   private releasePiece() {
     if(this.pieceDrag){
-      let field = this.locationUtilsService.determineFieldAtPos(this.pieceDrag.mouseLocation.x, this.pieceDrag.mouseLocation.y);
+      let field = this.locationUtilsService.depracatedDetermineFieldAtPos(this.pieceDrag.mouseLocation.x, this.pieceDrag.mouseLocation.y);
       this.fieldOccupations.set(field, this.pieceDrag.piece);
       this.pieceDrag = null;
     }
@@ -160,7 +160,7 @@ export class BoardCanvasComponent implements OnInit {
   pieceSelectedAtField: string | null
 
   private selectOrMovePiece(x: number, y: number) {
-    let field = this.locationUtilsService.determineFieldAtPos(x, y);
+    let field = this.locationUtilsService.depracatedDetermineFieldAtPos(x, y);
     if (!this.pieceSelectedAtField) {
       if (this.fieldOccupations.has(field)) {
         this.pieceSelectedAtField = field;
@@ -206,7 +206,7 @@ export class BoardCanvasComponent implements OnInit {
   }
 
   private markField(x: number, y: number) {
-    let field: string = this.locationUtilsService.determineFieldAtPos(x, y);
+    let field: string = this.locationUtilsService.depracatedDetermineFieldAtPos(x, y);
     const index = this.markedFields.indexOf(field, 0);
     if (index > -1) {
       this.markedFields.splice(index, 1);
@@ -227,7 +227,7 @@ export class BoardCanvasComponent implements OnInit {
     if (this.pieceMovement) {
       this.pieceMovement.updatePieceOnTheMove();
       if (this.pieceMovement.destinationAchieved === true) {
-        let field = this.locationUtilsService.determineFieldAtPos(this.pieceMovement.destination.x, this.pieceMovement.destination.y)
+        let field = this.locationUtilsService.depracatedDetermineFieldAtPos(this.pieceMovement.destination.x, this.pieceMovement.destination.y)
         this.fieldOccupations.set(field, this.pieceMovement.pieceOnTheMove);
         this.pieceMovement = null
       }
@@ -265,7 +265,7 @@ export class BoardCanvasComponent implements OnInit {
         let colPos = col * this.fieldSize;
         let rowPos = row * this.fieldSize;
         this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.fieldSize, this.fieldSize, currentColor)
-        let field = this.locationUtilsService.determineFieldAtPos(colPos, rowPos);
+        let field = this.locationUtilsService.depracatedDetermineFieldAtPos(colPos, rowPos);
         this.fieldLocations.set(field, { x: colPos, y: rowPos });
 
         if (this.markedFields.includes(field)) {

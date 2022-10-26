@@ -6,6 +6,9 @@ import { Point } from './point.model';
 })
 export class FieldUtilsService {
 
+  private columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  private rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
+
   private fieldSize: number;
   private boardFlipped: boolean;
   
@@ -24,23 +27,23 @@ export class FieldUtilsService {
 
   determineFieldLocation(field: string, fieldSize: number): {x: number, y: number} {
     const col = field.charAt(0)
-    let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    let columnsCopy = this.columns.slice()
     if (this.boardFlipped) {
-      cols.reverse();
+      columnsCopy.reverse();
     }
-    const x = cols.indexOf(col) * fieldSize
+    const x = columnsCopy.indexOf(col) * fieldSize
     
     const row = field.charAt(1)
-    let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
+    let rowsCopy = this.rows.slice()
     if (this.boardFlipped) {
-      rows.reverse();
+      rowsCopy.reverse();
     }
-    const y = rows.indexOf(row) * fieldSize
+    const y = rowsCopy.indexOf(row) * fieldSize
     
     return {x, y}
   }
 
-  nullableDetermineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | null {
+  determineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | null {
     const field = this.determineColAtPos(point.x, fieldSize) + this.determineRowAtPos(point.y, fieldSize);
     if(field.includes('x')) {
       return null
@@ -48,35 +51,35 @@ export class FieldUtilsService {
     return field
   }
 
-  determineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string {
+  depracatedDetermineFieldAtPos(x: number, y: number, fieldSize: number = this.fieldSize): string {
     return this.determineColAtPos(x, fieldSize) + this.determineRowAtPos(y, fieldSize);
   }
 
   determineRowAtPos(y: number, fieldSize: number = this.fieldSize): string {
-    let rows = ['8', '7', '6', '5', '4', '3', '2', '1']
+    let rowsCopy = this.rows.slice()
 
     if (this.boardFlipped) {
-      rows.reverse();
+      rowsCopy.reverse();
     }
 
     for (let i = 0; i < 8; i++) {
       if (y >= i * fieldSize && y < i * fieldSize + fieldSize) {
-        return rows[i]
+        return rowsCopy[i]
       }
     }
     return "x";
   }
 
   determineColAtPos(x: number, fieldSize: number = this.fieldSize): string {
-    let cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    let columnsCopy = this.columns.slice()
 
     if (this.boardFlipped) {
-      cols.reverse();
+      columnsCopy.reverse();
     }
 
     for (let i = 0; i < 8; i++) {
       if (x >= i * fieldSize && x < i * fieldSize + fieldSize) {
-        return cols[i]
+        return columnsCopy[i]
       }
     }
     return "x";

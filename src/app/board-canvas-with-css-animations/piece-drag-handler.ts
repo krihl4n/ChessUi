@@ -17,7 +17,10 @@ export class PieceDragHandler {
         private htmlPieceRenderer: HtmlPieceReneder) {}
 
     notifyMouseDownLeftClickEvent(p: Point) {
-        const field = this.fieldUtils.determineFieldAtPos(p.x, p.y, this.boardSetup.fieldSize)
+        const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
+        if(!field) {
+            return
+        }
         const piece = this.piecesLocations.get(field)
         if(!piece) {
             return
@@ -30,7 +33,10 @@ export class PieceDragHandler {
     }
 
     notifyMouseDownOnPieceEvent(p: Point, piece: Piece | null = null) {
-        const field = this.fieldUtils.determineFieldAtPos(p.x, p.y, this.boardSetup.fieldSize)
+        const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
+        if(!field) {
+            return
+        }
         const checkedPiece = piece || this.piecesLocations.get(field)
         if(!checkedPiece) {
             return
@@ -48,7 +54,7 @@ export class PieceDragHandler {
     }
 
     notifyMouseUpEvent(p: Point) {
-        const field = this.fieldUtils.nullableDetermineFieldAtPos(p, this.boardSetup.fieldSize)
+        const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
 
       if(this.draggedPiece) {
         if(!field) {
