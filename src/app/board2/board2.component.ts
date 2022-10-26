@@ -12,11 +12,11 @@ import { Piece } from './piece.model';
 import { Pieces } from './pieces';
 
 @Component({
-  selector: 'app-board-canvas-with-css-animations',
-  templateUrl: './board-canvas-with-css-animations.component.html',
-  styleUrls: ['./board-canvas-with-css-animations.component.css']
+  selector: 'app-board-2',
+  templateUrl: './board2.component.html',
+  styleUrls: ['./board2.component.css']
 })
-export class BoardCanvasWithCssAnimationsComponent implements OnInit {
+export class Board2Component implements OnInit {
 
   constructor(
     private drawingService: DrawingService, 

@@ -1,4 +1,4 @@
-import { Piece } from "../board-canvas-with-css-animations/piece.model";
+import { Piece } from "../board2/piece.model";
 
 export class PiecesLocations {
 
