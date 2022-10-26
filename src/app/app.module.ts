@@ -10,9 +10,7 @@ import { GameFinishedDialogComponent } from './game-finished-dialog/game-finishe
 import { BoardCanvasComponent } from './board-canvas/board-canvas.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
-import { SvgTestComponent } from './svg-test/svg-test.component';
 import { Board2Component } from './board2/board2.component';
-import { ChessPieceComponent } from './board2/chess-piece/chess-piece.component';
 
 @NgModule({
   declarations: [
@@ -23,9 +21,7 @@ import { ChessPieceComponent } from './board2/chess-piece/chess-piece.component'
     GameFinishedDialogComponent,
     BoardCanvasComponent,
     GameComponent,
-    SvgTestComponent,
-    Board2Component,
-    ChessPieceComponent
+    Board2Component
   ],
   imports: [
     BrowserModule,
