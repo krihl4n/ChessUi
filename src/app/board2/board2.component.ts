@@ -1,15 +1,15 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
-import { DrawingService } from './drawing.service';
-import { FieldUtilsService } from './field-utils.service';
-import { PiecesLocations } from './pieces-locations';
-import { Point } from './point.model';
-import { BoardSetup } from './board-setup';
-import { CoordinationsUtil } from './coordinations-utils';
-import { HtmlPieceReneder } from './html-piece-renderer';
-import { PieceDragHandler } from './piece-drag-handler';
-import { PieceMoveHandler } from './piece-move-handler';
-import { Piece } from './piece.model';
-import { Pieces } from './pieces';
+import { DrawingService } from './tools/drawing.service';
+import { FieldUtilsService } from './tools//field-utils.service';
+import { PiecesLocations } from './tools//pieces-locations';
+import { Point } from './tools//point.model';
+import { BoardSetup } from './tools/board-setup';
+import { CoordinationsUtil } from './tools/coordinations-utils';
+import { HtmlPieceReneder } from './tools/html-piece-renderer';
+import { PieceDragHandler } from './tools/piece-drag-handler';
+import { PieceMoveHandler } from './tools/piece-move-handler';
+import { Piece } from './tools/piece.model';
+import { Pieces } from './tools/pieces';
 
 @Component({
   selector: 'app-board-2',
