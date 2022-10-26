@@ -9,6 +9,7 @@ export class PieceDragHandler {
 
     private pieceDraggedFromField: string
     private draggedPiece: Piece | null
+    private pieceMovementListener: any
 
     constructor(
         private fieldUtils: FieldUtilsService, 
@@ -16,6 +17,11 @@ export class PieceDragHandler {
         private piecesLocations: PiecesLocations, 
         private htmlPieceRenderer: HtmlPieceReneder) {}
 
+
+    registerPieceMovementListener(l: any) {
+        this.pieceMovementListener = l
+    }
+        
     notifyMouseDownLeftClickEvent(p: Point) {
         const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
         if(!field) {
@@ -63,6 +69,9 @@ export class PieceDragHandler {
         } else {
           this.piecesLocations.set(field, this.draggedPiece)
           this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
+          if(field != this.pieceDraggedFromField) {
+            this.pieceMovementListener()
+          }
         }
 
         this.draggedPiece = null

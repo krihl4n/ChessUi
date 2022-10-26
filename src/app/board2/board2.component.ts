@@ -10,6 +10,7 @@ import { PieceDragHandler } from './tools/piece-drag-handler';
 import { PieceMoveHandler } from './tools/piece-move-handler';
 import { Piece } from './tools/piece.model';
 import { Pieces } from './tools/pieces';
+import { MarkAndMoveHandler } from './tools/mark-and-move-handler';
 
 @Component({
   selector: 'app-board-2',
@@ -49,6 +50,7 @@ export class Board2Component implements OnInit {
   private piecesLocations = new PiecesLocations()
   private dragHandler: PieceDragHandler;
   private pieceMoveHandler: PieceMoveHandler
+  private markAndMoveHandler: MarkAndMoveHandler
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
@@ -58,13 +60,17 @@ export class Board2Component implements OnInit {
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
+    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations)
+
+    this.dragHandler.registerPieceMovementListener(this.markAndMoveHandler.pieceMovedListener.bind(this.markAndMoveHandler))
     this.pieces.initialize()
 
     this.piecesLocations.set("h8", this.pieces.whiteBishop)
     this.piecesLocations.set("a2", this.pieces.blackBishop)
-
+    this.piecesLocations.set("b2", this.pieces.whiteBishop2)
+    this.piecesLocations.set("c2", this.pieces.blackBishop2)
     this.renderPieces()
-    this.testPieceMovement()
+   // this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       let leftClick = 0; // todo check other OSes
@@ -73,8 +79,13 @@ export class Board2Component implements OnInit {
       }
     })
 
+    window.addEventListener('mousedown', (e: MouseEvent) => {
+      this.markAndMoveHandler.notifyMouseDownEvent()
+    })
+
     window.addEventListener('mouseup', (e: MouseEvent) => {
       this.dragHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
+      this.markAndMoveHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
     })
 
     window.addEventListener('mousemove', (e: MouseEvent) => {
@@ -141,7 +152,12 @@ export class Board2Component implements OnInit {
       for (let row = 0; row < 8; row++) {
         let colPos = col * this.boardSetup.fieldSize;
         let rowPos = row * this.boardSetup.fieldSize;
-        this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, currentColor)
+        const field = this.fieldUtils.determineFieldAtPos({x: colPos, y: rowPos}, this.boardSetup.fieldSize)
+        if(field && this.markAndMoveHandler.fieldIsMarked(field)) {
+          this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, "#FF0000")
+        } else {
+          this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, currentColor)
+        }
 
         if (col == 7) {
           this.drawingService.fillText(

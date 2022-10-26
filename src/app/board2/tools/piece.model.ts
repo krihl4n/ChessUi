@@ -4,7 +4,7 @@ export class Piece {
     htmlElement: any
 
     listener: any; // todo collection
-    constructor(color: String, type: String) {
+    constructor(public color: string, type: string) {
         this.imagePath = `assets/${color}_${type}.svg`
     }
 
