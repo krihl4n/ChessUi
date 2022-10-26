@@ -1,4 +1,4 @@
-import { Piece } from "../board2/piece.model";
+import { Piece } from "./piece.model";
 
 export class PiecesLocations {
 

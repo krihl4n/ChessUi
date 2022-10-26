@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
-import { DrawingService } from '../board-canvas/drawing.service';
-import { FieldUtilsService } from '../board-canvas/field-utils.service';
-import { PiecesLocations } from '../board-canvas/pieces-locations';
-import { Point } from '../board-canvas/point.model';
+import { DrawingService } from './drawing.service';
+import { FieldUtilsService } from './field-utils.service';
+import { PiecesLocations } from './pieces-locations';
+import { Point } from './point.model';
 import { BoardSetup } from './board-setup';
 import { CoordinationsUtil } from './coordinations-utils';
 import { HtmlPieceReneder } from './html-piece-renderer';

@@ -1,6 +1,6 @@
-import { FieldUtilsService } from "../board-canvas/field-utils.service";
-import { PiecesLocations } from "../board-canvas/pieces-locations";
-import { Point } from "../board-canvas/point.model";
+import { FieldUtilsService } from "./field-utils.service";
+import { PiecesLocations } from "./pieces-locations";
+import { Point } from "./point.model";
 import { BoardSetup } from "./board-setup";
 import { HtmlPieceReneder } from "./html-piece-renderer";
 import { Piece } from "./piece.model";

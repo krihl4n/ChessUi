@@ -1,4 +1,4 @@
-import { PiecesLocations } from "../board-canvas/pieces-locations";
+import { PiecesLocations } from "./pieces-locations";
 import { HtmlPieceReneder } from "./html-piece-renderer";
 
 export class PieceMoveHandler {

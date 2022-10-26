@@ -7,7 +7,6 @@ import { BoardComponent } from './board/board.component';
 import { ControlsComponent } from './controls/controls.component';
 import { CapturesComponent } from './captures/captures.component';
 import { GameFinishedDialogComponent } from './game-finished-dialog/game-finished-dialog.component';
-import { BoardCanvasComponent } from './board-canvas/board-canvas.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { Board2Component } from './board2/board2.component';
@@ -19,7 +18,6 @@ import { Board2Component } from './board2/board2.component';
     ControlsComponent,
     CapturesComponent,
     GameFinishedDialogComponent,
-    BoardCanvasComponent,
     GameComponent,
     Board2Component
   ],

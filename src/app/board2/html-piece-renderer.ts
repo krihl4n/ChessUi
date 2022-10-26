@@ -1,5 +1,5 @@
 import { Renderer2 } from "@angular/core";
-import { FieldUtilsService } from "../board-canvas/field-utils.service";
+import { FieldUtilsService } from "./field-utils.service";
 import { Piece } from "./piece.model";
 
 export class HtmlPieceReneder {
