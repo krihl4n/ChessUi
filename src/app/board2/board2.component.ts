@@ -60,7 +60,7 @@ export class Board2Component implements OnInit {
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
-    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations)
+    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
 
     this.dragHandler.registerPieceMovementListener(this.markAndMoveHandler.pieceMovedListener.bind(this.markAndMoveHandler))
     this.pieces.initialize()
