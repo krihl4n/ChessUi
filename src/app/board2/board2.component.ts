@@ -75,6 +75,7 @@ export class Board2Component implements OnInit {
     // this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
+      e.preventDefault()
       let leftClick = 0; // todo check other OSes
       if (e.button == leftClick) {
         this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
@@ -82,6 +83,7 @@ export class Board2Component implements OnInit {
     })
 
     window.addEventListener('mousedown', (e: MouseEvent) => {
+      e.preventDefault()
       this.markAndMoveHandler.notifyMouseDownEvent()
     })
 
@@ -105,6 +107,7 @@ export class Board2Component implements OnInit {
   }
 
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
+    e.preventDefault()
     let leftClick = 0; // todo check other OSes
     if (e.button == leftClick) {
       this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e), piece)
