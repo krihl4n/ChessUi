@@ -47,7 +47,7 @@ export class HtmlPieceReneder {
     this.renderer.setStyle(piece.htmlElement, "transition", "all 500ms ease");
   }
 
-  private createElementIfNotExists(piece: Piece) {
+private createElementIfNotExists(piece: Piece) {
     if (!piece.htmlElement) {
       const htmlElement = this.renderer.createElement('img')
       this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)

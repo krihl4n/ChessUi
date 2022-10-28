@@ -77,7 +77,7 @@ export class Board2Component implements OnInit {
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       let leftClick = 0; // todo check other OSes
       if (e.button == leftClick) {
-        this.dragHandler.notifyMouseDownOnPieceEvent(this.getEventLocationOnBoard(e))
+        this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       }
     })
 
@@ -107,7 +107,7 @@ export class Board2Component implements OnInit {
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
     let leftClick = 0; // todo check other OSes
     if (e.button == leftClick) {
-      this.dragHandler.notifyMouseDownOnPieceEvent(this.getEventLocationOnBoard(e), piece)
+      this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e), piece)
     }
   }
 
