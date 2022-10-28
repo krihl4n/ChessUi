@@ -10,9 +10,11 @@ export class DrawingService {
     ctx.clearRect(0, 0, 700, 700);
   }
 
-  fillRectangle(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string) {
+  fillRectangle(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string, alpha: number = 1) {
     ctx.fillStyle = color;
+    ctx.globalAlpha = alpha
     ctx.fillRect(x, y, w, h);
+    ctx.globalAlpha = 1
   }
 
   fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number, font: number) {

@@ -20,30 +20,32 @@ import { MarkAndMoveHandler } from './tools/mark-and-move-handler';
 export class Board2Component implements OnInit {
 
   constructor(
-    private drawingService: DrawingService, 
+    private drawingService: DrawingService,
     private locationUtilsService: FieldUtilsService,
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService) { }
 
-  @ViewChild('canvas', { static: true }) 
+  @ViewChild('canvas', { static: true })
   canvas: ElementRef;
 
   canvasContext: CanvasRenderingContext2D;
 
-  @ViewChild('boardcontainer', { static: true }) 
+  @ViewChild('boardcontainer', { static: true })
   boardContainer: ElementRef<HTMLCanvasElement>;
 
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
 
   canvasSize: number;
-  private fieldColorLight = "#D2C3C3";
-  private fieldColorDark = "#75352B";
+  private lightFieldColor = "#D2C3C3";
+  private darkFieldColor = "#75352B";
+  private markedFieldColor = "#4F7B64";
+  private markedFieldAlpha = 0.8;
   private boardFlipped = false;
   private boardSetup: BoardSetup;
 
   readyForDrawing = false
-  
+
   private htmlPieceRender: HtmlPieceReneder
 
   private pieces = new Pieces()
@@ -70,7 +72,7 @@ export class Board2Component implements OnInit {
     this.piecesLocations.set("b2", this.pieces.whiteBishop2)
     this.piecesLocations.set("c2", this.pieces.blackBishop2)
     this.renderPieces()
-   // this.testPieceMovement()
+    // this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       let leftClick = 0; // todo check other OSes
@@ -97,16 +99,16 @@ export class Board2Component implements OnInit {
 
   renderPieces() {
     this.piecesLocations.getAll().forEach((piece, field) => {
-        this.htmlPieceRender.renderPieceAtField(field, piece)
-        piece.setMouseDownListener(this.notifyPieceClicked.bind(this))
+      this.htmlPieceRender.renderPieceAtField(field, piece)
+      piece.setMouseDownListener(this.notifyPieceClicked.bind(this))
     })
   }
 
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
-      let leftClick = 0; // todo check other OSes
-      if (e.button == leftClick) {
-        this.dragHandler.notifyMouseDownOnPieceEvent(this.getEventLocationOnBoard(e), piece)
-      }
+    let leftClick = 0; // todo check other OSes
+    if (e.button == leftClick) {
+      this.dragHandler.notifyMouseDownOnPieceEvent(this.getEventLocationOnBoard(e), piece)
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -115,7 +117,7 @@ export class Board2Component implements OnInit {
     this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
   }
-  
+
   private testPieceMovement() {
     let from1 = "a2"
     let to1 = "h2"
@@ -146,17 +148,18 @@ export class Board2Component implements OnInit {
   }
 
   private drawBackground() {
-    
-    let currentColor = this.fieldColorLight;
+
+    let currentColor = this.lightFieldColor;
     for (let col = 0; col < 8; col++) {
       for (let row = 0; row < 8; row++) {
         let colPos = col * this.boardSetup.fieldSize;
         let rowPos = row * this.boardSetup.fieldSize;
-        const field = this.fieldUtils.determineFieldAtPos({x: colPos, y: rowPos}, this.boardSetup.fieldSize)
-        if(field && this.markAndMoveHandler.fieldIsMarked(field)) {
-          this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, "#FF0000")
-        } else {
+        const field = this.fieldUtils.determineFieldAtPos({ x: colPos, y: rowPos }, this.boardSetup.fieldSize)
+        if (field) {
           this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, currentColor)
+          if (this.markAndMoveHandler.fieldIsMarked(field)) {
+            this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.markedFieldColor, this.markedFieldAlpha)
+          }
         }
 
         if (col == 7) {
@@ -184,10 +187,10 @@ export class Board2Component implements OnInit {
   }
 
   private oppositeOf(color: string): string {
-    if (color == this.fieldColorLight) {
-      return this.fieldColorDark
+    if (color == this.lightFieldColor) {
+      return this.darkFieldColor
     } else {
-      return this.fieldColorLight
+      return this.lightFieldColor
     }
   }
 }
