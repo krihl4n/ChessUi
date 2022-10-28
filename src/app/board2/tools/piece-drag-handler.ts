@@ -23,7 +23,7 @@ export class PieceDragHandler {
   }
 
   notifyMouseDownEvent(p: Point, piece: Piece | null = null) {
-    const delay = 50
+    const delay = 75
     setTimeout(() => {
       if (Date.now() - this.mouseUpEventTime > delay) {
         const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
