@@ -2,7 +2,7 @@ export class BoardSetup {
     
     boardSize: number
     fieldSize: number
-    constructor(private boardFlipped: boolean, private windowHeight: number) {
+    constructor(public boardFlipped: boolean, private windowHeight: number) {
         this.updateFieldSize(windowHeight)
     }
 

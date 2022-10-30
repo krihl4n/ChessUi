@@ -8,7 +8,6 @@ export class MarkAndMoveHandler {
 
     private markedField: string | null
     private previouslyMarkedField: string | null
-    private pieceMoved: boolean
 
     constructor(private fieldUtils: FieldUtilsService, private boardSetup: BoardSetup, private piecesLocations: PiecesLocations, private renderer: HtmlPieceReneder) { }
 
@@ -27,7 +26,7 @@ export class MarkAndMoveHandler {
 
     notifyMouseUpEvent(point: Point) {
         const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
-        console.log(this.previouslyMarkedField)
+
         if(field && this.previouslyMarkedField && field != this.previouslyMarkedField) {
             const pieceToMove = this.piecesLocations.get(this.previouslyMarkedField)
             if(pieceToMove) {
@@ -36,9 +35,6 @@ export class MarkAndMoveHandler {
                     this.piecesLocations.delete(this.previouslyMarkedField)
                     this.renderer.renderPieceMovement(field, pieceToMove)
                     this.piecesLocations.set(field, pieceToMove)
-                }
-                if(pieceAtDst?.color != pieceToMove.color) {
-                    console.log("attack")
                 }
             }
         }

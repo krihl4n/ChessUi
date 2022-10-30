@@ -41,7 +41,6 @@ export class Board2Component implements OnInit {
   private darkFieldColor = "#75352B";
   private markedFieldColor = "#4F7B64";
   private markedFieldAlpha = 0.8;
-  private boardFlipped = false;
   private boardSetup: BoardSetup;
 
   readyForDrawing = false
@@ -56,9 +55,9 @@ export class Board2Component implements OnInit {
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    this.boardSetup = new BoardSetup(false, window.outerHeight)
+    this.boardSetup = new BoardSetup(true, window.outerHeight)
     this.canvasSize = this.boardSetup.boardSize
-    this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
+    this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
@@ -117,7 +116,7 @@ export class Board2Component implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.boardSetup.windowHeightUpdated(window.outerHeight)
-    this.locationUtilsService.initialize(this.boardFlipped, this.boardSetup.fieldSize)
+    this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
   }
 
