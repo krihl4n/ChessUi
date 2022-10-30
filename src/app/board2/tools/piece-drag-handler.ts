@@ -9,7 +9,6 @@ export class PieceDragHandler {
 
   private pieceDraggedFromField: string
   private draggedPiece: Piece | null
-  private pieceMovementListener: any
   private mouseUpEventTime: number
 
   constructor(
@@ -17,10 +16,6 @@ export class PieceDragHandler {
     private boardSetup: BoardSetup,
     private piecesLocations: PiecesLocations,
     private htmlPieceRenderer: HtmlPieceReneder) { }
-
-  registerPieceMovementListener(l: any) {
-    this.pieceMovementListener = l
-  }
 
   notifyMouseDownEvent(p: Point, piece: Piece | null = null) {
     const delay = 75
@@ -59,9 +54,6 @@ export class PieceDragHandler {
       } else {
         this.piecesLocations.set(field, this.draggedPiece)
         this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
-        if (field != this.pieceDraggedFromField) {
-          this.pieceMovementListener()
-        }
       }
 
       this.draggedPiece = null

@@ -12,56 +12,50 @@ export class MarkAndMoveHandler {
 
     constructor(private fieldUtils: FieldUtilsService, private boardSetup: BoardSetup, private piecesLocations: PiecesLocations, private renderer: HtmlPieceReneder) { }
 
-    notifyMouseDownEvent() {
+    notifyMouseDownEvent(point: Point) {
         this.previouslyMarkedField = this.markedField
-        this.markedField = null
+        const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
+        if(!field) {
+            return
+        }
+        
+        const piece = this.piecesLocations.get(field)
+        if (piece) {
+            this.markedField = field
+        }
     }
 
     notifyMouseUpEvent(point: Point) {
         const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
-        if (!this.markedField) {
-            if (field) {
-                const piece = this.piecesLocations.get(field)
-                if (piece && !this.pieceMoved) {
-                    this.markedField = field
+        console.log(this.previouslyMarkedField)
+        if(field && this.previouslyMarkedField && field != this.previouslyMarkedField) {
+            const pieceToMove = this.piecesLocations.get(this.previouslyMarkedField)
+            if(pieceToMove) {
+                const pieceAtDst = this.piecesLocations.get(field) 
+                if(!pieceAtDst) {
+                    this.piecesLocations.delete(this.previouslyMarkedField)
+                    this.renderer.renderPieceMovement(field, pieceToMove)
+                    this.piecesLocations.set(field, pieceToMove)
+                }
+                if(pieceAtDst?.color != pieceToMove.color) {
+                    console.log("attack")
                 }
             }
         }
-
-        if (this.previouslyMarkedField) {
-            if (this.previouslyMarkedField == field) {
-                this.previouslyMarkedField = null
-                this.markedField = null
+        if(field && field == this.markedField) {
+            if(this.previouslyMarkedField != field) {
+                   
             } else {
-                const pieceToMove = this.piecesLocations.get(this.previouslyMarkedField)
-                if (field) {
-                    const pieceAtDstField = this.piecesLocations.get(field)
-                    if (pieceAtDstField && pieceAtDstField.color == pieceToMove?.color) {
-                        this.markedField = field
-                    } else {
-                        if (field && pieceToMove) {
-                            this.piecesLocations.delete(this.previouslyMarkedField)
-                            this.renderer.renderPieceMovement(field, pieceToMove)
-                            this.piecesLocations.set(field, pieceToMove)
-                            this.previouslyMarkedField = null
-                            this.markedField = null
-                        }
-                    }
-                }
+                this.previouslyMarkedField = this.markedField
+                this.markedField = null
             }
+        } else {
+            this.previouslyMarkedField = this.markedField
+            this.markedField = null
         }
-
-        this.pieceMoved = false
     }
 
     fieldIsMarked(field: string) {
         return this.markedField == field
-    }
-
-    pieceMovedListener() { // todo maybe register also in piece-move-handler
-        console.log("notified about piece movement")
-        this.markedField = null
-        this.pieceMoved = true
-        this.previouslyMarkedField = null
     }
 }

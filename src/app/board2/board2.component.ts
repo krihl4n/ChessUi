@@ -64,7 +64,6 @@ export class Board2Component implements OnInit {
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
 
-    this.dragHandler.registerPieceMovementListener(this.markAndMoveHandler.pieceMovedListener.bind(this.markAndMoveHandler))
     this.pieces.initialize()
 
     this.piecesLocations.set("h8", this.pieces.whiteBishop)
@@ -72,7 +71,7 @@ export class Board2Component implements OnInit {
     this.piecesLocations.set("b2", this.pieces.whiteBishop2)
     this.piecesLocations.set("c2", this.pieces.blackBishop2)
     this.renderPieces()
-    // this.testPieceMovement()
+    //this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       e.preventDefault()
@@ -84,7 +83,7 @@ export class Board2Component implements OnInit {
 
     window.addEventListener('mousedown', (e: MouseEvent) => {
       e.preventDefault()
-      this.markAndMoveHandler.notifyMouseDownEvent()
+      this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
     })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
@@ -110,6 +109,7 @@ export class Board2Component implements OnInit {
     e.preventDefault()
     let leftClick = 0; // todo check other OSes
     if (e.button == leftClick) {
+     // this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e), piece)
     }
   }
