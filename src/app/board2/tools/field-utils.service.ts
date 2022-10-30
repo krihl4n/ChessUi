@@ -43,10 +43,10 @@ export class FieldUtilsService {
     return {x, y}
   }
 
-  determineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | null {
+  determineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | undefined {
     const field = this.determineColAtPos(point.x, fieldSize) + this.determineRowAtPos(point.y, fieldSize);
     if(field.includes('x')) {
-      return null
+      return
     }
     return field
   }

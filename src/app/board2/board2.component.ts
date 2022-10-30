@@ -55,7 +55,7 @@ export class Board2Component implements OnInit {
 
   ngOnInit(): void {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-    this.boardSetup = new BoardSetup(true, window.outerHeight)
+    this.boardSetup = new BoardSetup(false, window.outerHeight)
     this.canvasSize = this.boardSetup.boardSize
     this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
@@ -108,7 +108,6 @@ export class Board2Component implements OnInit {
     e.preventDefault()
     let leftClick = 0; // todo check other OSes
     if (e.button == leftClick) {
-     // this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e), piece)
     }
   }

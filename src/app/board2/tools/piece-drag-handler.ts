@@ -8,7 +8,7 @@ import { Piece } from "./piece.model";
 export class PieceDragHandler {
 
   private pieceDraggedFromField: string
-  private draggedPiece: Piece | null
+  private draggedPiece?: Piece
   private mouseUpEventTime: number
 
   constructor(
@@ -17,7 +17,7 @@ export class PieceDragHandler {
     private piecesLocations: PiecesLocations,
     private htmlPieceRenderer: HtmlPieceReneder) { }
 
-  notifyMouseDownEvent(p: Point, piece: Piece | null = null) {
+  notifyMouseDownEvent(p: Point, piece?: Piece) {
     const delay = 75
     setTimeout(() => {
       if (Date.now() - this.mouseUpEventTime > delay) {
@@ -56,7 +56,7 @@ export class PieceDragHandler {
         this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
       }
 
-      this.draggedPiece = null
+      this.draggedPiece = undefined
     }
   }
 }

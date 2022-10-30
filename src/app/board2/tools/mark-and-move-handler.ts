@@ -4,10 +4,10 @@ import { HtmlPieceReneder } from "./html-piece-renderer";
 import { PiecesLocations } from "./pieces-locations";
 import { Point } from "./point.model";
 
-export class MarkAndMoveHandler {
+export class MarkAndMoveHandler { // todo maybe separate handlers for pieve movement and fields marking
 
-    private markedField: string | null
-    private previouslyMarkedField: string | null
+    private markedField?: string
+    private previouslyMarkedField?: string
 
     constructor(private fieldUtils: FieldUtilsService, private boardSetup: BoardSetup, private piecesLocations: PiecesLocations, private renderer: HtmlPieceReneder) { }
 
@@ -43,11 +43,11 @@ export class MarkAndMoveHandler {
                    
             } else {
                 this.previouslyMarkedField = this.markedField
-                this.markedField = null
+                this.markedField = undefined
             }
         } else {
             this.previouslyMarkedField = this.markedField
-            this.markedField = null
+            this.markedField = undefined
         }
     }
 
