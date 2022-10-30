@@ -11,7 +11,7 @@ export class BoardSetup {
     }
 
     private updateFieldSize(windowHeight: number) {
-        this.fieldSize = (windowHeight-200)/8
+        this.fieldSize = (windowHeight-220)/8
         this.boardSize = this.fieldSize * 8
     }
 }

@@ -115,8 +115,10 @@ export class Board2Component implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.boardSetup.windowHeightUpdated(window.outerHeight)
+    this.canvasSize = this.boardSetup.boardSize
     this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
+    this.renderPieces()
   }
 
   private testPieceMovement() {
