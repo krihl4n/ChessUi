@@ -21,7 +21,6 @@ export class Board2Component implements OnInit {
 
   constructor(
     private drawingService: DrawingService,
-    private locationUtilsService: FieldUtilsService,
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService) { }
 
@@ -57,13 +56,13 @@ export class Board2Component implements OnInit {
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.boardSetup = new BoardSetup(false, window.outerHeight)
     this.canvasSize = this.boardSetup.boardSize
-    this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
+    this.fieldUtils.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
 
-    this.pieces.initialize()
+    this.pieces.initialize(this.boardSetup)
 
     this.piecesLocations.set("h8", this.pieces.whiteBishop)
     this.piecesLocations.set("a2", this.pieces.blackBishop)
@@ -116,8 +115,11 @@ export class Board2Component implements OnInit {
   onResize() {
     this.boardSetup.windowHeightUpdated(window.outerHeight)
     this.canvasSize = this.boardSetup.boardSize
-    this.locationUtilsService.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
+    this.fieldUtils.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
+    this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
+    this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
+    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.renderPieces()
   }
 
@@ -168,7 +170,7 @@ export class Board2Component implements OnInit {
         if (col == 7) {
           this.drawingService.fillText(
             this.canvasContext,
-            this.locationUtilsService.determineRowAtPos(rowPos, this.boardSetup.fieldSize),
+            this.fieldUtils.determineRowAtPos(rowPos, this.boardSetup.fieldSize),
             this.oppositeOf(currentColor),
             colPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.1,
             rowPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.85,
@@ -177,7 +179,7 @@ export class Board2Component implements OnInit {
         if (row == 7) {
           this.drawingService.fillText(
             this.canvasContext,
-            this.locationUtilsService.determineColAtPos(colPos, this.boardSetup.fieldSize),
+            this.fieldUtils.determineColAtPos(colPos, this.boardSetup.fieldSize),
             this.oppositeOf(currentColor),
             colPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.95,
             rowPos + this.boardSetup.fieldSize - this.boardSetup.fieldSize * 0.05,

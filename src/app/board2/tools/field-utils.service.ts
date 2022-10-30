@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Piece } from './piece.model';
 import { Point } from './point.model';
 
 @Injectable({
@@ -17,11 +18,12 @@ export class FieldUtilsService {
     this.boardFlipped = boardFlipped;
   }
 
-  determinePieceLocationAtField(field: string, fieldSize: number) : {x: number, y: number} {
+  determinePieceLocationAtField(field: string, fieldSize: number, piece: Piece) : {x: number, y: number} {
     const fieldLocation = this.determineFieldLocation(field, fieldSize)
+    console.log(piece.getWitdh())
     return {
       x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
-      y: fieldLocation.y + this.fieldSize - 70 // todo find piece height
+      y: fieldLocation.y + this.fieldSize* 0.96 - piece.desiredHeight
     }   
   }
 
