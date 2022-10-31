@@ -64,16 +64,48 @@ export class Board2Component implements OnInit {
 
     this.pieces.initialize(this.boardSetup)
 
-    this.piecesLocations.set("h8", this.pieces.whiteBishop)
-    this.piecesLocations.set("a2", this.pieces.blackBishop)
-    this.piecesLocations.set("b2", this.pieces.whiteBishop2)
-    this.piecesLocations.set("c2", this.pieces.blackBishop2)
+    this.piecesLocations.set("a2", this.pieces.whitePawn1)
+    this.piecesLocations.set("b2", this.pieces.whitePawn2)
+    this.piecesLocations.set("c2", this.pieces.whitePawn3)
+    this.piecesLocations.set("d2", this.pieces.whitePawn4)
+    this.piecesLocations.set("e2", this.pieces.whitePawn5)
+    this.piecesLocations.set("f2", this.pieces.whitePawn6)
+    this.piecesLocations.set("g2", this.pieces.whitePawn7)
+    this.piecesLocations.set("h2", this.pieces.whitePawn8)
+
+    this.piecesLocations.set("c1", this.pieces.whiteBishop1)
+    this.piecesLocations.set("f1", this.pieces.whiteBishop2)
+    this.piecesLocations.set("a1", this.pieces.whiteRook1)
+    this.piecesLocations.set("h1", this.pieces.whiteRook2)
+    this.piecesLocations.set("b1", this.pieces.whiteKnight1)
+    this.piecesLocations.set("g1", this.pieces.whiteKnight2)
+    this.piecesLocations.set("d1", this.pieces.whiteQueen)
+    this.piecesLocations.set("e1", this.pieces.whiteKing)
+
+
+    this.piecesLocations.set("a7", this.pieces.blackPawn1)
+    this.piecesLocations.set("b7", this.pieces.blackPawn2)
+    this.piecesLocations.set("c7", this.pieces.blackPawn3)
+    this.piecesLocations.set("d7", this.pieces.blackPawn4)
+    this.piecesLocations.set("e7", this.pieces.blackPawn5)
+    this.piecesLocations.set("f7", this.pieces.blackPawn6)
+    this.piecesLocations.set("g7", this.pieces.blackPawn7)
+    this.piecesLocations.set("h7", this.pieces.blackPawn8)
+
+    this.piecesLocations.set("c8", this.pieces.blackBishop1)
+    this.piecesLocations.set("f8", this.pieces.blackBishop2)
+    this.piecesLocations.set("a8", this.pieces.blackRook1)
+    this.piecesLocations.set("h8", this.pieces.blackRook2)
+    this.piecesLocations.set("b8", this.pieces.blackKnight1)
+    this.piecesLocations.set("g8", this.pieces.blackKnight2)
+    this.piecesLocations.set("d8", this.pieces.blackQueen)
+    this.piecesLocations.set("e8", this.pieces.blackKing)
 
     this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
       this.renderPieces()
     })
     
-    this.testPieceMovement()
+ //   this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       e.preventDefault()

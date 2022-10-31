@@ -24,6 +24,10 @@ export class Piece {
     }
 
     setDesiredHeight() {
-        this.desiredHeight = this.boardSetup.fieldSize * 0.8 // maybe smaller
+        if(this.type == "pawn"){
+            this.desiredHeight = this.boardSetup.fieldSize * 0.7 
+        } else {
+            this.desiredHeight = this.boardSetup.fieldSize * 0.8 
+        }
     }
 }
