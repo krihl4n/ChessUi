@@ -9,16 +9,50 @@ export class HtmlPieceReneder {
     private boardNativeElement: any,
     private fieldSize: number) { }
 
+  private listener: any
+  private piecesToRender = 0
+
+  preRenderPieces(pieces: Piece[], listener: any) {
+    this.piecesToRender = pieces.length
+    this.listener = listener
+    for(let piece of pieces) {
+      const htmlElement = this.renderer.createElement('img')
+      this.renderer.setAttribute(htmlElement, 'hidden', 'true')
+      this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
+      this.renderer.setAttribute(htmlElement, 'draggable', 'false')
+      this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
+
+      htmlElement.onload = () => {
+        this.piecesToRender--
+        if(this.piecesToRender == 0) {
+          this.listener()
+          this.listener = undefined
+        }
+      }
+      this.renderer.appendChild(this.boardNativeElement, htmlElement)
+      piece.setHtmlElement(htmlElement)   
+    }
+  }
+
+  resizePieces(pieces: Piece[]) {
+    for(let piece of pieces) {
+      piece.setDesiredHeight()
+      this.renderer.setStyle(piece.htmlElement, 'height', piece.desiredHeight + 'px')
+    }
+  }
+
   renderPieceByCoursor(mouseX: number, mouseY: number, piece: Piece) {
-    this.createElementIfNotExists(piece)
+    //this.createElementIfNotExists(piece)
+    this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '999')
-    this.setElementLocation(piece.htmlElement, { x: mouseX - 28, y: mouseY - 35 }) // todo tune to piece size      
+    this.setElementLocation(piece.htmlElement, { x: mouseX - piece.htmlElement.width/2, y: mouseY - piece.htmlElement.height/2 })  
   }
 
   renderPieceAtField(field: string, piece: Piece) {
-    this.createElementIfNotExists(piece)
+    //this.createElementIfNotExists(piece)
+    this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
-    this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece)) // todo tune to piece size
+    this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece))
   }
 
   renderPieceMovement(destinationField: string, piece: Piece) {
@@ -50,21 +84,12 @@ export class HtmlPieceReneder {
 private createElementIfNotExists(piece: Piece) {
     if (!piece.htmlElement) {
       const htmlElement = this.renderer.createElement('img')
+      this.renderer.setAttribute(htmlElement, 'hidden', 'true')
       this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
-      console.log("desired height " + piece.desiredHeight)
       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
-
-      htmlElement.onload = () => {
-        console.log('onload ' + htmlElement.width)
-      }
-
       this.renderer.appendChild(this.boardNativeElement, htmlElement)
-      piece.setHtmlElement(htmlElement)
-      this.renderer.listen(htmlElement, 'onresize', (evt) => {
-        console.log(":::")
-       });
-    
+      piece.setHtmlElement(htmlElement)   
     }
   }
 

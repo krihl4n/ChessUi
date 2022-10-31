@@ -23,17 +23,7 @@ export class Piece {
         this.listener = listener
     }
 
-    private setDesiredHeight() {
+    setDesiredHeight() {
         this.desiredHeight = this.boardSetup.fieldSize * 0.8 // maybe smaller
     }
-
-    getWitdh() {
-        console.log(this.htmlElement.height)
-        console.log(this.htmlElement.width)
-    }
 }
-
-// F 88
-// p 68
-
-// P = F * X

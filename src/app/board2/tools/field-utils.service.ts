@@ -20,10 +20,9 @@ export class FieldUtilsService {
 
   determinePieceLocationAtField(field: string, fieldSize: number, piece: Piece) : {x: number, y: number} {
     const fieldLocation = this.determineFieldLocation(field, fieldSize)
-    console.log(piece.getWitdh())
     return {
-      x: (fieldLocation.x + this.fieldSize / 2) - 50/2, // todo find piece width
-      y: fieldLocation.y + this.fieldSize* 0.96 - piece.desiredHeight
+      x: (fieldLocation.x + this.fieldSize / 2) - piece.htmlElement.width / 2,
+      y: fieldLocation.y + this.fieldSize* 0.96 - piece.htmlElement.height
     }   
   }
 

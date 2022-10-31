@@ -68,8 +68,12 @@ export class Board2Component implements OnInit {
     this.piecesLocations.set("a2", this.pieces.blackBishop)
     this.piecesLocations.set("b2", this.pieces.whiteBishop2)
     this.piecesLocations.set("c2", this.pieces.blackBishop2)
-    this.renderPieces()
-    //this.testPieceMovement()
+
+    this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
+      this.renderPieces()
+    })
+    
+    this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       e.preventDefault()
@@ -120,6 +124,7 @@ export class Board2Component implements OnInit {
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
+    this.htmlPieceRender.resizePieces(Array.from(this.piecesLocations.getAll().values()))
     this.renderPieces()
   }
 
