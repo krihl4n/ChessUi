@@ -10,6 +10,8 @@ import { GameFinishedDialogComponent } from './game-finished-dialog/game-finishe
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { Board2Component } from './board2/board2.component';
+import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
+import { Game2Component } from './game2/game2.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { Board2Component } from './board2/board2.component';
     CapturesComponent,
     GameFinishedDialogComponent,
     GameComponent,
-    Board2Component
+    Board2Component,
+    StartGameDialogComponent,
+    Game2Component
   ],
   imports: [
     BrowserModule,
