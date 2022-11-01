@@ -111,14 +111,15 @@ export class Board2Component implements OnInit {
       e.preventDefault()
       let leftClick = 0; // todo check other OSes
       if (e.button == leftClick) {
+        this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
         this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       }
     })
 
-    window.addEventListener('mousedown', (e: MouseEvent) => {
-      e.preventDefault()
-      this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
-    })
+    // window.addEventListener('mousedown', (e: MouseEvent) => {
+    //   e.preventDefault()
+    //   //this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
+    // })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
       this.dragHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
@@ -143,6 +144,7 @@ export class Board2Component implements OnInit {
     e.preventDefault()
     let leftClick = 0; // todo check other OSes
     if (e.button == leftClick) {
+      this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e), piece)
     }
   }

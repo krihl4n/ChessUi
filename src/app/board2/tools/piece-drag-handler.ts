@@ -9,7 +9,6 @@ export class PieceDragHandler {
 
   private pieceDraggedFromField: string
   private draggedPiece?: Piece
-  private mouseUpEventTime: number
 
   constructor(
     private fieldUtils: FieldUtilsService,
@@ -18,23 +17,18 @@ export class PieceDragHandler {
     private htmlPieceRenderer: HtmlPieceReneder) { }
 
   notifyMouseDownEvent(p: Point, piece?: Piece) {
-    const delay = 75
-    setTimeout(() => {
-      if (Date.now() - this.mouseUpEventTime > delay) {
-        const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
-        if (!field) {
-          return
-        }
-        const checkedPiece = piece || this.piecesLocations.get(field)
-        if (!checkedPiece) {
-          return
-        }
-        this.pieceDraggedFromField = field
-        this.draggedPiece = checkedPiece
-        this.piecesLocations.delete(field)
-        this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, checkedPiece)
-      }
-    }, delay)
+    const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
+    if (!field) {
+      return
+    }
+    const checkedPiece = piece || this.piecesLocations.get(field)
+    if (!checkedPiece) {
+      return
+    }
+    this.pieceDraggedFromField = field
+    this.draggedPiece = checkedPiece
+    this.piecesLocations.delete(field)
+    this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, checkedPiece)
   }
 
   notifyMouseMove(p: Point) {
@@ -44,7 +38,6 @@ export class PieceDragHandler {
   }
 
   notifyMouseUpEvent(p: Point) {
-    this.mouseUpEventTime = Date.now()
     const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
 
     if (this.draggedPiece) {
