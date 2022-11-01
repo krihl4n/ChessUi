@@ -103,5 +103,7 @@
       }
     }
   },
-  "defaultProject": "ChessWeb"
+  "cli": {
+    "analytics": false
+  }
 }
