@@ -16,19 +16,10 @@ export class Game2Component implements OnInit {
   }
 
   openDialog() {
-
-    const dialogConfig = new MatDialogConfig();
-
-    // const dialogConfig = {
-    //   disableClose: false;
-    // }.
-    // dialogConfig.autoFocus = true;
-    // dialogConfig.width = "767px"
-    // dialogConfig.height = "415px"
-    
     this.dialog.open(StartGameDialogComponent, {
       disableClose: false,
-      autoFocus: true,
+      hasBackdrop: true,
+      autoFocus: false,
       width: "767px",
       height: "415px",
       panelClass: 'custom-modalbox'

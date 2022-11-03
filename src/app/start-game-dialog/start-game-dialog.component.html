@@ -1,14 +1,20 @@
 
 <mat-dialog-content>
-    <div class="container" >
-        <div class="row">
-            <div class="col-6">
+    <div id="main-container" class="container">
+        <div id="modal-mode-buttons-row" class="row">
+            <div id="modal-upper-left-column" class="col-6">
                 <button class="btn-game-mode-select">vs computer</button>
             </div>
-            <div class="col-6">
+            <div id="modal-upper-right-column" class="col-6">
                 <button class="btn-game-mode-select">vs friend</button>    
             </div>
         </div>
-        <div class="row"></div>
+        <div id="modal-bottom-row" class="row">
+            <div style="position: relative;">
+                <button style="left: 130px;" class="btn btn-color-select-small"><img src="/assets/white_pawn.svg"></button>
+                <button style="left: 300px;" class="btn btn-color-select-large">random</button>
+                <button style="right: 130px;" class="btn btn-color-select-small"><img src="/assets/black_pawn.svg"></button>
+            </div>
+        </div>
     </div>
 </mat-dialog-content>

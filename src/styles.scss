@@ -5,15 +5,82 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 .custom-modalbox .mat-dialog-container{
+
+    background-color: #20363F;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    
+    #main-container {
+        width: 767px; // match modal size
+        height: 415px; 
+        position: relative;
+    }
+    #modal-mode-buttons-row {
+        padding: 40px;
+    }
+    #modal-upper-left-column {
+        padding: 0;
+        margin: 0;
+        text-align: left;
+    }
+    #modal-upper-right-column {
+        padding: 0;
+        margin: 0;
+        text-align: right;
+    }
+    #modal-bottom-row {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+    #modal-center-column {
+        border: 1px solid red;
+        text-align: center;
+    }
+    #modal-left-column {
+        border: 1px solid red;
+        text-align: right;
+    }
+    #modal-right-column {
+        border: 1px solid red;
+        text-align: left;
+    }
+
+    #modal-right-column {
+        border: 1px solid red;
+        text-align: left;
+    }
+
+    .btn-color-select-large {
+        position: absolute;
+        border: none;
+        width: 160px;
+        height: 160px;
+        bottom: 40px;
+        color: white;
+        font-size: 24px;
+        background-color: #36555D;
+    }
+
+    .btn-color-select-small {
+        position: absolute;
+        border: none;
+        width: 120px;
+        height: 120px;
+        bottom: 40px;
+        color: white;
+        font-size: 24px;
+        background-color: #36555D;
+    }
+
     .btn-game-mode-select {
         width: 323px;
         height: 60px;
         color: white;
         font-size: 24px;
         background-color: #36555D;
-        
+        padding: 0;
+        margin: 0;
     }
-    background-color: #20363F;
-   // opacity: 0.2;
-
 }
