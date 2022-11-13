@@ -11,76 +11,37 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin: 0;
     overflow: hidden;
     
-    #main-container {
-        width: 767px; // match modal size
-        height: 415px; 
+    .modal-container {
+        width: 331px; // match modal size
+        height: 313px; // try to remove later
+        padding: 20px;
         position: relative;
     }
-    #modal-mode-buttons-row {
-        padding: 40px;
-    }
-    #modal-upper-left-column {
-        padding: 0;
-        margin: 0;
-        text-align: left;
-    }
-    #modal-upper-right-column {
-        padding: 0;
-        margin: 0;
-        text-align: right;
-    }
-    #modal-bottom-row {
-        position: absolute;
+
+    .select-mode-button {
         width: 100%;
-        bottom: 0;
-    }
-    #modal-center-column {
-        border: 1px solid red;
-        text-align: center;
-    }
-    #modal-left-column {
-        border: 1px solid red;
-        text-align: right;
-    }
-    #modal-right-column {
-        border: 1px solid red;
-        text-align: left;
+        height: 50px;
+        margin-bottom: 20px;
     }
 
-    #modal-right-column {
-        border: 1px solid red;
-        text-align: left;
-    }
-
-    .btn-color-select-large {
+    #modal-button-1 {
         position: absolute;
-        border: none;
-        width: 160px;
-        height: 160px;
-        bottom: 40px;
-        color: white;
-        font-size: 24px;
-        background-color: #36555D;
+        left: 20px;
+        bottom: 20px;
     }
-
-    .btn-color-select-small {
+    #modal-button-2 {
         position: absolute;
-        border: none;
-        width: 120px;
-        height: 120px;
-        bottom: 40px;
-        color: white;
-        font-size: 24px;
-        background-color: #36555D;
-    }
+        left: 120px;
+        bottom: 20px;
+     }
+     #modal-button-3 {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+     }
+}
 
-    .btn-game-mode-select {
-        width: 323px;
-        height: 60px;
-        color: white;
-        font-size: 24px;
-        background-color: #36555D;
-        padding: 0;
-        margin: 0;
-    }
+.cutom-modal-backdrop {
+    background-color: black;
+    opacity: 0.8 !important;
 }

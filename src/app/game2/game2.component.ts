@@ -17,12 +17,14 @@ export class Game2Component implements OnInit {
 
   openDialog() {
     this.dialog.open(StartGameDialogComponent, {
-      disableClose: false,
+      disableClose: true,
       hasBackdrop: true,
       autoFocus: false,
-      width: "767px",
-      height: "415px",
-      panelClass: 'custom-modalbox'
+      position: {top: "140px"},
+      minWidth: "331px",
+      // height: "313px",
+      panelClass: 'custom-modalbox',
+      backdropClass: 'cutom-modal-backdrop'
     })
   }
 }
