@@ -13,35 +13,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     
     .modal-container {
         width: 331px; // match modal size
-        height: 313px; // try to remove later
+        height: 313px;
         padding: 20px;
-        position: relative;
+    }
+
+    .main-box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     .select-mode-button {
         width: 100%;
         height: 50px;
-        margin-bottom: 20px;
     }
 
-    #modal-button-1 {
-        position: absolute;
-        left: 20px;
-        bottom: 20px;
+    .button-box {
+        flex: 1; // stretches all the way to the bottom
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
     }
-    #modal-button-2 {
-        position: absolute;
-        left: 120px;
-        bottom: 20px;
-     }
-     #modal-button-3 {
-        position: absolute;
-        right: 20px;
-        bottom: 20px;
-     }
 }
 
 .cutom-modal-backdrop {
     background-color: black;
-    opacity: 0.8 !important;
+    opacity: 0.9 !important;
 }
