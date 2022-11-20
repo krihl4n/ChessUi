@@ -1,16 +1,28 @@
-.container {
+.main-container {
     width: 1000px;
+    height: 700px; 
     background-color: red;
     display: grid;
-    justify-content: center;
+    justify-content: center; 
+    /* align-content: center; */
+     /* grid-template-columns: 100px 600px 100px 100px;  */
+     grid-template-columns: 1fr 2fr 1fr;
+     
+   gap: 20px;
 }
 
 .left-box {
     background-color: green;
+     /* width: 200px;  */
+}
+
+.board-box {
+    /* width: 250px; */
+    /* height: 600px; */
+}
+
+.right-box-1 {
+    background-color: yellow;
     /* width: 200px; */
 }
 
-.right-box {
-    background-color: yellow;
-    width: 200px;
-}

@@ -6,12 +6,13 @@ export class BoardSetup {
         this.updateFieldSize(windowHeight)
     }
 
-    windowHeightUpdated(windowHeight: number) {
+    containerSizeUpdated(windowHeight: number) {
         this.updateFieldSize(windowHeight)
     }
 
-    private updateFieldSize(windowHeight: number) {
-        this.boardSize = windowHeight - 500
+    private updateFieldSize(containerHeight: number) {
+        console.log(containerHeight)
+        this.boardSize = containerHeight
         this.fieldSize = this.boardSize / 8
     }
 }
