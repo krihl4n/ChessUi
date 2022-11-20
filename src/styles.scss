@@ -32,8 +32,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .button-box {
         flex: 1; // stretches all the way to the bottom
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: flex-end;
+        gap: 20px;
     }
 }
 
