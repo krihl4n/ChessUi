@@ -12,7 +12,7 @@ export class Game2Component implements OnInit {
   constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.openDialog()
+     this.openDialog()
   }
 
   openDialog() {
