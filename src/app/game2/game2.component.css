@@ -1,0 +1,16 @@
+.container {
+    width: 1000px;
+    background-color: red;
+    display: grid;
+    justify-content: center;
+}
+
+.left-box {
+    background-color: green;
+    /* width: 200px; */
+}
+
+.right-box {
+    background-color: yellow;
+    width: 200px;
+}

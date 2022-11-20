@@ -105,7 +105,7 @@ export class Board2Component implements OnInit {
       this.renderPieces()
     })
     
- //   this.testPieceMovement()
+    //this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
       e.preventDefault()
@@ -115,11 +115,6 @@ export class Board2Component implements OnInit {
         this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
       }
     })
-
-    // window.addEventListener('mousedown', (e: MouseEvent) => {
-    //   e.preventDefault()
-    //   //this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
-    // })
 
     window.addEventListener('mouseup', (e: MouseEvent) => {
       this.dragHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
@@ -164,10 +159,10 @@ export class Board2Component implements OnInit {
 
   private testPieceMovement() {
     let from1 = "a2"
-    let to1 = "h2"
+    let to1 = "a4"
 
-    let from2 = "h8"
-    let to2 = "a1"
+    let from2 = "g8"
+    let to2 = "f6"
 
     setInterval(() => {
       this.pieceMoveHandler.movePiece(from1, to1)

@@ -1,17 +1,17 @@
 export class BoardSetup {
-    
+
     boardSize: number
     fieldSize: number
-    constructor(public boardFlipped: boolean, private windowHeight: number) {
+    constructor(public boardFlipped: boolean, windowHeight: number) {
         this.updateFieldSize(windowHeight)
     }
 
-    windowHeightUpdated(windowHeight: number){
+    windowHeightUpdated(windowHeight: number) {
         this.updateFieldSize(windowHeight)
     }
 
     private updateFieldSize(windowHeight: number) {
-        this.fieldSize = (windowHeight-220)/8
-        this.boardSize = this.fieldSize * 8
+        this.boardSize = windowHeight - 500
+        this.fieldSize = this.boardSize / 8
     }
 }
