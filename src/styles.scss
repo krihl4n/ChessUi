@@ -34,7 +34,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .button-box {
         flex: 1; // stretches all the way to the bottom
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: flex-end;
         gap: 20px;
     }
@@ -42,9 +42,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .btn {
         background-color: #36555D;
         border: 1px solid #36555D;
+        border-radius: 2px;
+        padding-top: 10px;
     }
 
-    .btn:hover {
+    // .btn-small {
+    //     width: 80px;
+    //     height: 82px;
+    //     //padding-bottom: 20px;
+    // }
+
+    .btn:hover, .btn-selected {
         background-color: #4E6E77;
         border: 1px solid #fff;
         cursor: pointer;
