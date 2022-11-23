@@ -1,14 +1,21 @@
-
 <mat-dialog-content>
     <div class="modal-container">
         <div class="main-box">
-            <button class="btn select-mode-btn">Play with the computer</button>
-            <button class="btn select-mode-btn">Play with a friend</button>
-    
+            <button class="btn select-mode-btn" [ngClass]="{'btn-selected':isComputerSelected}"
+                (click)="computerSelected()">Play with the computer</button>
+            <button class="btn select-mode-btn" [ngClass]="{'btn-selected':isFriendSelected}"
+                (click)="friendSelected()">Play with a friend</button>
+
             <div class="button-box">
-                <button class="btn btn-small"><img src="assets/white_pawn.svg" alt=""width="78px" height="82px"></button>
-                <button class="btn"><img src="assets/white_and_black_pawn.svg" alt="" width="92px" height="96px"></button>
-                <button class="btn btn-selected"><img src="assets/black_pawn.svg" alt="" width="78px" height="82px"></button>
+                <button class="btn" [ngClass]="{'btn-selected':isWhiteColorSelected}"
+                    (click)="whiteColorSelected()"><img src="assets/white_pawn.svg" alt="" width="78px" height="82px"
+                        draggable="false"></button>
+                <button class="btn" [ngClass]="{'btn-selected':isRandomColorSelected}"
+                    (click)="randomColorSelected()"><img src="assets/white_and_black_pawn.svg" alt="" width="92px"
+                        height="96px" draggable="false"></button>
+                <button class="btn" [ngClass]="{'btn-selected':isBlackColorSelected}"
+                    (click)="blackColorSelected()"><img src="assets/black_pawn.svg" alt="" width="78px" height="82px"
+                        draggable="false"></button>
             </div>
         </div>
     </div>

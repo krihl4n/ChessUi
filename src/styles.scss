@@ -3,7 +3,6 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-
 /*
  blue_theme_dark: #20363F
  blue_theme_light: #36555D
@@ -45,12 +44,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         border-radius: 2px;
         padding-top: 10px;
     }
-
-    // .btn-small {
-    //     width: 80px;
-    //     height: 82px;
-    //     //padding-bottom: 20px;
-    // }
 
     .btn:hover, .btn-selected {
         background-color: #4E6E77;
