@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
 
 @Component({
@@ -9,7 +10,7 @@ import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog
 })
 export class Game2Component implements OnInit {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private gameService: GameService) { }
 
   ngOnInit(): void {
     this.openDialog()
@@ -28,7 +29,7 @@ export class Game2Component implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(
-      data => console.log("Dialog output: " + JSON.stringify(data))
+      data => this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
     )
   }
 }

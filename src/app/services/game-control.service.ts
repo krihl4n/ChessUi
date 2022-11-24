@@ -28,6 +28,14 @@ export class GameControlService {
     this.webSocketApiService.sendMoveMsg({ "from": from, "to": to })
   }
 
+  initiateNewGame(mode: string) {
+    console.log("initiate new game")
+    this.webSocketApiService.connect(() => {
+      console.log("connected")
+      //this.startGame(mode)
+    });
+  }
+
   startGame(mode: String) {
     this.webSocketApiService.sendGameControlsMsg("start_" + mode)
   }
