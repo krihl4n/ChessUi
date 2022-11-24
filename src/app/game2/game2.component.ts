@@ -12,20 +12,24 @@ export class Game2Component implements OnInit {
   constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
-     this.openDialog()
+    this.openDialog()
   }
 
   openDialog() {
-    this.dialog.open(StartGameDialogComponent, {
+    const dialogRef = this.dialog.open(StartGameDialogComponent, {
       disableClose: true,
       hasBackdrop: true,
       autoFocus: false,
-      position: {top: "140px"},
+      position: { top: "140px" },
       minWidth: "331px",
       // height: "313px",
       panelClass: 'custom-modalbox',
       backdropClass: 'cutom-modal-backdrop'
     })
+
+    dialogRef.afterClosed().subscribe(
+      data => console.log("Dialog output: " + JSON.stringify(data))
+    )
   }
 }
 
