@@ -7,7 +7,7 @@ export class Piece {
     desiredHeight: number
     listener: any; // todo collection
 
-    constructor(public color: string, private type: string, private boardSetup: BoardSetup) {
+    constructor(public color: string, public type: string, private boardSetup: BoardSetup) {
         this.imagePath = `assets/${color}_${type}.svg`
         this.setDesiredHeight()
     }

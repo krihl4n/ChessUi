@@ -32,7 +32,8 @@ export class GameControlService {
     console.log("initiate new game")
     this.webSocketApiService.connect(() => {
       console.log("connected")
-      //this.startGame(mode)
+      this.startGame(mode)
+      this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
     });
   }
 
