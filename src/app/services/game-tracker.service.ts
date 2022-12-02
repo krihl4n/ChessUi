@@ -43,7 +43,7 @@ export class GameTrackerService {
   }
 
   private subscribeToPiecePositionUpdates() {
-    this.gameControlService.getPiecePositionUpdatesSubscription().subscribe((update: PiecePositionUpdate) => {
+    this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       if (!update.reverted) {
         this.handleMove(update);
       } else {

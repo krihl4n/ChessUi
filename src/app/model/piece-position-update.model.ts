@@ -9,11 +9,11 @@ export interface PiecePositionUpdate {
 }
 
 interface Move {
-    from: String,
-    to: String
+    from: string,
+    to: string
 }
 
 interface PieceCapture {
-    field: String,
+    field: string,
     capturedPiece: Piece
 }

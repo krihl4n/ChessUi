@@ -32,7 +32,7 @@ export class BoardComponent {
         this.gameControlService.requestPossibleMoves(field)
       }
     } else {
-      this.gameControlService.movePiece(this.selectedField, field)
+      this.gameControlService.moveRequest(this.selectedField, field)
       this.selectedField = null
     }
   }

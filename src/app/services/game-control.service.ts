@@ -25,7 +25,7 @@ export class GameControlService {
     this.webSocketApiService.disconnect();
   }
 
-  movePiece(from: String, to: String) {
+  moveRequest(from: String, to: String) {
     this.webSocketApiService.sendMoveMsg({ "from": from, "to": to })
   }
 
@@ -64,7 +64,7 @@ export class GameControlService {
     return this.webSocketApiService.fieldOccupationChange
   }
 
-  getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate> {
+  piecePositionUpdate(): Subject<PiecePositionUpdate> {
     return this.webSocketApiService.piecePositionUpdateSubject
   }
 

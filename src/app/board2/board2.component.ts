@@ -62,14 +62,14 @@ export class Board2Component implements OnInit {
     this.fieldUtils.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
-    this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender)
-    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
+    this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
+    this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
     this.pieces.initialize(this.boardSetup)
     this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
     this.gameService.fieldOccupationChange // maybe also get initial position (race condition)
-      .subscribe((positions: FieldOccupation[]) => {
+      .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
         console.log("POSITIONS RECEIVED")
         positions.forEach(fieldOccupation => {
           if(fieldOccupation.piece) {
