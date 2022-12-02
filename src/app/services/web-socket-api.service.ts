@@ -26,42 +26,46 @@ export class WebSocketAPIService {
     constructor(){
     }
 
-    connect(callback: () => any) {
-        console.log("Initialize WebSocket Connection");
-        let ws = new SockJS(this.webSocketEndPoint);
-        this.stompClient = Stomp.over(ws);
-        const _this = this;
-        this.stompClient.connect({}, (frame: any) => {
-
-            var url = _this.stompClient.ws._transport.url;
-            url = url.replace("ws://localhost:8080/game/",  "");
-            url = url.replace("/websocket", "");
-            url = url.replace(/^[0-9]+\//, "");
-            console.log("Your current session is: " + url);
-
-            // todo can this be simplified/
-            _this.stompClient.subscribe("/user/queue/game-state-updates" + '-user' + url, function (sdkEvent: any) {
-                _this.onGameStateUpdate(sdkEvent);
-            });
-            _this.stompClient.subscribe("/user/queue/game-result" + '-user' + url, function (sdkEvent: any) {
-                _this.onGameResultReceived(sdkEvent);
-            });
-            _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
-                _this.onPiecePositionUpdate(sdkEvent);
-            });
-            _this.stompClient.subscribe('/user/queue/game-controls' + '-user' + url, function (sdkEvent: any) {
-                _this.gameControlsMsgReceived(sdkEvent);
-            });
-            _this.stompClient.subscribe('/user/queue/fields-occupation' + '-user' + url, function (sdkEvent: any) {
-                _this.onPiecePositionsReceived(sdkEvent);
-            });
-            _this.stompClient.subscribe('/user/queue/possible-moves' + '-user' + url, function (sdkEvent: any) {
-                _this.onPossibleMovesReceived(sdkEvent);
-            });
-            //_this.stompClient.reconnect_delay = 2000;
-            //callback.connected();
-            callback()
-        }, this.errorCallBack);
+    connect(): Promise<void> {
+        return new Promise(resolve => {
+            console.log("Initialize WebSocket Connection");
+        
+            let ws = new SockJS(this.webSocketEndPoint);
+            this.stompClient = Stomp.over(ws);
+            const _this = this;
+            this.stompClient.connect({}, (frame: any) => {
+    
+                var url = _this.stompClient.ws._transport.url;
+                url = url.replace("ws://localhost:8080/game/",  "");
+                url = url.replace("/websocket", "");
+                url = url.replace(/^[0-9]+\//, "");
+                console.log("Your current session is: " + url);
+    
+                // todo can this be simplified/
+                _this.stompClient.subscribe("/user/queue/game-state-updates" + '-user' + url, function (sdkEvent: any) {
+                    _this.onGameStateUpdate(sdkEvent);
+                });
+                _this.stompClient.subscribe("/user/queue/game-result" + '-user' + url, function (sdkEvent: any) {
+                    _this.onGameResultReceived(sdkEvent);
+                });
+                _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
+                    _this.onPiecePositionUpdate(sdkEvent);
+                });
+                _this.stompClient.subscribe('/user/queue/game-controls' + '-user' + url, function (sdkEvent: any) {
+                    _this.gameControlsMsgReceived(sdkEvent);
+                });
+                _this.stompClient.subscribe('/user/queue/fields-occupation' + '-user' + url, function (sdkEvent: any) {
+                    _this.onPiecePositionsReceived(sdkEvent);
+                });
+                _this.stompClient.subscribe('/user/queue/possible-moves' + '-user' + url, function (sdkEvent: any) {
+                    _this.onPossibleMovesReceived(sdkEvent);
+                });
+                //_this.stompClient.reconnect_delay = 2000;
+                //callback.connected();
+                //callback()
+                resolve()
+            }, this.errorCallBack);
+        })    
     }
 
     disconnect() {

@@ -15,9 +15,10 @@ export class GameControlService {
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
   connect() {
-    this.webSocketApiService.connect(() => {
-      this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
-    });
+    this.webSocketApiService.connect()
+      .then(() => {
+        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
+      });
   }
 
   disconnect() {
@@ -30,11 +31,13 @@ export class GameControlService {
 
   initiateNewGame(mode: string) {
     console.log("initiate new game")
-    this.webSocketApiService.connect(() => {
-      console.log("connected")
-      this.startGame(mode)
-      this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
-    });
+
+    this.webSocketApiService.connect()
+      .then(() => {
+        console.log("connected")
+        this.startGame(mode)
+        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
+      })
   }
 
   startGame(mode: String) {
