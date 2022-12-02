@@ -66,9 +66,7 @@ export class Board2Component implements OnInit {
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
 
     this.pieces.initialize(this.boardSetup)
-    this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces, () => {
-      //this.renderPieces()
-    })
+    this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
     this.gameService.getPiecePositionsSubscription() // maybe also get initial position (race condition)
       .subscribe((positions: FieldOccupation[]) => {

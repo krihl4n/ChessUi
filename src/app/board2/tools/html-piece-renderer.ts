@@ -9,12 +9,7 @@ export class HtmlPieceReneder {
     private boardNativeElement: any,
     private fieldSize: number) { }
 
-  private listener: any
-  private piecesToRender = 0
-
-  preRenderPieces(pieces: Piece[], listener: any) {
-    this.piecesToRender = pieces.length
-    this.listener = listener
+  preRenderPieces(pieces: Piece[]) {
     for(let piece of pieces) {
       const htmlElement = this.renderer.createElement('img')
       this.renderer.setAttribute(htmlElement, 'hidden', 'true')
@@ -22,13 +17,9 @@ export class HtmlPieceReneder {
       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
 
-      htmlElement.onload = () => {
-        this.piecesToRender--
-        if(this.piecesToRender == 0) {
-          this.listener()
-          this.listener = undefined
-        }
-      }
+      // htmlElement.onload = () => {
+      //   return Promise.resolve()
+      // }
       this.renderer.appendChild(this.boardNativeElement, htmlElement)
       piece.setHtmlElement(htmlElement)   
     }
@@ -81,17 +72,17 @@ export class HtmlPieceReneder {
     this.renderer.setStyle(piece.htmlElement, "transition", "all 500ms ease");
   }
 
-private createElementIfNotExists(piece: Piece) {
-    if (!piece.htmlElement) {
-      const htmlElement = this.renderer.createElement('img')
-      this.renderer.setAttribute(htmlElement, 'hidden', 'true')
-      this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
-      this.renderer.setAttribute(htmlElement, 'draggable', 'false')
-      this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
-      this.renderer.appendChild(this.boardNativeElement, htmlElement)
-      piece.setHtmlElement(htmlElement)   
-    }
-  }
+// private createElementIfNotExists(piece: Piece) {
+//     if (!piece.htmlElement) {
+//       const htmlElement = this.renderer.createElement('img')
+//       this.renderer.setAttribute(htmlElement, 'hidden', 'true')
+//       this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
+//       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
+//       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
+//       this.renderer.appendChild(this.boardNativeElement, htmlElement)
+//       piece.setHtmlElement(htmlElement)   
+//     }
+//   }
 
   private setElementLocation(pieceImageElement: any, pieceLocation: { x: number, y: number }) {
     this.renderer.setStyle(pieceImageElement, 'left', pieceLocation.x + 'px')
