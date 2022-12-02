@@ -68,7 +68,7 @@ export class Board2Component implements OnInit {
     this.pieces.initialize(this.boardSetup)
     this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
-    this.gameService.getPiecePositionsSubscription() // maybe also get initial position (race condition)
+    this.gameService.fieldOccupationChange // maybe also get initial position (race condition)
       .subscribe((positions: FieldOccupation[]) => {
         console.log("POSITIONS RECEIVED")
         positions.forEach(fieldOccupation => {

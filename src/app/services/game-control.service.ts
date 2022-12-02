@@ -60,8 +60,8 @@ export class GameControlService {
     this.webSocketApiService.sendRequestPossibleMovesRequest(field)
   }
 
-  getPiecePositionsSubscription(): Subject<FieldOccupation[]> {
-    return this.webSocketApiService.piecePositionsReceivedSubject
+  fieldOccupationChange(): Subject<FieldOccupation[]> {
+    return this.webSocketApiService.fieldOccupationChange
   }
 
   getPiecePositionUpdatesSubscription(): Subject<PiecePositionUpdate> {

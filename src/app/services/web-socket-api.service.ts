@@ -17,7 +17,7 @@ import { GameResult } from '../model/game-result.model';
 export class WebSocketAPIService {
     webSocketEndPoint: string = 'http://localhost:8080/game';
     stompClient: any;
-    piecePositionsReceivedSubject: Subject<FieldOccupation[]>  = new Subject()
+    fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
     piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
     gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
     gameResultSubject: Subject<GameResult> = new Subject()
@@ -115,7 +115,7 @@ export class WebSocketAPIService {
 
     onPiecePositionsReceived(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
-        this.piecePositionsReceivedSubject.next(value)
+        this.fieldOccupationChange.next(value)
     }
 
     onPossibleMovesReceived(message: Stomp.Frame) {

@@ -35,7 +35,7 @@ export class GameTrackerService {
   }
 
   private subscribeToFieldOccupationUpdates() {
-    this.gameControlService.getPiecePositionsSubscription().subscribe((piecePositions: FieldOccupation[]) => {
+    this.gameControlService.fieldOccupationChange().subscribe((piecePositions: FieldOccupation[]) => {
       for (let i = 0; i < piecePositions.length; i++) {
         this.positions.set(piecePositions[i].field, this.getTokenFor(piecePositions[i].piece));
       }

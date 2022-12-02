@@ -9,7 +9,8 @@ import { GameControlService } from './game-control.service';
 export class GameService {
 
   private piecePositions: FieldOccupation[]
-  piecePositionsChangedSubject: Subject<FieldOccupation[]>  = new Subject()
+  fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
+  
   constructor(private gameControlService: GameControlService) {
     this.subscribeToFieldOccupationUpdates();
   }
@@ -19,17 +20,13 @@ export class GameService {
   }
 
   private subscribeToFieldOccupationUpdates() {
-    this.gameControlService.getPiecePositionsSubscription()
+    this.gameControlService.fieldOccupationChange()
       .subscribe((piecePositions: FieldOccupation[]) => {
         // if changed notify
         if(this.piecePositions != piecePositions) {
-          this.piecePositionsChangedSubject.next(piecePositions)
+          this.fieldOccupationChange.next(piecePositions)
           this.piecePositions = piecePositions
         }
       });
-  }
-
-  getPiecePositionsSubscription() {
-    return this.piecePositionsChangedSubject
   }
 }
