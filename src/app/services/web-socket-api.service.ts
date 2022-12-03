@@ -8,6 +8,7 @@ import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
 import { GameResult } from '../model/game-result.model';
+import { StartGameRequest } from '../model/start-game-request.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -89,6 +90,10 @@ export class WebSocketAPIService {
 
     sendGameControlsMsg(message: String) {
         this.stompClient.send("/chess-app/game-controls", {}, message);
+    }
+
+    sendStartNewGameMsg(message: StartGameRequest) {
+        this.stompClient.send("/chess-app/start-new-game", {}, JSON.stringify(message));
     }
 
     sendRequestPiecePositionsMsg(message: String) {

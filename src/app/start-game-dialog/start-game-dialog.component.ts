@@ -66,10 +66,10 @@ export class StartGameDialogComponent {
     return this.isComputerSelected || this.isFriendSelected
   }
 
-  private determineSelectedColor(): string {
+  private determineSelectedColor(): string | null {
     if (this.isWhiteColorSelected) return "white"
     if (this.isBlackColorSelected) return "black"
-    return "random"
+    return null
   }
 
   private determineSelectedMode(): string {

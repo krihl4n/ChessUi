@@ -29,16 +29,22 @@ export class GameControlService {
     this.webSocketApiService.sendMoveMsg({ "from": from, "to": to })
   }
 
-  initiateNewGame(mode: string) {
+  initiateNewGame(mode: string, colorPreference: string | null) {
     console.log("initiate new game")
 
     this.webSocketApiService.connect()
       .then(() => {
         console.log("connected")
-        this.startGame(mode)
+        //this.startGame(mode)
+        this.startNewGame(mode, colorPreference)
         this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
       })
   }
+
+  private startNewGame(mode: String, colorPreference: string | null) {
+    this.webSocketApiService.sendStartNewGameMsg({ mode, colorPreference })
+  }
+
 
   startGame(mode: String) {
     this.webSocketApiService.sendGameControlsMsg("start_" + mode)
@@ -55,7 +61,7 @@ export class GameControlService {
   resign() {
     this.webSocketApiService.sendGameControlsMsg("resign")
   }
-  
+
   requestPossibleMoves(field: String) {
     this.webSocketApiService.sendRequestPossibleMovesRequest(field)
   }

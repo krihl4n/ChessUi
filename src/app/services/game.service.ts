@@ -24,8 +24,8 @@ export class GameService {
     this.subscribeToPossibleMoves();
   }
 
-  initiateNewGame(mode: string, color: string) {
-    this.gameControlService.initiateNewGame("vs_computer")
+  initiateNewGame(mode: string, colorPreference: string | null) {
+    this.gameControlService.initiateNewGame("vs_computer", colorPreference)
   }
 
   initiateMoveFrom(from: String) {
