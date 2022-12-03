@@ -27,8 +27,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
         const piece = this.piecesLocations.get(field)
         if (piece) {
-            this.markedField = field
-            this.gameService.initiateMoveFrom(field)
+            this.markField(field)
         }
     }
 
@@ -59,6 +58,11 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
     fieldIsMarked(field: string) {
         return this.markedField == field
+    }
+
+    private markField(field: string) {
+        this.markedField = field
+        this.gameService.initiateMoveFrom(field)
     }
 
     private tryToMovePiece(from: string, to: string, piece: Piece) {

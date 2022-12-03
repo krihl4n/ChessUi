@@ -61,7 +61,7 @@ export class Board2Component implements OnInit {
     this.canvasSize = this.boardSetup.boardSize
     this.fieldUtils.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
-    this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender)
+    this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
