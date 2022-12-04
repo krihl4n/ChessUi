@@ -49,6 +49,9 @@ export class WebSocketAPIService {
                 _this.stompClient.subscribe("/user/queue/game-result" + '-user' + url, function (sdkEvent: any) {
                     _this.onGameResultReceived(sdkEvent);
                 });
+                _this.stompClient.subscribe("/user/queue/game-started" + '-user' + url, function (sdkEvent: any) {
+                    _this.onGameStarted(sdkEvent)
+                });
                 _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
                     _this.onPiecePositionUpdate(sdkEvent);
                 });
@@ -107,6 +110,12 @@ export class WebSocketAPIService {
     onGameStateUpdate(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.gameStateUpdateSubject.next(value)
+    }
+
+    onGameStarted(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
+        console.log("NEW GAME STARTED")
+        console.log(value)
     }
 
     onPiecePositionUpdate(message: Stomp.Frame) {
