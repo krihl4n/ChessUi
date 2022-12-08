@@ -19,6 +19,10 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         private gameService: GameService) { }
 
     notifyMouseDownEvent(point: Point) {
+        if(!this.gameService.canMove()) {
+            return
+        }
+
         this.previouslyMarkedField = this.markedField
         const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
         if (!field) {
@@ -32,6 +36,10 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     notifyMouseUpEvent(point: Point) {
+        if(!this.gameService.canMove()) {
+            return
+        }
+        
         const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
 
         if (field && this.previouslyMarkedField && field != this.previouslyMarkedField) {
