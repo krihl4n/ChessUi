@@ -19,6 +19,10 @@ export class PieceDragHandler {
     private gameService: GameService) { }
 
   notifyMouseDownEvent(p: Point, piece?: Piece) {
+    if(!this.gameService.canMove()) {
+      return
+    }
+
     const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
     if (!field) {
       return

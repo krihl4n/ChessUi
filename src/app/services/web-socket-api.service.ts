@@ -9,6 +9,7 @@ import { PossibleMoves } from '../model/possible-moves.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
 import { GameResult } from '../model/game-result.model';
 import { StartGameRequest } from '../model/start-game-request.model';
+import { GameInfo } from '../model/piece-position-update.model copy';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -23,6 +24,7 @@ export class WebSocketAPIService {
     gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
     gameResultSubject: Subject<GameResult> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
+    gameStartedSubject: Subject<GameInfo> = new Subject()
 
     constructor(){
     }
@@ -114,8 +116,7 @@ export class WebSocketAPIService {
 
     onGameStarted(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
-        console.log("NEW GAME STARTED")
-        console.log(value)
+        this.gameStartedSubject.next(value)
     }
 
     onPiecePositionUpdate(message: Stomp.Frame) {

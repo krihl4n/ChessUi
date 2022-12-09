@@ -14,6 +14,7 @@ export class GameService {
   private piecePositions: FieldOccupation[] // necessary?
   private moveRequest: MoveRequest | null
   private possibleMoves: PossibleMoves | null
+  private canPlayerMove: boolean = false
   private playerId = "player1" // todo generate id
   fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
   piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
@@ -39,7 +40,7 @@ export class GameService {
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
-      this.moveRequest = {playerId: this.playerId, from, to }
+      this.moveRequest = {playerId : this.playerId, from, to }
       this.gameControlService.moveRequest(from, to)
       return true
     }
