@@ -26,23 +26,23 @@ export class GameControlService {
   }
 
   moveRequest(from: String, to: String) {
-    this.webSocketApiService.sendMoveMsg({ "from": from, "to": to })
+    this.webSocketApiService.sendMoveMsg({playerId: "player1", from, to})
   }
 
-  initiateNewGame(mode: string, colorPreference: string | null) {
+  initiateNewGame(playerId: string, mode: string, colorPreference: string | null) {
     console.log("initiate new game")
 
     this.webSocketApiService.connect()
       .then(() => {
         console.log("connected")
         //this.startGame(mode)
-        this.startNewGame(mode, colorPreference)
+        this.startNewGame(playerId, mode, colorPreference)
         this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
       })
   }
 
-  private startNewGame(mode: String, colorPreference: string | null) {
-    this.webSocketApiService.sendStartNewGameMsg({ mode, colorPreference })
+  private startNewGame(playerId: string, mode: String, colorPreference: string | null) {
+    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, colorPreference })
   }
 
 

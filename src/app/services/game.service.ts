@@ -14,7 +14,7 @@ export class GameService {
   private piecePositions: FieldOccupation[] // necessary?
   private moveRequest: MoveRequest | null
   private possibleMoves: PossibleMoves | null
-
+  private playerId = "player1" // todo generate id
   fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
   piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
 
@@ -25,7 +25,7 @@ export class GameService {
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
-    this.gameControlService.initiateNewGame("vs_computer", colorPreference)
+    this.gameControlService.initiateNewGame(this.playerId, "vs_computer", colorPreference)
   }
 
   initiateMoveFrom(from: String) {
@@ -39,7 +39,7 @@ export class GameService {
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
-      this.moveRequest = { from, to }
+      this.moveRequest = {playerId: this.playerId, from, to }
       this.gameControlService.moveRequest(from, to)
       return true
     }
