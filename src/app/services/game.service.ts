@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
+import { GameInfo } from '../model/game-info.model';
 import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
@@ -23,6 +24,7 @@ export class GameService {
     this.subscribeToFieldOccupationUpdates();
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
+    this.subscribteToGameStartEvent();
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
@@ -45,6 +47,10 @@ export class GameService {
       return true
     }
     return false;
+  }
+
+  canMove() {
+    return this.canPlayerMove
   }
 
   private subscribeToFieldOccupationUpdates() {
@@ -75,6 +81,12 @@ export class GameService {
       console.log("POSSIBLE MOVES")
       console.log(possibleMoves)
       this.possibleMoves = possibleMoves
+    })
+  }
+
+  private subscribteToGameStartEvent() {
+    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
+      this.canPlayerMove = true
     })
   }
 }

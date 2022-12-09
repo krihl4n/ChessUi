@@ -4,7 +4,7 @@ import { FieldOccupation } from '../model/field-occupation.model';
 import { GameResult } from '../model/game-result.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
-import { GameInfo } from '../model/piece-position-update.model copy';
+import { GameInfo } from '../model/game-info.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { WebSocketAPIService } from './web-socket-api.service';
 

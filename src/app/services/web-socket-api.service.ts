@@ -9,7 +9,7 @@ import { PossibleMoves } from '../model/possible-moves.model';
 import { GameStateUpdate } from '../model/game-state-update.model';
 import { GameResult } from '../model/game-result.model';
 import { StartGameRequest } from '../model/start-game-request.model';
-import { GameInfo } from '../model/piece-position-update.model copy';
+import { GameInfo } from '../model/game-info.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
