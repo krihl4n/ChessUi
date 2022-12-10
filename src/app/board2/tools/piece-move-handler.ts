@@ -8,6 +8,9 @@ export class PieceMoveHandler {
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
         this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
             this.movePiece(update.primaryMove.from, update.primaryMove.to)
+            if(update.secondaryMove) {
+                this.movePiece(update.secondaryMove.from, update.secondaryMove.to)
+            }
         })
     }
 
