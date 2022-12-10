@@ -1,4 +1,4 @@
 export interface PossibleMoves {
-    from: String,
-    to: String[]
+    from: string,
+    to: string[]
 }

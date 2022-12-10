@@ -5,18 +5,25 @@ import { PiecesLocations } from "./pieces-locations";
 import { Point } from "./point.model";
 import { Piece } from "./piece.model";
 import { GameService } from "src/app/services/game.service";
+import { PossibleMoves } from "src/app/model/possible-moves.model";
 
 export class MarkAndMoveHandler { // todo maybe separate handlers for pieve movement and fields marking
 
     private markedField?: string
     private previouslyMarkedField?: string
+    private displayPossibleMoves = false
+    private possibleMoves: PossibleMoves | null
 
     constructor(
         private fieldUtils: FieldUtilsService,
         private boardSetup: BoardSetup,
         private piecesLocations: PiecesLocations,
         private renderer: HtmlPieceReneder,
-        private gameService: GameService) { }
+        private gameService: GameService) { 
+            this.gameService.possibleMovesUpdate.subscribe((possibleMoves: PossibleMoves) => {
+                this.possibleMoves = possibleMoves
+            })
+        }
 
     notifyMouseDownEvent(point: Point) {
         if(!this.gameService.canMove()) {
@@ -66,6 +73,16 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
     fieldIsMarked(field: string) {
         return this.markedField == field
+    }
+
+    fieldIsMarkedForPossibleMove(field: string): boolean {
+        if(!this.possibleMoves) {
+            return false
+        }
+        if(this.possibleMoves.from == this.markedField) {
+            return this.possibleMoves.to.includes(field)
+        }
+        return false
     }
 
     private markField(field: string) {

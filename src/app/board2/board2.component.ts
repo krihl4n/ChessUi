@@ -204,6 +204,10 @@ export class Board2Component implements OnInit {
           if (this.markAndMoveHandler.fieldIsMarked(field)) {
             this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.markedFieldColor, this.markedFieldAlpha)
           }
+          if(this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
+            // todo circle
+            this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.markedFieldColor, this.markedFieldAlpha)
+          }
         }
 
         if (col == 7) {

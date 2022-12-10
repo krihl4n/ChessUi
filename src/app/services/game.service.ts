@@ -23,6 +23,7 @@ export class GameService {
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
+  possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
 
   constructor(private gameControlService: GameControlService) {
     this.subscribeToFieldOccupationUpdates();
@@ -39,7 +40,7 @@ export class GameService {
     this.gameControlService.requestPossibleMoves(from)
   }
 
-  requestMove(from: String, to: String): boolean {
+  requestMove(from: string, to: string): boolean {
 
     if (this.moveRequest) {
       return false
@@ -88,6 +89,7 @@ export class GameService {
       console.log("POSSIBLE MOVES")
       console.log(possibleMoves)
       this.possibleMoves = possibleMoves
+      this.possibleMovesUpdate.next(possibleMoves)
     })
   }
 
