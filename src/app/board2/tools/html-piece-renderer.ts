@@ -56,13 +56,15 @@ export class HtmlPieceReneder {
     }, 600)
   }
 
-  deletePiece(piece: Piece) {
+  deletePiece(piece: Piece, field: string) {
     setTimeout(() => {
+      console.log(`DELETING PIECE: ${field} ${piece.color} ${piece.type}` )
       this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
     }, 300)
   }
 
   deletePieceNow(piece: Piece) {
+      console.log(`deleting piece: ${piece.color} ${piece.type}` )
       this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
   }
 

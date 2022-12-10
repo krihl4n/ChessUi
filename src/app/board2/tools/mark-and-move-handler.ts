@@ -79,7 +79,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
             this.renderer.renderPieceMovement(to, piece)
             let pieceAtDst = this.piecesLocations.get(to)
             if(pieceAtDst) {
-                this.renderer.deletePiece(pieceAtDst)
+                this.renderer.deletePiece(pieceAtDst, to)
             }
             this.piecesLocations.set(to, piece)
         }

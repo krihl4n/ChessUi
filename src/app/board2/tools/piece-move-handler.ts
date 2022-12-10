@@ -21,9 +21,10 @@ export class PieceMoveHandler {
         const pieceAtDst = this.piecesLocations.get(to)
         this.htmlPieceRenderer.renderPieceMovement(to, piece)
         if(pieceAtDst) {
-            this.htmlPieceRenderer.deletePiece(pieceAtDst)
-            this.piecesLocations.delete(from)
+            this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
         }
+        this.piecesLocations.delete(from)
+        this.piecesLocations.delete(to)
         this.piecesLocations.set(to, piece)
     }
 }
