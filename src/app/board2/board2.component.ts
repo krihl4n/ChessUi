@@ -13,6 +13,7 @@ import { Pieces } from './tools/pieces';
 import { MarkAndMoveHandler } from './tools/mark-and-move-handler';
 import { GameService } from '../services/game.service';
 import { FieldOccupation } from '../model/field-occupation.model';
+import { GameStartEvent } from '../model/game-start-event.model';
 
 @Component({
   selector: 'app-board-2',
@@ -56,38 +57,57 @@ export class Board2Component implements OnInit {
   private markAndMoveHandler: MarkAndMoveHandler
 
   ngOnInit(): void {
+    this.initializeBoard()
+
+    this.gameService.gameStartEvent
+      .subscribe((gameStartEvent: GameStartEvent) => {
+
+        if (gameStartEvent.playerColor == "BLACK") {
+          this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
+          this.fieldUtils.initialize(true, this.boardSetup.fieldSize)
+        } else {
+          this.boardSetup = new BoardSetup(false, this.boardContainer.nativeElement.offsetHeight)
+          this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
+        }
+
+        this.gameService.fieldOccupationChange // maybe also get initial position, or use ReplaySubject
+        .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
+          console.log("POSITIONS RECEIVED")
+          positions.forEach(fieldOccupation => {
+            if (fieldOccupation.piece) {
+              const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
+              if (pieceElement) {
+                this.piecesLocations.set(
+                  fieldOccupation.field,
+                  pieceElement
+                )
+              }
+            }
+          })
+          this.renderPieces()
+          // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
+          //   this.renderPieces()
+          // })
+        })
+
+      })
+  }
+
+  initializeBoard() {
+
     this.canvasContext = this.canvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
     this.boardSetup = new BoardSetup(false, this.boardContainer.nativeElement.offsetHeight)
     this.canvasSize = this.boardSetup.boardSize
-    this.fieldUtils.initialize(this.boardSetup.boardFlipped, this.boardSetup.fieldSize)
+    this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
+
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
-    this.pieces.initialize(this.boardSetup)
+    this.pieces.initialize(this.boardSetup.fieldSize)
     this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
-    this.gameService.fieldOccupationChange // maybe also get initial position (race condition)
-      .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
-        console.log("POSITIONS RECEIVED")
-        positions.forEach(fieldOccupation => {
-          if(fieldOccupation.piece) {
-            const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
-            if(pieceElement) {
-              this.piecesLocations.set(
-                fieldOccupation.field,
-                pieceElement 
-              )
-            }
-          }
-        })
-        this.renderPieces()        
-        // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
-        //   this.renderPieces()
-        // })
-      })
-    
     //this.testPieceMovement()
 
     this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {

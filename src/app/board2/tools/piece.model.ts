@@ -7,7 +7,7 @@ export class Piece {
     desiredHeight: number
     listener: any; // todo collection
 
-    constructor(public color: string, public type: string, private boardSetup: BoardSetup) {
+    constructor(public color: string, public type: string, private fieldSize: number) {
         this.imagePath = `assets/${color}_${type}.svg`
         this.setDesiredHeight()
     }
@@ -25,9 +25,9 @@ export class Piece {
 
     setDesiredHeight() {
         if(this.type == "pawn"){
-            this.desiredHeight = this.boardSetup.fieldSize * 0.7 
+            this.desiredHeight = this.fieldSize * 0.7 
         } else {
-            this.desiredHeight = this.boardSetup.fieldSize * 0.8 
+            this.desiredHeight = this.fieldSize * 0.8 
         }
     }
 }

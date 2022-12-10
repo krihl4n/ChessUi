@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { debug } from 'console';
+import { ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
+import { GameStartEvent } from '../model/game-start-event.model';
 import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
@@ -17,8 +19,10 @@ export class GameService {
   private possibleMoves: PossibleMoves | null
   private canPlayerMove: boolean = false
   private playerId = "player1" // todo generate id
-  fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
-  piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
+  private playerColor = ""
+  fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
+  piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
+  gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
 
   constructor(private gameControlService: GameControlService) {
     this.subscribeToFieldOccupationUpdates();
@@ -87,6 +91,13 @@ export class GameService {
   private subscribteToGameStartEvent() {
     this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
       this.canPlayerMove = true
+      if(gameInfo.player1.id == this.playerId) {
+        this.playerColor = gameInfo.player1.color
+      } else {
+        this.playerColor = gameInfo.player2.color
+      }
+
+      this.gameStartEvent.next({playerColor: this.playerColor})
     })
   }
 }

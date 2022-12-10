@@ -1,37 +1,36 @@
-import { BoardSetup } from "./board-setup";
 import { Piece } from "./piece.model";
 
 export class Pieces {
 
     availablePieces: Piece[] = []
 
-    initialize(boardSetup: BoardSetup) {
+    initialize(fieldSize: number) {
         for(var i = 0; i < 8; i++){
-            this.availablePieces.push(new Piece('white', "pawn", boardSetup))
-            this.availablePieces.push(new Piece('black', "pawn", boardSetup))
+            this.availablePieces.push(new Piece('white', "pawn", fieldSize))
+            this.availablePieces.push(new Piece('black', "pawn", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "rook", boardSetup))
-            this.availablePieces.push(new Piece('black', "rook", boardSetup))
+            this.availablePieces.push(new Piece('white', "rook", fieldSize))
+            this.availablePieces.push(new Piece('black', "rook", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "bishop", boardSetup))
-            this.availablePieces.push(new Piece('black', "bishop", boardSetup))
+            this.availablePieces.push(new Piece('white', "bishop", fieldSize))
+            this.availablePieces.push(new Piece('black', "bishop", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "knight", boardSetup))
-            this.availablePieces.push(new Piece('black', "knight", boardSetup))
+            this.availablePieces.push(new Piece('white', "knight", fieldSize))
+            this.availablePieces.push(new Piece('black', "knight", fieldSize))
         }
 
 
-        this.availablePieces.push(new Piece('white', "king", boardSetup))
-        this.availablePieces.push(new Piece('black', "king", boardSetup))
+        this.availablePieces.push(new Piece('white', "king", fieldSize))
+        this.availablePieces.push(new Piece('black', "king", fieldSize))
 
-        this.availablePieces.push(new Piece('white', "queen", boardSetup))
-        this.availablePieces.push(new Piece('black', "queen", boardSetup))
+        this.availablePieces.push(new Piece('white', "queen", fieldSize))
+        this.availablePieces.push(new Piece('black', "queen", fieldSize))
     }
 
     getPiece(color: string, type: string): Piece | null {
