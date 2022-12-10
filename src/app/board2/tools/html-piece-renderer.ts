@@ -56,6 +56,16 @@ export class HtmlPieceReneder {
     }, 600)
   }
 
+  deletePiece(piece: Piece) {
+    setTimeout(() => {
+      this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
+    }, 300)
+  }
+
+  deletePieceNow(piece: Piece) {
+      this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
+  }
+
   private moveElementToBackground(piece: Piece) {
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1');
   }

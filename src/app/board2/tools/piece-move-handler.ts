@@ -18,8 +18,12 @@ export class PieceMoveHandler {
             return
         }
 
-        this.piecesLocations.delete(from)
+        const pieceAtDst = this.piecesLocations.get(to)
         this.htmlPieceRenderer.renderPieceMovement(to, piece)
+        if(pieceAtDst) {
+            this.htmlPieceRenderer.deletePiece(pieceAtDst)
+            this.piecesLocations.delete(from)
+        }
         this.piecesLocations.set(to, piece)
     }
 }

@@ -55,6 +55,11 @@ export class PieceDragHandler {
         this.piecesLocations.set(this.pieceDraggedFromField, this.draggedPiece)
         this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, this.draggedPiece)
       } else {
+        let pieceAtDst = this.piecesLocations.get(field)
+        if(pieceAtDst) {
+          this.piecesLocations.delete(field)
+          this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
+        }
         this.piecesLocations.set(field, this.draggedPiece)
         this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
       }
