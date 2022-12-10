@@ -30,7 +30,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         }
 
         const piece = this.piecesLocations.get(field)
-        if (piece) {
+        if (piece && this.gameService.canMove(piece.color)) {
             this.markField(field)
         }
     }
@@ -44,7 +44,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
         if (field && this.previouslyMarkedField && field != this.previouslyMarkedField) {
             const pieceToMove = this.piecesLocations.get(this.previouslyMarkedField)
-            if (pieceToMove) {
+            if (pieceToMove && this.gameService.canMove(pieceToMove.color)) {
                 const pieceAtDst = this.piecesLocations.get(field)
                 if (!pieceAtDst) {
                     this.tryToMovePiece(this.previouslyMarkedField, field, pieceToMove)

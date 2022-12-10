@@ -19,7 +19,7 @@ export class PieceDragHandler {
     private gameService: GameService) { }
 
   notifyMouseDownEvent(p: Point, piece?: Piece) {
-    if(!this.gameService.canMove()) {
+    if(!this.gameService.canMove(piece?.color)) {
       return
     }
 
@@ -28,7 +28,7 @@ export class PieceDragHandler {
       return
     }
     const checkedPiece = piece || this.piecesLocations.get(field)
-    if (!checkedPiece) {
+    if (!checkedPiece || !this.gameService.canMove(checkedPiece.color)) {
       return
     }
     this.pieceDraggedFromField = field

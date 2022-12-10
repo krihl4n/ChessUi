@@ -53,7 +53,10 @@ export class GameService {
     return false;
   }
 
-  canMove() {
+  canMove(color: string | null = null) {
+    if(color) {
+        return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase()
+    }
     return this.canPlayerMove
   }
 
