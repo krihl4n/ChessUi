@@ -27,10 +27,12 @@ export class DrawingService {
     ctx.drawImage(pic, x, y);
   }
 
-  fillCircle(ctx: CanvasRenderingContext2D, x:number, y:number, radius:number, color:string) {
+  fillCircle(ctx: CanvasRenderingContext2D, x:number, y:number, radius:number, color:string, alpha: number = 1) {
     ctx.fillStyle = color;
+    ctx.globalAlpha = alpha
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2, true);
     ctx.fill();
+    ctx.globalAlpha = 1
   }
 }
