@@ -17,6 +17,14 @@ export class DrawingService {
     ctx.globalAlpha = 1
   }
 
+  drawRectangle(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, color: string, alpha: number = 1) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4
+    ctx.globalAlpha = alpha
+    ctx.strokeRect(x + 2, y + 2, w-4, h-4);
+    ctx.globalAlpha = 1
+  }
+
   fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number, font: number) {
     ctx.fillStyle = color;
     ctx.font = font + "px Georgia"; // todo scale 

@@ -43,7 +43,7 @@ export class Board2Component implements OnInit {
   private lightFieldColor = "#D2C3C3";
   private darkFieldColor = "#75352B";
   private markedFieldColor = "#4F7B64";
-  private markedFieldAlpha = 0.8;
+  private markedFieldAlpha = 0.9;
   private boardSetup: BoardSetup;
 
   readyForDrawing = false
@@ -204,14 +204,25 @@ export class Board2Component implements OnInit {
           if (this.markAndMoveHandler.fieldIsMarked(field)) {
             this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.markedFieldColor, this.markedFieldAlpha)
           }
-          if(this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
-            this.drawingService.fillCircle(
-              this.canvasContext, 
-              colPos + this.boardSetup.fieldSize/2,
-              rowPos + this.boardSetup.fieldSize/2, 
-              this.boardSetup.fieldSize/6, 
-              this.markedFieldColor,
-              this.markedFieldAlpha)
+          if (this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
+            if (this.piecesLocations.fieldOccupied(field)) {
+              this.drawingService.drawRectangle(
+                this.canvasContext,
+                colPos,
+                rowPos,
+                this.boardSetup.fieldSize,
+                this.boardSetup.fieldSize,
+                this.markedFieldColor,
+                this.markedFieldAlpha)
+            } else {
+              this.drawingService.fillCircle(
+                this.canvasContext,
+                colPos + this.boardSetup.fieldSize / 2,
+                rowPos + this.boardSetup.fieldSize / 2,
+                this.boardSetup.fieldSize / 6,
+                this.markedFieldColor,
+                this.markedFieldAlpha)
+            }
           }
         }
 

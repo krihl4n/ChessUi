@@ -19,4 +19,8 @@ export class PiecesLocations {
     delete(field: string) {
         this.locations.delete(field)
     }
+
+    fieldOccupied(field: string) {
+        return this.locations.get(field)
+    }
 }
