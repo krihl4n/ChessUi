@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from './tools/drawing.service';
 import { FieldUtilsService } from './tools//field-utils.service';
 import { PiecesLocations } from './tools//pieces-locations';
@@ -206,14 +206,12 @@ export class Board2Component implements OnInit {
           }
           if (this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
             if (this.piecesLocations.fieldOccupied(field)) {
-              this.drawingService.drawRectangle(
-                this.canvasContext,
-                colPos,
-                rowPos,
-                this.boardSetup.fieldSize,
-                this.boardSetup.fieldSize,
-                this.markedFieldColor,
-                this.markedFieldAlpha)
+              const size = this.boardSetup.fieldSize * 0.25  
+              this.drawingService.fillTriangle(this.canvasContext, colPos, rowPos, 1, 1, size, this.markedFieldColor)
+              this.drawingService.fillTriangle(this.canvasContext, colPos + this.boardSetup.fieldSize, rowPos, -1, 1, size, this.markedFieldColor)
+              this.drawingService.fillTriangle(this.canvasContext, colPos, rowPos + this.boardSetup.fieldSize, 1, -1, size, this.markedFieldColor)
+              this.drawingService.fillTriangle(this.canvasContext, colPos + this.boardSetup.fieldSize, rowPos + this.boardSetup.fieldSize, -1, -1, size, this.markedFieldColor)
+
             } else {
               this.drawingService.fillCircle(
                 this.canvasContext,

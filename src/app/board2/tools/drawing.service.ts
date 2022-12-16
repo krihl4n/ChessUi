@@ -25,6 +25,17 @@ export class DrawingService {
     ctx.globalAlpha = 1
   }
 
+  fillTriangle(ctx: CanvasRenderingContext2D, x: number, y: number, xDir: number, yDir: number, size: number, color: string) {
+    ctx.fillStyle = color
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4
+    ctx.beginPath();
+    ctx.lineTo(x + size * xDir, y)
+    ctx.lineTo(x, y + size * yDir)
+    ctx.lineTo(x, y)
+    ctx.fill()
+  }
+
   fillText(ctx: CanvasRenderingContext2D, txt: string, color: string, x: number, y: number, font: number) {
     ctx.fillStyle = color;
     ctx.font = font + "px Georgia"; // todo scale 
