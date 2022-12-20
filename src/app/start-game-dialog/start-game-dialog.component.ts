@@ -13,8 +13,11 @@ export class StartGameDialogComponent {
   isWhiteColorSelected = false
   isRandomColorSelected = false
   isBlackColorSelected = false
+
   isComputerSelected = false
   isFriendSelected = false
+  isHotSeatSelected = false
+  isTestSelected = false
 
   whiteColorSelected() {
     this.isWhiteColorSelected = true
@@ -40,12 +43,32 @@ export class StartGameDialogComponent {
   computerSelected() {
     this.isComputerSelected = true
     this.isFriendSelected = false
+    this.isHotSeatSelected = false
+    this.isTestSelected = false
     this.closeIfPossible()
   }
 
   friendSelected() {
     this.isFriendSelected = true
     this.isComputerSelected = false
+    this.isHotSeatSelected = false
+    this.isTestSelected = false
+    this.closeIfPossible()
+  }
+
+  hotSeatSelected() {
+    this.isFriendSelected = false
+    this.isComputerSelected = false
+    this.isHotSeatSelected = true
+    this.isTestSelected = false
+    this.closeIfPossible()
+  }
+
+  testSelected() {
+    this.isFriendSelected = false
+    this.isComputerSelected = false
+    this.isHotSeatSelected = false
+    this.isTestSelected = true
     this.closeIfPossible()
   }
 
@@ -63,7 +86,7 @@ export class StartGameDialogComponent {
   }
 
   private modeSelected(): Boolean {
-    return this.isComputerSelected || this.isFriendSelected
+    return this.isComputerSelected || this.isFriendSelected || this.isHotSeatSelected || this.isTestSelected
   }
 
   private determineSelectedColor(): string | null {
@@ -73,7 +96,9 @@ export class StartGameDialogComponent {
   }
 
   private determineSelectedMode(): string {
-    if (this.isFriendSelected) return "friend"
-    else return "computer"
+    if (this.isFriendSelected) return "vs_friend"
+    if (this.isHotSeatSelected) return "hot_seat"
+    if (this.isTestSelected) return "test_mode"
+    else return "vs_computer"
   }
 }

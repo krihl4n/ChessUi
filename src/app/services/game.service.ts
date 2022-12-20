@@ -33,7 +33,7 @@ export class GameService {
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
-    this.gameControlService.initiateNewGame(this.playerId, "vs_computer", colorPreference)
+    this.gameControlService.initiateNewGame(this.playerId, mode, colorPreference)
   }
 
   initiateMoveFrom(from: String) {

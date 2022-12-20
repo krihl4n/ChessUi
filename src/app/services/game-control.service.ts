@@ -42,7 +42,7 @@ export class GameControlService {
       })
   }
 
-  private startNewGame(playerId: string, mode: String, colorPreference: string | null) {
+  private startNewGame(playerId: string, mode: string, colorPreference: string | null) {
     this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, colorPreference })
   }
 
