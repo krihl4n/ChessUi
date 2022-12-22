@@ -20,6 +20,8 @@ export class GameService {
   private canPlayerMove: boolean = false
   private playerId = "player1" // todo generate id
   private playerColor = ""
+  private gameMode: string | null
+
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
@@ -55,7 +57,8 @@ export class GameService {
   }
 
   canMove(color: string | null = null) {
-    if(color) {
+    if(color && this.gameMode != "TEST_MODE") {
+        console.log(this.gameMode)
         return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase()
     }
     return this.canPlayerMove
@@ -96,6 +99,7 @@ export class GameService {
   private subscribteToGameStartEvent() {
     this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
       this.canPlayerMove = true
+      this.gameMode = gameInfo.mode
       if(gameInfo.player1.id == this.playerId) {
         this.playerColor = gameInfo.player1.color
       } else {
