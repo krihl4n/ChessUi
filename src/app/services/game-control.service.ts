@@ -36,9 +36,7 @@ export class GameControlService {
     this.webSocketApiService.connect()
       .then(() => {
         console.log("connected")
-        //this.startGame(mode)
         this.startNewGame(playerId, mode, colorPreference)
-        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
       })
   }
 

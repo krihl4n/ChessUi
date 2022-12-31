@@ -28,7 +28,6 @@ export class GameService {
   possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
 
   constructor(private gameControlService: GameControlService) {
-    this.subscribeToFieldOccupationUpdates();
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
@@ -64,17 +63,6 @@ export class GameService {
     return this.canPlayerMove
   }
 
-  private subscribeToFieldOccupationUpdates() {
-    this.gameControlService.fieldOccupationChange()
-      .subscribe((piecePositions: FieldOccupation[]) => {
-        // if changed notify
-        if (this.piecePositions != piecePositions) {
-          this.fieldOccupationChange.next(piecePositions)
-          this.piecePositions = piecePositions
-        }
-      });
-  }
-
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       console.log("PIECE POSITION UPDATE")
@@ -100,6 +88,12 @@ export class GameService {
     this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
       this.canPlayerMove = true
       this.gameMode = gameInfo.mode
+      
+      if (this.piecePositions != gameInfo.piecePositions) {
+        this.fieldOccupationChange.next(gameInfo.piecePositions)
+        this.piecePositions = gameInfo.piecePositions
+      }
+
       if(gameInfo.player1.id == this.playerId) {
         this.playerColor = gameInfo.player1.color
       } else {
