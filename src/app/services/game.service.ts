@@ -57,7 +57,6 @@ export class GameService {
 
   canMove(color: string | null = null) {
     if(color && this.gameMode != "TEST_MODE") {
-        console.log(this.gameMode)
         return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase()
     }
     return this.canPlayerMove
@@ -65,7 +64,6 @@ export class GameService {
 
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
-      console.log("PIECE POSITION UPDATE")
       const from = update.primaryMove.from
       const to = update.primaryMove.to
 
@@ -77,8 +75,6 @@ export class GameService {
 
   private subscribeToPossibleMoves() {
     this.gameControlService.getPossibleMovesSubscription().subscribe((possibleMoves: PossibleMoves) => {
-      console.log("POSSIBLE MOVES")
-      console.log(possibleMoves)
       this.possibleMoves = possibleMoves
       this.possibleMovesUpdate.next(possibleMoves)
     })

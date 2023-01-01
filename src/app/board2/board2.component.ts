@@ -72,7 +72,6 @@ export class Board2Component implements OnInit {
 
         this.gameService.fieldOccupationChange // maybe also get initial position, or use ReplaySubject
         .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
-          console.log("POSITIONS RECEIVED")
           positions.forEach(fieldOccupation => {
             if (fieldOccupation.piece) {
               const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)

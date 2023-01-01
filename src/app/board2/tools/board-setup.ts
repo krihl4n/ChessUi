@@ -11,7 +11,6 @@ export class BoardSetup {
     }
 
     private updateFieldSize(containerHeight: number) {
-        console.log(containerHeight)
         this.boardSize = containerHeight
         this.fieldSize = this.boardSize / 8
     }

@@ -31,8 +31,6 @@ export class WebSocketAPIService {
 
     connect(): Promise<void> {
         return new Promise(resolve => {
-            console.log("Initialize WebSocket Connection");
-        
             let ws = new SockJS(this.webSocketEndPoint);
             this.stompClient = Stomp.over(ws);
             const _this = this;

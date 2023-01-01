@@ -31,11 +31,8 @@ export class GameControlService {
   }
 
   initiateNewGame(playerId: string, mode: string, colorPreference: string | null) {
-    console.log("initiate new game")
-
     this.webSocketApiService.connect()
       .then(() => {
-        console.log("connected")
         this.startNewGame(playerId, mode, colorPreference)
       })
   }
