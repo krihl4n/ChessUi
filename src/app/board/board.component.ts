@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from './tools/drawing.service';
-import { FieldUtilsService } from './tools//field-utils.service';
-import { PiecesLocations } from './tools//pieces-locations';
-import { Point } from './tools//point.model';
+import { FieldUtilsService } from './tools/field-utils.service';
+import { PiecesLocations } from './tools/pieces-locations';
+import { Point } from './tools/point.model';
 import { BoardSetup } from './tools/board-setup';
 import { CoordinationsUtil } from './tools/coordinations-utils';
 import { HtmlPieceReneder } from './tools/html-piece-renderer';
@@ -16,11 +16,11 @@ import { FieldOccupation } from '../model/field-occupation.model';
 import { GameStartEvent } from '../model/game-start-event.model';
 
 @Component({
-  selector: 'app-board-2',
-  templateUrl: './board2.component.html',
-  styleUrls: ['./board2.component.css']
+  selector: 'app-board',
+  templateUrl: './board.component.html',
+  styleUrls: ['./board.component.css']
 })
-export class Board2Component implements OnInit {
+export class BoardComponent implements OnInit {
 
   constructor(
     private drawingService: DrawingService,

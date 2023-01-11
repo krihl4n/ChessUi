@@ -4,11 +4,11 @@ import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
 
 @Component({
-  selector: 'app-game2',
-  templateUrl: './game2.component.html',
-  styleUrls: ['./game2.component.css']
+  selector: 'app-game',
+  templateUrl: './game.component.html',
+  styleUrls: ['./game.component.css']
 })
-export class Game2Component implements OnInit {
+export class GameComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private gameService: GameService) { }
 

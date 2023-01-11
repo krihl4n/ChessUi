@@ -9,9 +9,9 @@ import { ControlsComponent } from './controls/controls.component';
 import { CapturesComponent } from './captures/captures.component';
 import { GameFinishedDialogComponent } from './game-finished-dialog/game-finished-dialog.component';
 import { AppRoutingModule } from './app-routing.module';
-import { Board2Component } from './board2/board2.component';
+import { BoardComponent } from './board/board.component';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
-import { Game2Component } from './game2/game2.component';
+import { GameComponent } from './game/game.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +19,9 @@ import { Game2Component } from './game2/game2.component';
     ControlsComponent,
     CapturesComponent,
     GameFinishedDialogComponent,
-    Board2Component,
+    BoardComponent,
     StartGameDialogComponent,
-    Game2Component
+    GameComponent
   ],
   imports: [
     BrowserModule,
