@@ -1,0 +1,1 @@
+- block initial movement if starting as black figures

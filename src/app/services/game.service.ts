@@ -18,7 +18,7 @@ export class GameService {
   private moveRequest: MoveRequest | null
   private possibleMoves: PossibleMoves | null
   private canPlayerMove: boolean = false
-  private playerId = "player1" // todo generate id
+  private playerId = "" // todo generate id
   private playerColor = ""
   private gameMode: string | null
 
@@ -49,7 +49,7 @@ export class GameService {
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
       this.moveRequest = {playerId : this.playerId, from, to }
-      this.gameControlService.moveRequest(from, to)
+      this.gameControlService.moveRequest(this.playerId, from, to)
       return true
     }
     return false;
@@ -90,11 +90,13 @@ export class GameService {
         this.piecePositions = gameInfo.piecePositions
       }
 
-      if(gameInfo.player1.id == this.playerId) {
-        this.playerColor = gameInfo.player1.color
-      } else {
-        this.playerColor = gameInfo.player2.color
-      }
+      this.playerId = gameInfo.player.id
+      this.playerColor = gameInfo.player.color
+      // if(gameInfo.player1.id == this.playerId) {
+      //   this.playerColor = gameInfo.player1.color
+      // } else {
+      //   this.playerColor = gameInfo.player2.color
+      // }
 
       this.gameStartEvent.next({playerColor: this.playerColor})
     })

@@ -26,8 +26,8 @@ export class GameControlService {
     this.webSocketApiService.disconnect();
   }
 
-  moveRequest(from: String, to: String) {
-    this.webSocketApiService.sendMoveMsg({playerId: "player1", from, to})
+  moveRequest(playerId: String, from: String, to: String) {
+    this.webSocketApiService.sendMoveMsg({playerId, from, to})
   }
 
   initiateNewGame(playerId: string, mode: string, colorPreference: string | null) {
