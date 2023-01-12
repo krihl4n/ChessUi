@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
 
@@ -10,10 +11,15 @@ import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog
 })
 export class GameComponent implements OnInit {
 
-  constructor(private dialog: MatDialog, private gameService: GameService) { }
+  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.openDialog()
+    const gameId = this.route.snapshot.params['id']
+    if(gameId) {
+      this.joinExistingGame(gameId)
+    } else {
+      this.openDialog()
+    }
   }
 
   openDialog() {
@@ -31,6 +37,11 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
     )
+  }
+
+  joinExistingGame(gameId: string) {
+    debugger
+    this.gameService.joinExistingGame(gameId)
   }
 }
 

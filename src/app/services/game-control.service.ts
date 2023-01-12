@@ -37,6 +37,13 @@ export class GameControlService {
       })
   }
 
+  joinExistingGame(gameId: string) {
+    this.webSocketApiService.connect()
+      .then(() => {
+        this.webSocketApiService.sendJoinGameMsg(gameId)
+    })
+  }
+
   private startNewGame(playerId: string, mode: string, colorPreference: string | null) {
     this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, colorPreference })
   }
@@ -84,5 +91,9 @@ export class GameControlService {
 
   getGameStartedSubscription(): Subject<GameInfo> {
     return this.webSocketApiService.gameStartedSubject
+  }
+
+  getWaitingForOtherPlayersSubscription() : Subject<String> {
+    return this.webSocketApiService.waitingForOtherPlayersSubject
   }
 }

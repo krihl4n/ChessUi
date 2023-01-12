@@ -4,7 +4,10 @@ import { GameComponent } from "./game/game.component";
 
 const appRoutes: Routes = [
     { path: '', redirectTo: '/game', pathMatch: 'full'},
-    { path: 'game', component: GameComponent}
+    { path: 'game', children: [
+        {path: '', component:GameComponent},
+        {path: ':id', component:GameComponent}
+    ]}
 ]
 
 @NgModule({

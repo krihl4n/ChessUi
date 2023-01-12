@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { debug } from 'console';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
@@ -18,7 +17,7 @@ export class GameService {
   private moveRequest: MoveRequest | null
   private possibleMoves: PossibleMoves | null
   private canPlayerMove: boolean = false
-  private playerId = "" // todo generate id
+  private playerId = ""
   private playerColor = ""
   private gameMode: string | null
 
@@ -31,10 +30,15 @@ export class GameService {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
+    this.subscribeToWaitingForOtherPlayersEvent();
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
     this.gameControlService.initiateNewGame(this.playerId, mode, colorPreference)
+  }
+
+  joinExistingGame(gameId: string) {
+    this.gameControlService.joinExistingGame(gameId)
   }
 
   initiateMoveFrom(from: String) {
@@ -92,13 +96,12 @@ export class GameService {
 
       this.playerId = gameInfo.player.id
       this.playerColor = gameInfo.player.color
-      // if(gameInfo.player1.id == this.playerId) {
-      //   this.playerColor = gameInfo.player1.color
-      // } else {
-      //   this.playerColor = gameInfo.player2.color
-      // }
-
       this.gameStartEvent.next({playerColor: this.playerColor})
+    })
+  }
+
+  private subscribeToWaitingForOtherPlayersEvent() {
+    this.gameControlService.getWaitingForOtherPlayersSubscription().subscribe((gameId: String) => {
     })
   }
 }

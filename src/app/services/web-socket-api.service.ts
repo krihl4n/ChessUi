@@ -25,6 +25,7 @@ export class WebSocketAPIService {
     gameResultSubject: Subject<GameResult> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
     gameStartedSubject: Subject<GameInfo> = new Subject()
+    waitingForOtherPlayersSubject: Subject<String> = new Subject()
 
     constructor(){
     }
@@ -64,6 +65,9 @@ export class WebSocketAPIService {
                 _this.stompClient.subscribe('/user/queue/possible-moves' + '-user' + url, function (sdkEvent: any) {
                     _this.onPossibleMovesReceived(sdkEvent);
                 });
+                _this.stompClient.subscribe('/user/queue/waiting-for-other-player' + '-user' + url, function (sdkEvent: any) {
+                    _this.onWaitingForOtherPlayersReceived(sdkEvent);
+                });
                 //_this.stompClient.reconnect_delay = 2000;
                 //callback.connected();
                 //callback()
@@ -97,6 +101,10 @@ export class WebSocketAPIService {
 
     sendStartNewGameMsg(message: StartGameRequest) {
         this.stompClient.send("/chess-app/start-new-game", {}, JSON.stringify(message));
+    }
+
+    sendJoinGameMsg(gameId: String) {
+        this.stompClient.send("/chess-app/join-game", {}, gameId);
     }
 
     sendRequestPiecePositionsMsg(message: String) {
@@ -139,5 +147,9 @@ export class WebSocketAPIService {
     onGameResultReceived(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.gameResultSubject.next(value)
+    }
+
+    onWaitingForOtherPlayersReceived(message: Stomp.Frame) {
+        this.waitingForOtherPlayersSubject.next(message.body)
     }
 }
