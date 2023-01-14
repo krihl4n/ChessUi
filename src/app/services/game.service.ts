@@ -39,7 +39,7 @@ export class GameService {
 
   initiateNewGame(mode: string, colorPreference: string | null) {
     this.colorPreference = colorPreference
-    this.gameControlService.initiateNewGame(this.playerId, mode, colorPreference)
+    this.gameControlService.initiateNewGame(this.playerId, mode)
   }
 
   joinExistingGame(joinGameRequest: JoinGameRequest) {

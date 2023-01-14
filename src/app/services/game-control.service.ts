@@ -35,11 +35,11 @@ export class GameControlService {
     this.webSocketApiService.sendMoveMsg({ playerId, from, to })
   }
 
-  initiateNewGame(playerId: string, mode: string, colorPreference: string | null) {
+  initiateNewGame(playerId: string, mode: string) {
     this.webSocketApiService.connect()
       .then(() => {
         this.connected = true
-        this.startNewGame(playerId, mode, colorPreference)
+        this.startNewGame(playerId, mode)
       })
   }
 
@@ -55,8 +55,8 @@ export class GameControlService {
     }
   }
 
-  private startNewGame(playerId: string, mode: string, colorPreference: string | null) {
-    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, colorPreference })
+  private startNewGame(playerId: string, mode: string) {
+    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode })
   }
 
 
