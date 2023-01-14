@@ -61,7 +61,7 @@ export class BoardComponent implements OnInit {
 
     this.gameService.gameStartEvent
       .subscribe((gameStartEvent: GameStartEvent) => {
-
+        console.log("GAME STARTED")
         if (gameStartEvent.playerColor == "BLACK") {
           this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(true, this.boardSetup.fieldSize)

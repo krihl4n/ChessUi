@@ -7,41 +7,52 @@ import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { GameInfo } from '../model/game-info.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { WebSocketAPIService } from './web-socket-api.service';
+import { JoinGameRequest } from '../model/join-game-request.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameControlService {
 
+  connected = false
+
   constructor(private webSocketApiService: WebSocketAPIService) { }
 
   connect() {
     this.webSocketApiService.connect()
       .then(() => {
+        this.connected = true
         this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
       });
   }
 
   disconnect() {
     this.webSocketApiService.disconnect();
+    this.connected = false
   }
 
   moveRequest(playerId: String, from: String, to: String) {
-    this.webSocketApiService.sendMoveMsg({playerId, from, to})
+    this.webSocketApiService.sendMoveMsg({ playerId, from, to })
   }
 
   initiateNewGame(playerId: string, mode: string, colorPreference: string | null) {
     this.webSocketApiService.connect()
       .then(() => {
+        this.connected = true
         this.startNewGame(playerId, mode, colorPreference)
       })
   }
 
-  joinExistingGame(gameId: string) {
-    this.webSocketApiService.connect()
-      .then(() => {
-        this.webSocketApiService.sendJoinGameMsg(gameId)
-    })
+  joinExistingGame(req: JoinGameRequest) {
+    if (this.connected) {
+      this.webSocketApiService.sendJoinGameMsg(req)
+    } else {
+      this.webSocketApiService.connect()
+        .then(() => {
+          this.connected = true
+          this.webSocketApiService.sendJoinGameMsg(req)
+        })
+    }
   }
 
   private startNewGame(playerId: string, mode: string, colorPreference: string | null) {
@@ -93,7 +104,7 @@ export class GameControlService {
     return this.webSocketApiService.gameStartedSubject
   }
 
-  getWaitingForOtherPlayersSubscription() : Subject<String> {
+  getWaitingForOtherPlayersSubscription(): Subject<string> {
     return this.webSocketApiService.waitingForOtherPlayersSubject
   }
 }

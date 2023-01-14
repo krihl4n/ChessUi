@@ -10,6 +10,7 @@ import { GameStateUpdate } from '../model/game-state-update.model';
 import { GameResult } from '../model/game-result.model';
 import { StartGameRequest } from '../model/start-game-request.model';
 import { GameInfo } from '../model/game-info.model';
+import { JoinGameRequest } from '../model/join-game-request.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -25,7 +26,7 @@ export class WebSocketAPIService {
     gameResultSubject: Subject<GameResult> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
     gameStartedSubject: Subject<GameInfo> = new Subject()
-    waitingForOtherPlayersSubject: Subject<String> = new Subject()
+    waitingForOtherPlayersSubject: Subject<string> = new Subject()
 
     constructor(){
     }
@@ -103,8 +104,8 @@ export class WebSocketAPIService {
         this.stompClient.send("/chess-app/start-new-game", {}, JSON.stringify(message));
     }
 
-    sendJoinGameMsg(gameId: String) {
-        this.stompClient.send("/chess-app/join-game", {}, gameId);
+    sendJoinGameMsg(req: JoinGameRequest) {
+        this.stompClient.send("/chess-app/join-game", {}, JSON.stringify(req));
     }
 
     sendRequestPiecePositionsMsg(message: String) {

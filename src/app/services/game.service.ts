@@ -3,6 +3,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameStartEvent } from '../model/game-start-event.model';
+import { JoinGameRequest } from '../model/join-game-request.model';
 import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
@@ -21,9 +22,12 @@ export class GameService {
   private playerColor = ""
   private gameMode: string | null
 
+  public colorPreference: string | null
+
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
+  waitingForPlayersEvent: Subject<string> = new ReplaySubject()
   possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
 
   constructor(private gameControlService: GameControlService) {
@@ -34,11 +38,12 @@ export class GameService {
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
+    this.colorPreference = colorPreference
     this.gameControlService.initiateNewGame(this.playerId, mode, colorPreference)
   }
 
-  joinExistingGame(gameId: string) {
-    this.gameControlService.joinExistingGame(gameId)
+  joinExistingGame(joinGameRequest: JoinGameRequest) {
+    this.gameControlService.joinExistingGame(joinGameRequest)
   }
 
   initiateMoveFrom(from: String) {
@@ -101,7 +106,8 @@ export class GameService {
   }
 
   private subscribeToWaitingForOtherPlayersEvent() {
-    this.gameControlService.getWaitingForOtherPlayersSubscription().subscribe((gameId: String) => {
+    this.gameControlService.getWaitingForOtherPlayersSubscription().subscribe((gameId: string) => {
+      this.waitingForPlayersEvent.next(gameId)
     })
   }
 }

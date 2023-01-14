@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GameStartEvent } from '../model/game-start-event.model';
 import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
 
@@ -11,7 +12,7 @@ import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog
 })
 export class GameComponent implements OnInit {
 
-  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute) { }
+  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     const gameId = this.route.snapshot.params['id']
@@ -19,6 +20,9 @@ export class GameComponent implements OnInit {
       this.joinExistingGame(gameId)
     } else {
       this.openDialog()
+      this.gameService.waitingForPlayersEvent.subscribe((gameId: string) => {
+        this.router.navigate([gameId], {relativeTo: this.route})
+      })
     }
   }
 
@@ -35,13 +39,18 @@ export class GameComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(
-      data => this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
+      data => {
+        this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
+      }
     )
   }
 
   joinExistingGame(gameId: string) {
-    debugger
-    this.gameService.joinExistingGame(gameId)
+    this.gameService.joinExistingGame({
+        gameId: gameId,
+        colorPreference: this.gameService.colorPreference
+      }
+    )
   }
 }
 
