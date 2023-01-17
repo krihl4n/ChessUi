@@ -14,12 +14,15 @@ export class StorageService {
   }
 
   public getGame(): SavedGame | null {
-
+    var cookieValue = this.cookieService.get('chess-game')
+    if(cookieValue) {
+      return JSON.parse(cookieValue)
+    }
     return null
   }
 }
 
 export interface SavedGame{
-  gameId: String,
-  playerId: String 
+  gameId: string,
+  playerId: string 
 }

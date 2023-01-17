@@ -54,14 +54,22 @@ export class GameControlService {
 
   joinExistingGame(req: JoinGameRequest) {
     if (this.connected) {
-      this.webSocketApiService.sendJoinGameMsg(req)
+      this.joinGame(req)
     } else {
       this.webSocketApiService.connect()
         .then(() => {
           this.connected = true
-          this.webSocketApiService.sendJoinGameMsg(req)
+          this.joinGame(req)
         })
     }
+  }
+
+  private joinGame(req: JoinGameRequest){ 
+    var savedGame = this.storageService.getGame();
+    if(savedGame && savedGame.gameId == req.gameId) {
+      req.playerId = savedGame.playerId
+    }
+    this.webSocketApiService.sendJoinGameMsg(req)
   }
 
   private startNewGame(playerId: string, mode: string) {

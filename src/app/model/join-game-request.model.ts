@@ -1,4 +1,5 @@
 export interface JoinGameRequest {
     gameId: string,
-    colorPreference: string | null
+    colorPreference: string | null,
+    playerId: string | null
 }

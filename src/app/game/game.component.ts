@@ -48,7 +48,8 @@ export class GameComponent implements OnInit {
   joinExistingGame(gameId: string) {
     this.gameService.joinExistingGame({
         gameId: gameId,
-        colorPreference: this.gameService.colorPreference
+        colorPreference: this.gameService.colorPreference,
+        playerId: null
       }
     )
   }
