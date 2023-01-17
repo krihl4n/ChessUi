@@ -8,6 +8,7 @@ import { GameInfo } from '../model/game-info.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { JoinGameRequest } from '../model/join-game-request.model';
+import { StorageService } from '../storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,15 @@ export class GameControlService {
 
   connected = false
 
-  constructor(private webSocketApiService: WebSocketAPIService) { }
+  constructor(private webSocketApiService: WebSocketAPIService, private storageService: StorageService) { 
+    this.subscribeToGameStartedEvent()
+  }
+
+  subscribeToGameStartedEvent() {
+    this.webSocketApiService.gameStartedSubject.subscribe((gameInfo: GameInfo) => {
+        this.storageService.save(gameInfo.gameId, gameInfo.player.id)
+    })
+  }
 
   connect() {
     this.webSocketApiService.connect()

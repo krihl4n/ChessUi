@@ -23,6 +23,7 @@
     "@angular/router": "^14.2.8",
     "@types/socket.io-client": "^3.0.0",
     "net": "^1.0.2",
+    "ngx-cookie-service": "^15.0.0",
     "rxjs": "~6.6.0",
     "rxjs-compat": "^6.6.7",
     "sockjs-client": "^1.5.2",
