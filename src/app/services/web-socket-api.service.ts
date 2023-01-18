@@ -26,6 +26,7 @@ export class WebSocketAPIService {
     gameResultSubject: Subject<GameResult> = new Subject()
     possibleMovesSubject: Subject<PossibleMoves> = new Subject()
     gameStartedSubject: Subject<GameInfo> = new Subject()
+    joinedExistingGameSubject: Subject<GameInfo> = new Subject()
     waitingForOtherPlayersSubject: Subject<string> = new Subject()
 
     constructor(){
@@ -53,6 +54,9 @@ export class WebSocketAPIService {
                 });
                 _this.stompClient.subscribe("/user/queue/game-started" + '-user' + url, function (sdkEvent: any) {
                     _this.onGameStarted(sdkEvent)
+                });
+                _this.stompClient.subscribe("/user/queue/joined-existing-game" + '-user' + url, function (sdkEvent: any) {
+                    _this.onJoinedExistingGame(sdkEvent)
                 });
                 _this.stompClient.subscribe("/user/queue/piece-position-updates" + '-user' + url, function (sdkEvent: any) {
                     _this.onPiecePositionUpdate(sdkEvent);
@@ -124,6 +128,11 @@ export class WebSocketAPIService {
     onGameStarted(message: Stomp.Frame) {
         let value = JSON.parse(message.body)
         this.gameStartedSubject.next(value)
+    }
+
+    onJoinedExistingGame(message: Stomp.Frame) {
+        let value = JSON.parse(message.body)
+        this.joinedExistingGameSubject.next(value)
     }
 
     onPiecePositionUpdate(message: Stomp.Frame) {

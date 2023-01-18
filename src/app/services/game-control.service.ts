@@ -124,4 +124,8 @@ export class GameControlService {
   getWaitingForOtherPlayersSubscription(): Subject<string> {
     return this.webSocketApiService.waitingForOtherPlayersSubject
   }
+
+  getJoinedExistingGameSubscription(): Subject<GameInfo> {
+    return this.webSocketApiService.joinedExistingGameSubject
+  }
 }

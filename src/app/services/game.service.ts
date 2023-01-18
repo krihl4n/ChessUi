@@ -35,6 +35,7 @@ export class GameService {
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
     this.subscribeToWaitingForOtherPlayersEvent();
+    this.subscribeToJoinedExistingGameEvent();
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
@@ -91,18 +92,28 @@ export class GameService {
 
   private subscribteToGameStartEvent() {
     this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
-      this.canPlayerMove = true
-      this.gameMode = gameInfo.mode
-      
-      if (this.piecePositions != gameInfo.piecePositions) {
-        this.fieldOccupationChange.next(gameInfo.piecePositions)
-        this.piecePositions = gameInfo.piecePositions
-      }
-
-      this.playerId = gameInfo.player.id
-      this.playerColor = gameInfo.player.color
-      this.gameStartEvent.next({playerColor: this.playerColor})
+      this.gameStarted(gameInfo)
     })
+  }
+
+  private subscribeToJoinedExistingGameEvent() {
+      this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfo) => {
+        this.gameStarted(gameInfo)
+      })
+  }
+
+  private gameStarted(gameInfo: GameInfo) {
+    this.canPlayerMove = true
+    this.gameMode = gameInfo.mode
+    
+    if (this.piecePositions != gameInfo.piecePositions) {
+      this.fieldOccupationChange.next(gameInfo.piecePositions)
+      this.piecePositions = gameInfo.piecePositions
+    }
+
+    this.playerId = gameInfo.player.id
+    this.playerColor = gameInfo.player.color
+    this.gameStartEvent.next({playerColor: this.playerColor})
   }
 
   private subscribeToWaitingForOtherPlayersEvent() {
