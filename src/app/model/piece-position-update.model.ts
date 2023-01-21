@@ -6,6 +6,7 @@ export interface PiecePositionUpdate {
     pieceCapture: PieceCapture | null,
     convertToQueen: Boolean,
     reverted: Boolean,
+    turn: string
 }
 
 interface Move {

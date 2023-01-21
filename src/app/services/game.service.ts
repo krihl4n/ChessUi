@@ -20,6 +20,7 @@ export class GameService {
   private canPlayerMove: boolean = false
   private playerId = ""
   private playerColor = ""
+  private turn = ""
   private gameMode: string | null
 
   public colorPreference: string | null
@@ -67,7 +68,7 @@ export class GameService {
 
   canMove(color: string | null = null) {
     if(color && this.gameMode != "TEST_MODE") {
-        return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase()
+        return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
     }
     return this.canPlayerMove
   }
@@ -79,6 +80,8 @@ export class GameService {
 
      // const piece = this.piecePositions[from] necessary?
       this.moveRequest = null // todo something better
+
+      this.turn = update.turn
       this.piecePositionChange.next(update)
     })
   }
@@ -113,6 +116,7 @@ export class GameService {
 
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
+    this.turn = gameInfo.turn
     this.gameStartEvent.next({playerColor: this.playerColor})
   }
 

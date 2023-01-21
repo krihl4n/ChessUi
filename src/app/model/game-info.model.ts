@@ -4,7 +4,8 @@ export interface GameInfo {
     gameId: string,
     mode: string,
     player: Player,
-    piecePositions: FieldOccupation[]
+    piecePositions: FieldOccupation[],
+    turn: string
 }
 
 interface Player {
