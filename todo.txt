@@ -1,1 +1,1 @@
-- block initial movement if starting as black figures
+- error - sometimes figures are rendered at wrong place after refresh

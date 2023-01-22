@@ -38,11 +38,11 @@ export class GameComponent implements OnInit {
       backdropClass: 'cutom-modal-backdrop'
     })
 
-    dialogRef.afterClosed().subscribe(
-      data => {
-        this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
-      }
-    )
+    // dialogRef.afterClosed().subscribe(
+    //   data => {
+    //    // this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
+    //   }
+    // )
   }
 
   joinExistingGame(gameId: string) {

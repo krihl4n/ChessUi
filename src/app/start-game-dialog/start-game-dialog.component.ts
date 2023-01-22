@@ -1,14 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { timeout } from 'rxjs-compat/operator/timeout';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-start-game-dialog',
   templateUrl: './start-game-dialog.component.html',
   styleUrls: ['./start-game-dialog.component.scss']
 })
-export class StartGameDialogComponent {
+export class StartGameDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>) { }
+  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService) { }
+  
+  ngOnInit(): void {
+    this.gameService.waitingForPlayersEvent.subscribe(() => {
+      if(this.isFriendSelected) {
+        this.showFirstScreen = false
+      }
+    })
+    this.gameService.gameStartEvent.subscribe(() => {
+      this.dialogRef.close();
+    })
+  }
+
+  showFirstScreen = true
 
   isWhiteColorSelected = false
   isRandomColorSelected = false
@@ -22,50 +37,47 @@ export class StartGameDialogComponent {
     this.isWhiteColorSelected = true
     this.isBlackColorSelected = false
     this.isRandomColorSelected = false
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
   randomColorSelected() {
     this.isRandomColorSelected = true
     this.isWhiteColorSelected = false
     this.isBlackColorSelected = false
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
   blackColorSelected() {
     this.isBlackColorSelected = true
     this.isWhiteColorSelected = false
     this.isRandomColorSelected = false
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
   computerSelected() {
     this.isComputerSelected = true
     this.isFriendSelected = false
     this.isTestSelected = false
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
   friendSelected() {
     this.isFriendSelected = true
     this.isComputerSelected = false
     this.isTestSelected = false
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
   testSelected() {
     this.isFriendSelected = false
     this.isComputerSelected = false
     this.isTestSelected = true
-    this.closeIfPossible()
+    this.initNewGame()
   }
 
-  private closeIfPossible() {
+  private initNewGame() {
     if (this.colorSelected() && this.modeSelected()) {
-      this.dialogRef.close({
-        selectedMode: this.determineSelectedMode(),
-        selectedColor: this.determineSelectedColor()
-      })
+      this.gameService.initiateNewGame(this.determineSelectedMode(), this.determineSelectedColor())  
     }
   }
 

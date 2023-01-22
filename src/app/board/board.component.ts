@@ -61,7 +61,6 @@ export class BoardComponent implements OnInit {
 
     this.gameService.gameStartEvent
       .subscribe((gameStartEvent: GameStartEvent) => {
-        console.log("GAME STARTED")
         if (gameStartEvent.playerColor == "BLACK") {
           this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(true, this.boardSetup.fieldSize)
@@ -71,23 +70,23 @@ export class BoardComponent implements OnInit {
         }
 
         this.gameService.fieldOccupationChange // maybe also get initial position, or use ReplaySubject
-        .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
-          positions.forEach(fieldOccupation => {
-            if (fieldOccupation.piece) {
-              const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
-              if (pieceElement) {
-                this.piecesLocations.set(
-                  fieldOccupation.field,
-                  pieceElement
-                )
+          .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
+            positions.forEach(fieldOccupation => {
+              if (fieldOccupation.piece) {
+                const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
+                if (pieceElement) {
+                  this.piecesLocations.set(
+                    fieldOccupation.field,
+                    pieceElement
+                  )
+                }
               }
-            }
+            })
+            this.renderPieces()
+            // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
+            //   this.renderPieces()
+            // })
           })
-          this.renderPieces()
-          // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
-          //   this.renderPieces()
-          // })
-        })
 
       })
   }
@@ -170,7 +169,7 @@ export class BoardComponent implements OnInit {
           }
           if (this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
             if (this.piecesLocations.fieldOccupied(field)) {
-              const size = this.boardSetup.fieldSize * 0.25 
+              const size = this.boardSetup.fieldSize * 0.25
               const offset = 0.25
               this.drawingService.fillTriangle(this.canvasContext, colPos + offset, rowPos + offset, 1, 1, size, this.markedFieldColor)
               this.drawingService.fillTriangle(this.canvasContext, colPos + this.boardSetup.fieldSize - offset, rowPos + offset, -1, 1, size, this.markedFieldColor)
