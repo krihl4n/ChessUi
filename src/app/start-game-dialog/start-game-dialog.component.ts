@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { timeout } from 'rxjs-compat/operator/timeout';
 import { GameService } from '../services/game.service';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -10,12 +10,13 @@ import { GameService } from '../services/game.service';
 })
 export class StartGameDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService) { }
+  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard) { }
   
   ngOnInit(): void {
-    this.gameService.waitingForPlayersEvent.subscribe(() => {
+    this.gameService.waitingForPlayersEvent.subscribe((gameId: string) => {
       if(this.isFriendSelected) {
         this.showFirstScreen = false
+        this.invitationUrl = window.location.href + "/" + gameId
       }
     })
     this.gameService.gameStartEvent.subscribe(() => {
@@ -23,6 +24,7 @@ export class StartGameDialogComponent implements OnInit {
     })
   }
 
+  invitationUrl = ""
   showFirstScreen = true
 
   isWhiteColorSelected = false
@@ -32,6 +34,10 @@ export class StartGameDialogComponent implements OnInit {
   isComputerSelected = false
   isFriendSelected = false
   isTestSelected = false
+
+  copyToClipboard() {
+    this.clipboard.copy(this.invitationUrl)
+  }
 
   whiteColorSelected() {
     this.isWhiteColorSelected = true

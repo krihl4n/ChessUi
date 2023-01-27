@@ -20,7 +20,9 @@
             </div>
         </div>
         <div *ngIf="!showFirstScreen" class="main-box" style="color: white;">
-            waiting for other player
+            waiting for other player <br><br>
+            {{invitationUrl}} <br>
+            <button (click)="copyToClipboard()">copy</button>
         </div>
     </div>
 </mat-dialog-content>
