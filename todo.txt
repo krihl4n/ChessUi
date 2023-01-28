@@ -3,3 +3,4 @@
 - find a font that works and use it in modals; style modals
 - cannot refresh if in the wainting for player screen
 - field markings should be rendered at the same time as piece. it looks a bit weird when refreshing playing the black pieces
+- undo captures
