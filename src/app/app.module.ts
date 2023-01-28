@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BoardComponent } from './board/board.component';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { GameComponent } from './game/game.component';
+import { MessageComponent } from './game/message/message.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { GameComponent } from './game/game.component';
     GameFinishedDialogComponent,
     BoardComponent,
     StartGameDialogComponent,
-    GameComponent
+    GameComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

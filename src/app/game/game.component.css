@@ -16,8 +16,19 @@
     gap: 40px;
 }
 
-.control-box {
-    background-color: #36555D;
+.control-panel {
     align-self: center;
+}
+
+.recorded-moves-box {
+    background-color: #36555D;
+    /* align-self: center; */
     height: 300px;
+}
+
+.message-box {
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    height: 100px;
 }
