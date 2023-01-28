@@ -12,6 +12,7 @@ import { BoardComponent } from './board/board.component';
 import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.component';
 import { GameComponent } from './game/game.component';
 import { MessageComponent } from './game/message/message.component';
+import { ControlsComponent } from './game/controls/controls.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MessageComponent } from './game/message/message.component';
     BoardComponent,
     StartGameDialogComponent,
     GameComponent,
-    MessageComponent
+    MessageComponent,
+    ControlsComponent
   ],
   imports: [
     BrowserModule,

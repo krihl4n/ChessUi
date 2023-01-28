@@ -89,8 +89,8 @@ export class GameControlService {
     this.webSocketApiService.sendGameControlsMsg("redo_move")
   }
 
-  resign() {
-    this.webSocketApiService.sendGameControlsMsg("resign")
+  resign(playerId: string) {
+    this.webSocketApiService.sendResignMsg(playerId)
   }
 
   requestPossibleMoves(field: String) {

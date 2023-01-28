@@ -112,6 +112,10 @@ export class WebSocketAPIService {
         this.publish("/chess-app/game-controls", message)
     }
 
+    sendResignMsg(playerId: string) {
+        this.publish("/chess-app/resign", playerId)
+    }
+
     sendStartNewGameMsg(message: StartGameRequest) {
         this.publish("/chess-app/start-new-game", JSON.stringify(message))
     }

@@ -83,6 +83,10 @@ export class GameService {
     return this.playerColor
   }
 
+  resign() {
+    this.gameControlService.resign(this.playerId)
+  }
+
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       const from = update.primaryMove.from

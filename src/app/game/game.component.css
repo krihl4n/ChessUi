@@ -20,15 +20,20 @@
     align-self: center;
 }
 
+/* use flex here? */ 
+
 .recorded-moves-box {
     background-color: #36555D;
     /* align-self: center; */
     height: 300px;
 }
 
+.controls-box {
+    margin-top: 20px
+}
+
 .message-box {
     color: lightgrey;
     font-size: 14px;
     font-weight: 400;
-    height: 100px;
 }
