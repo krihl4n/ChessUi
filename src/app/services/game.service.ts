@@ -73,6 +73,14 @@ export class GameService {
     return this.canPlayerMove
   }
 
+  getTurn() {
+    return this.turn
+  }
+
+  getPlayerColor() {
+    return this.playerColor
+  }
+
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       const from = update.primaryMove.from
