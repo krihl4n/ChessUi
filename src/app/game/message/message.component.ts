@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { GameInfo } from 'src/app/model/game-info.model';
-import { GameStartEvent } from 'src/app/model/game-start-event.model';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -16,10 +14,24 @@ export class MessageComponent implements OnInit {
   }
 
   getMessage(): string {
-    if(this.gameService.getPlayerColor() == this.gameService.getTurn()) {
-      return "Your move"
+    const result = this.gameService.gameResult
+    if(result) {
+      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'WHITE' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'BLACK') {
+        return "You won!"
+      }
+      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'BLACK' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'WHITE') {
+        return "You lost!"
+      }
+      if(result.result == "DRAW") {
+        return "Draw!"
+      }
+      return result.result + " " + result.reason
     } else {
-      return "Waiting for the opponent's move"
+      if(this.gameService.getPlayerColor() == this.gameService.getTurn()) {
+        return "Your move"
+      } else {
+        return "Waiting for opponent"
+      }
     }
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
+import { GameResult } from '../model/game-result.model';
 import { GameStartEvent } from '../model/game-start-event.model';
 import { JoinGameRequest } from '../model/join-game-request.model';
 import { MoveRequest } from '../model/move-request.model';
@@ -22,7 +23,7 @@ export class GameService {
   private playerColor = ""
   private turn = ""
   private gameMode: string | null
-
+  public gameResult: GameResult | null
   public colorPreference: string | null
 
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
@@ -37,6 +38,7 @@ export class GameService {
     this.subscribteToGameStartEvent();
     this.subscribeToWaitingForOtherPlayersEvent();
     this.subscribeToJoinedExistingGameEvent();
+    this.subscribeToGameFinishedEvent();
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
@@ -131,6 +133,13 @@ export class GameService {
   private subscribeToWaitingForOtherPlayersEvent() {
     this.gameControlService.getWaitingForOtherPlayersSubscription().subscribe((gameId: string) => {
       this.waitingForPlayersEvent.next(gameId)
+    })
+  }
+
+  private subscribeToGameFinishedEvent() {
+    this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResult) => {
+      this.canPlayerMove = false
+      this.gameResult = gameResult
     })
   }
 }
