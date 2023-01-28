@@ -7,9 +7,18 @@ export class PieceMoveHandler {
 
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
         this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
-            this.movePiece(update.primaryMove.from, update.primaryMove.to)
+            if(update.reverted) {
+                this.movePiece(update.primaryMove.to, update.primaryMove.from)
+            }else {
+                this.movePiece(update.primaryMove.from, update.primaryMove.to)
+            }
+            
             if(update.secondaryMove) {
-                this.movePiece(update.secondaryMove.from, update.secondaryMove.to)
+                if(update.reverted) {
+                    this.movePiece(update.secondaryMove.to, update.secondaryMove.from)
+                } else {
+                    this.movePiece(update.secondaryMove.from, update.secondaryMove.to)
+                }
             }
         })
     }

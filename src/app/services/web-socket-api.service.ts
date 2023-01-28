@@ -69,9 +69,6 @@ export class WebSocketAPIService {
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
                     _this.onPiecePositionUpdate(msg);
                 });
-                this.subscribe('/user/queue/game-controls', function (msg) {
-                    _this.gameControlsMsgReceived(msg);
-                });
                 this.subscribe('/user/queue/fields-occupation', function (msg) {
                     _this.onPiecePositionsReceived(msg);
                 });
@@ -116,6 +113,14 @@ export class WebSocketAPIService {
         this.publish("/chess-app/resign", playerId)
     }
 
+    sendUndoMoveMsg(playerId: string) {
+        this.publish("/chess-app/undo-move", playerId)
+    }
+
+    sendRedoMoveMsg(playerId: string) {
+        this.publish("/chess-app/redo-move", playerId)
+    }
+
     sendStartNewGameMsg(message: StartGameRequest) {
         this.publish("/chess-app/start-new-game", JSON.stringify(message))
     }
@@ -150,10 +155,6 @@ export class WebSocketAPIService {
     onPiecePositionUpdate(message: Message) {
         let value = JSON.parse(message.body)
         this.piecePositionUpdateSubject.next(value)
-    }
-
-    gameControlsMsgReceived(message: Message) {
-        console.log("DifferentTopic Message Recieved from Server :: " + message);
     }
 
     onPiecePositionsReceived(message: Message) {

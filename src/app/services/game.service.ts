@@ -87,6 +87,14 @@ export class GameService {
     this.gameControlService.resign(this.playerId)
   }
 
+  undoMove() {
+    this.gameControlService.undoMove(this.playerId)
+  }
+
+  redoMove() {
+    this.gameControlService.redoMove(this.playerId)
+  }
+
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       const from = update.primaryMove.from

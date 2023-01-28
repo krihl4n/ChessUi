@@ -76,17 +76,16 @@ export class GameControlService {
     this.webSocketApiService.sendStartNewGameMsg({ playerId, mode })
   }
 
-
   startGame(mode: String) {
     this.webSocketApiService.sendGameControlsMsg("start_" + mode)
   }
 
-  undoMove() {
-    this.webSocketApiService.sendGameControlsMsg("undo_move")
+  undoMove(playerId: string) {
+    this.webSocketApiService.sendUndoMoveMsg(playerId)
   }
 
-  redoMove() {
-    this.webSocketApiService.sendGameControlsMsg("redo_move")
+  redoMove(playerId: string) {
+    this.webSocketApiService.sendRedoMoveMsg(playerId)
   }
 
   resign(playerId: string) {
