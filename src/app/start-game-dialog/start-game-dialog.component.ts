@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GameService } from '../services/game.service';
 import {Clipboard} from '@angular/cdk/clipboard';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -10,7 +11,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 })
 export class StartGameDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard) { }
+  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard, private router: Router) { }
   
   ngOnInit(): void {
     this.gameService.waitingForPlayersEvent.subscribe((gameId: string) => {
@@ -37,6 +38,15 @@ export class StartGameDialogComponent implements OnInit {
 
   goToFirstScreen() {
     this.showFirstScreen = true
+
+    this.isWhiteColorSelected = false
+    this.isRandomColorSelected = false
+    this.isBlackColorSelected = false
+    this.isComputerSelected = false
+    this.isFriendSelected = false
+    this.isTestSelected = false
+    this.dialogRef.close();
+    this.router.navigate(["game"])
   }
 
   copyToClipboard() {

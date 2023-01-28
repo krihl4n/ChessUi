@@ -28,7 +28,7 @@ export class GameService {
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
-  waitingForPlayersEvent: Subject<string> = new ReplaySubject()
+  waitingForPlayersEvent: Subject<string> = new Subject()
   possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
 
   constructor(private gameControlService: GameControlService) {

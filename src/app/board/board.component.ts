@@ -84,7 +84,7 @@ export class BoardComponent implements OnInit {
             })
             setTimeout(() => {
               this.renderPieces()
-            }, 500) // pieces not diplayed at proper locations fix.
+            }, 100) // pieces not diplayed at proper locations fix.
             
             // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
             //   this.renderPieces()
