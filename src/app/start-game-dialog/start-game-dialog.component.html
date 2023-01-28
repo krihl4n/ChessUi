@@ -20,9 +20,10 @@
             </div>
         </div>
         <div *ngIf="!showFirstScreen" class="main-box" style="color: white;">
-            waiting for other player <br><br>
-            {{invitationUrl}} <br>
-            <button (click)="copyToClipboard()">copy</button>
+            <span class="main-text">waiting for other player...</span><br>
+            <div class="url-frame">{{invitationUrl}}</div>
+            <button class="btn select-mode-btn" (click)="copyToClipboard()">copy</button>
+            <button class="btn select-mode-btn" (click)="goToFirstScreen()">back</button>
         </div>
     </div>
 </mat-dialog-content>

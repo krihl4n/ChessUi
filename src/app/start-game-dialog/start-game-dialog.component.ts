@@ -35,6 +35,10 @@ export class StartGameDialogComponent implements OnInit {
   isFriendSelected = false
   isTestSelected = false
 
+  goToFirstScreen() {
+    this.showFirstScreen = true
+  }
+
   copyToClipboard() {
     this.clipboard.copy(this.invitationUrl)
   }

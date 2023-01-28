@@ -1,2 +1,3 @@
 - error - sometimes figures are rendered at wrong place after refresh (tmp fix with timeout implemented)
 - sometimes 2 cookies are created resulting in incorrect refresh behavior
+- find a font that works and use it in modals; style modals
