@@ -44,6 +44,8 @@ export class BoardComponent implements OnInit {
   private darkFieldColor = "#75352B";
   private markedFieldColor = "#4F7B64";
   private markedFieldAlpha = 0.9;
+  private lastMoveFieldColor = "#938864";
+  private lastMoveFieldAlpha = 0.8;
   private boardSetup: BoardSetup;
 
   readyForDrawing = false
@@ -169,6 +171,9 @@ export class BoardComponent implements OnInit {
           this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, currentColor)
           if (this.markAndMoveHandler.fieldIsMarked(field)) {
             this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.markedFieldColor, this.markedFieldAlpha)
+          }
+          if (this.gameService.lastMove?.from == field || this.gameService.lastMove?.to == field) {
+            this.drawingService.fillRectangle(this.canvasContext, colPos, rowPos, this.boardSetup.fieldSize, this.boardSetup.fieldSize, this.lastMoveFieldColor, this.lastMoveFieldAlpha)
           }
           if (this.markAndMoveHandler.fieldIsMarkedForPossibleMove(field)) {
             if (this.piecesLocations.fieldOccupied(field)) {

@@ -9,6 +9,7 @@ import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
+import { Move } from '../model/move.model'
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,7 @@ export class GameService {
   private gameMode: string | null
   public gameResult: GameResult | null
   public colorPreference: string | null
+  public lastMove: Move | null
 
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
@@ -97,6 +99,12 @@ export class GameService {
 
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
+      if(update.reverted) {
+        this.lastMove = null
+      } else {
+        this.lastMove = { from: update.primaryMove.from, to: update.primaryMove.to}
+      }
+      
       const from = update.primaryMove.from
       const to = update.primaryMove.to
 
