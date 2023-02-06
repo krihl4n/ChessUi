@@ -6,10 +6,17 @@ import { PiecePositionUpdate } from "src/app/model/piece-position-update.model";
 export class PieceMoveHandler {
 
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
-        // TODO undo attacks
+
         this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
             if (update.reverted) {
                 this.movePiece(update.primaryMove.to, update.primaryMove.from)
+                if(update.pieceCapture) {
+                    const piece = this.htmlPieceRenderer.renderPiece(
+                        update.pieceCapture.capturedPiece.color, 
+                        update.pieceCapture.capturedPiece.type, 
+                        update.pieceCapture.field)
+                    this.piecesLocations.set(update.pieceCapture.field, piece)
+                }
             } else {
                 this.movePiece(update.primaryMove.from, update.primaryMove.to)
             }
@@ -22,7 +29,7 @@ export class PieceMoveHandler {
                 }
             }
 
-            if (update.pieceCapture && update.primaryMove.to != update.pieceCapture.field) { // en passant
+            if (update.pieceCapture && update.primaryMove.to != update.pieceCapture.field && !update.reverted) { // en passant
                 const pieceAtDst = this.piecesLocations.get(update.pieceCapture.field)
                 if (pieceAtDst) {
                     this.piecesLocations.delete(update.pieceCapture.field)

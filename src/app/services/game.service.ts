@@ -26,7 +26,7 @@ export class GameService {
   private gameMode: string | null
   public gameResult: GameResult | null
   public colorPreference: string | null
-  public lastMove: Move | null
+  public lastMove: Move | null // for field marking
 
   fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
   piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()

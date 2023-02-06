@@ -9,6 +9,14 @@ export class HtmlPieceReneder {
     private boardNativeElement: any,
     private fieldSize: number) { }
 
+
+  renderPiece(color: string, type: string, field: string): Piece {
+    const piece = new Piece(color.toLowerCase(), type.toLowerCase(), this.fieldSize)
+    this.preRenderPieces([piece])
+    this.renderPieceAtField(field, piece)
+    return piece
+  }
+
   preRenderPieces(pieces: Piece[]) {
     for(let piece of pieces) {
       const htmlElement = this.renderer.createElement('img')
