@@ -7,8 +7,8 @@ export class HtmlPieceReneder {
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService,
     private boardNativeElement: any,
-    private fieldSize: number) { }
-
+    private fieldSize: number,
+    private onPieceClickListener: any) { }
 
   renderPiece(color: string, type: string, field: string): Piece {
     const piece = new Piece(color.toLowerCase(), type.toLowerCase(), this.fieldSize)
@@ -52,6 +52,7 @@ export class HtmlPieceReneder {
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece))
+    piece.setMouseDownListener(this.onPieceClickListener.notifyPieceClicked.bind(this.onPieceClickListener))
   }
 
   renderPieceMovement(destinationField: string, piece: Piece) {

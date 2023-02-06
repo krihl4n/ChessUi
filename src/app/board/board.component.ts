@@ -103,7 +103,7 @@ export class BoardComponent implements OnInit {
     this.canvasSize = this.boardSetup.boardSize
     this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
 
-    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize)
+    this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize, this)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
@@ -137,7 +137,7 @@ export class BoardComponent implements OnInit {
   renderPieces() {
     this.piecesLocations.getAll().forEach((piece, field) => {
       this.htmlPieceRender.renderPieceAtField(field, piece)
-      piece.setMouseDownListener(this.notifyPieceClicked.bind(this))
+      //piece.setMouseDownListener(this.notifyPieceClicked.bind(this)) // moved to renderer 
     })
   }
 
