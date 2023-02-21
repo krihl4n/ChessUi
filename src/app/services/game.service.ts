@@ -63,6 +63,13 @@ export class GameService {
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
+
+      if(to[1] == '8'){
+        console.log("last rank for white")
+        return false
+      }
+    
+
       this.moveRequest = {playerId : this.playerId, from, to }
       this.gameControlService.moveRequest(this.playerId, from, to)
       return true
