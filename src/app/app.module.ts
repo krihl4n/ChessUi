@@ -13,7 +13,7 @@ import { StartGameDialogComponent } from './start-game-dialog/start-game-dialog.
 import { GameComponent } from './game/game.component';
 import { MessageComponent } from './game/message/message.component';
 import { ControlsComponent } from './game/controls/controls.component';
-import { PawnConversionComponent } from './board/pawn-conversion/pawn-conversion.component';
+import { PawnPromotionComponent } from './board/pawn-promotion/pawn-promotion.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { PawnConversionComponent } from './board/pawn-conversion/pawn-conversion
     GameComponent,
     MessageComponent,
     ControlsComponent,
-    PawnConversionComponent
+    PawnPromotionComponent
   ],
   imports: [
     BrowserModule,

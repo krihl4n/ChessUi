@@ -26,7 +26,7 @@ export class BoardComponent implements OnInit {
     private drawingService: DrawingService,
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService,
-    private gameService: GameService) { }
+    private gameService: GameService,) { }
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef;

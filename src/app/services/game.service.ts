@@ -10,6 +10,7 @@ import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
 import { Move } from '../model/move.model'
+import { PawnPromotionService } from '../pawn-promotion.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class GameService {
   waitingForPlayersEvent: Subject<string> = new Subject()
   possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
 
-  constructor(private gameControlService: GameControlService) {
+  constructor(private gameControlService: GameControlService, private pawnPromotionService: PawnPromotionService) {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
@@ -66,6 +67,7 @@ export class GameService {
 
       if(to[1] == '8'){
         console.log("last rank for white")
+        this.pawnPromotionService.display()
         return false
       }
     

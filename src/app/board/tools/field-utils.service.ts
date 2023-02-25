@@ -10,7 +10,7 @@ export class FieldUtilsService {
   private columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
   private rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-  private fieldSize: number;
+  fieldSize: number;
   private boardFlipped: boolean;
   
   initialize(boardFlipped: boolean, fieldSize: number) { // figure out a better way (maybe pass boardSetup object)
