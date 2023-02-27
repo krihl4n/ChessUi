@@ -9,7 +9,7 @@ import { FieldUtilsService } from '../tools/field-utils.service';
 })
 export class PawnPromotionComponent implements OnInit {
 
-  constructor(private fieldUtils: FieldUtilsService, private pawnSelection: PawnPromotionService){}
+  constructor(private fieldUtils: FieldUtilsService, private pawnPromotionService: PawnPromotionService){}
 
   @Input()
   height: number
@@ -17,8 +17,29 @@ export class PawnPromotionComponent implements OnInit {
   @Input()
   width: number
 
+
   ngOnInit(): void {
 
+    this.pawnPromotionService.promotionOpened.subscribe(() => {
+      console.log("promotion opened")
+      window.addEventListener('mousedown', this.listener)
+    })
+
+    this.pawnPromotionService.promotionClosed.subscribe(() => {
+      console.log("promotion closed")
+      window.removeEventListener('mousedown', this.listener)
+    })
+
+
+    window.addEventListener('mousedown', (e: MouseEvent) => { // subscribe only when visible, unsubscribe when closed
+      //this.pawnPromotionService.closeSelection()
+    })
+
+    
+  }
+
+  listener = () => {
+    this.pawnPromotionService.closeSelection()
   }
 
   fieldSize() {
@@ -30,6 +51,6 @@ export class PawnPromotionComponent implements OnInit {
   }
 
   visible() {
-    return this.pawnSelection.shouldDisplayPromotionChoice()
+    return this.pawnPromotionService.shouldDisplayPromotionChoice()
   }
 }

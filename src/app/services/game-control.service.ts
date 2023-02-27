@@ -40,8 +40,8 @@ export class GameControlService {
     this.connected = false
   }
 
-  moveRequest(playerId: String, from: String, to: String) {
-    this.webSocketApiService.sendMoveMsg({ playerId, from, to })
+  moveRequest(playerId: String, from: String, to: String, pawnPromotion: String | null) {
+    this.webSocketApiService.sendMoveMsg({ playerId, from, to, pawnPromotion })
   }
 
   initiateNewGame(playerId: string, mode: string) {

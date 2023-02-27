@@ -91,6 +91,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     private tryToMovePiece(from: string, to: string, piece: Piece) {
+        console.log("tryToMove")
         if(this.gameService.requestMove(from, to)){
             this.piecesLocations.delete(from)
             this.renderer.renderPieceMovement(to, piece)

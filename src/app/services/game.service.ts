@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject, Subject } from 'rxjs';
+import { from, ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameResult } from '../model/game-result.model';
@@ -42,6 +42,15 @@ export class GameService {
     this.subscribeToWaitingForOtherPlayersEvent();
     this.subscribeToJoinedExistingGameEvent();
     this.subscribeToGameFinishedEvent();
+
+    this.pawnPromotionService.promotionClosed.subscribe(promotion => {
+      console.log(promotion)
+      this.canPlayerMove = true
+      if(promotion){
+        this.requestMoveWithPromotion(promotion.from, promotion.to, promotion.promotion)
+      }
+    }
+    )
   }
 
   initiateNewGame(mode: string, colorPreference: string | null) {
@@ -57,6 +66,14 @@ export class GameService {
     this.gameControlService.requestPossibleMoves(from)
   }
 
+  private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
+    console.log("move with promotion: " + pawnPromotion)
+    this.pawnPromotionService.moveWithSelectionPerformed()
+    this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: pawnPromotion }
+    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion)
+    return true
+  }
+
   requestMove(from: string, to: string): boolean {
 
     if (this.moveRequest) {
@@ -65,15 +82,23 @@ export class GameService {
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
 
-      if(to[1] == '8'){
+      if(to[1] == '8' && !this.pawnPromotionService.hasPlayerSelectedPromotion()){
         console.log("last rank for white")
-        this.pawnPromotionService.display()
+        this.pawnPromotionService.display(from, to) // pass field here? 
+        this.canPlayerMove = false // change when closed
         return false
       }
-    
 
-      this.moveRequest = {playerId : this.playerId, from, to }
-      this.gameControlService.moveRequest(this.playerId, from, to)
+      // if(to[1] == '8' && this.pawnPromotionService.hasPlayerSelectedPromotion()){
+      //   console.log("last rank for white")
+      //   this.pawnPromotionService.moveWithSelectionPerformed()
+      //   this.moveRequest = {playerId : this.playerId, from, to }
+      //   this.gameControlService.moveRequest(this.playerId, from, to)
+      //   return true
+      // }
+
+      this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: null}
+      this.gameControlService.moveRequest(this.playerId, from, to, null)
       return true
     }
     return false;
