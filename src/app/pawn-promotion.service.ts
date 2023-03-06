@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { PiecesLocations } from './board/tools/pieces-locations';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,11 @@ export class PawnPromotionService {
   private from: string = ""
   private to: string = ""
 
-  constructor() { }
+  constructor(private piecesLocations: PiecesLocations) { }
+
+  shouldOpenPromotionChoice(from: string, to: string, playerColor: string) {
+    return this.isLastRank(to, playerColor) && !this.hasPlayerSelectedPromotion() && this.piecesLocations.get(from)?.type == "pawn"
+  }
 
   shouldDisplayPromotionChoice() {
     return this.shouldDisplay
@@ -40,7 +45,15 @@ export class PawnPromotionService {
     return this.promotionSelected
   }
 
-  moveWithSelectionPerformed() {
+  moveWithPromotionPerformed() {
     this.promotionSelected = null
+  }
+
+  private isLastRank(to: string, playerColor: string) {
+    if(playerColor == 'WHITE') {
+      return to[1] == '8'
+    } else {
+      return to[1] == '1'
+    }
   }
 }

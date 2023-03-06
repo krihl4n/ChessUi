@@ -1,5 +1,9 @@
+import { Injectable } from "@angular/core";
 import { Piece } from "./piece.model";
 
+@Injectable({
+    providedIn: "root"
+})
 export class PiecesLocations {
 
     private locations = new Map<string, Piece>() 
@@ -8,7 +12,7 @@ export class PiecesLocations {
         this.locations.set(field, piece)
     }
 
-    get(field: string) {
+    get(field: string): Piece | undefined {
         return this.locations.get(field)
     }
 

@@ -68,7 +68,7 @@ export class GameService {
 
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     console.log("move with promotion: " + pawnPromotion)
-    this.pawnPromotionService.moveWithSelectionPerformed()
+    this.pawnPromotionService.moveWithPromotionPerformed()
     this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: pawnPromotion }
     this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion)
     return true
@@ -82,20 +82,12 @@ export class GameService {
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
 
-      if(to[1] == '8' && !this.pawnPromotionService.hasPlayerSelectedPromotion()){
+      if(this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)){ 
         console.log("last rank for white")
-        this.pawnPromotionService.display(from, to) // pass field here? 
-        this.canPlayerMove = false // change when closed
+        this.pawnPromotionService.display(from, to)
+        this.canPlayerMove = false
         return false
       }
-
-      // if(to[1] == '8' && this.pawnPromotionService.hasPlayerSelectedPromotion()){
-      //   console.log("last rank for white")
-      //   this.pawnPromotionService.moveWithSelectionPerformed()
-      //   this.moveRequest = {playerId : this.playerId, from, to }
-      //   this.gameControlService.moveRequest(this.playerId, from, to)
-      //   return true
-      // }
 
       this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: null}
       this.gameControlService.moveRequest(this.playerId, from, to, null)

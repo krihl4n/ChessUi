@@ -26,7 +26,8 @@ export class BoardComponent implements OnInit {
     private drawingService: DrawingService,
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService,
-    private gameService: GameService,) { }
+    private gameService: GameService,
+    private piecesLocations: PiecesLocations) { }
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef;
@@ -53,7 +54,6 @@ export class BoardComponent implements OnInit {
   private htmlPieceRender: HtmlPieceReneder
 
   private pieces = new Pieces()
-  private piecesLocations = new PiecesLocations()
   private dragHandler: PieceDragHandler;
   private pieceMoveHandler: PieceMoveHandler
   private markAndMoveHandler: MarkAndMoveHandler
