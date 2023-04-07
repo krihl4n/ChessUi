@@ -35,7 +35,7 @@ export class PieceDragHandler {
     this.draggedPiece = checkedPiece
     // available moves requested form mark and move class, so for now not doing it again
     // fix that - do not rely on side effect caused by other class and do not fetch moves twice at the same time
-    this.piecesLocations.delete(field)
+    //this.piecesLocations.delete(field) // moved to notifyMouseUpEvent - fixes issue with drag and drop to piece promotion
     this.htmlPieceRenderer.renderPieceByCoursor(p.x, p.y, checkedPiece)
   }
 
@@ -55,6 +55,7 @@ export class PieceDragHandler {
         this.piecesLocations.set(this.pieceDraggedFromField, this.draggedPiece)
         this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, this.draggedPiece)
       } else {
+        this.piecesLocations.delete(this.pieceDraggedFromField)
         let pieceAtDst = this.piecesLocations.get(field)
         if(pieceAtDst) {
           this.piecesLocations.delete(field)

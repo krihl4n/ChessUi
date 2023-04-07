@@ -7,6 +7,10 @@ import { PiecesLocations } from './board/tools/pieces-locations';
 })
 export class PawnPromotionService {
 
+// move to different location
+// undo move scenarios
+// change pawn to promoted piece icon
+
   private shouldDisplay = false
   private promotionSelected : string | null
   promotionOpened: Subject<string | null> = new Subject()
