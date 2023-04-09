@@ -36,6 +36,8 @@ export class StartGameDialogComponent implements OnInit {
   isFriendSelected = false
   isTestSelected = false
 
+  pieceSetup = ""
+
   goToFirstScreen() {
     this.showFirstScreen = true
 
@@ -97,7 +99,7 @@ export class StartGameDialogComponent implements OnInit {
 
   private initNewGame() {
     if (this.colorSelected() && this.modeSelected()) {
-      this.gameService.initiateNewGame(this.determineSelectedMode(), this.determineSelectedColor())  
+      this.gameService.initiateNewGame(this.determineSelectedMode(), this.determineSelectedColor(), this.pieceSetup)  
     }
   }
 

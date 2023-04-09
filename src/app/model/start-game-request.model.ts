@@ -1,4 +1,5 @@
 export interface StartGameRequest {
     playerId: string,
-    mode: string
+    mode: string,
+    setup: string
 }

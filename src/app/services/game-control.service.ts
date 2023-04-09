@@ -44,11 +44,11 @@ export class GameControlService {
     this.webSocketApiService.sendMoveMsg({ playerId, from, to, pawnPromotion })
   }
 
-  initiateNewGame(playerId: string, mode: string) {
+  initiateNewGame(playerId: string, mode: string, pieceSetup: string) {
     this.webSocketApiService.connect()
       .then(() => {
         this.connected = true
-        this.startNewGame(playerId, mode)
+        this.startNewGame(playerId, mode, pieceSetup)
       })
   }
 
@@ -72,8 +72,8 @@ export class GameControlService {
     this.webSocketApiService.sendJoinGameMsg(req)
   }
 
-  private startNewGame(playerId: string, mode: string) {
-    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode })
+  private startNewGame(playerId: string, mode: string, pieceSetup: string, ) {
+    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, setup: pieceSetup })
   }
 
   startGame(mode: String) {
