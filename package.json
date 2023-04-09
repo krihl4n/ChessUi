@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "build-for-electron": "ng build --base-href ./",
-    "test": "ng test"
+    "test": "ng test",
+    "cypress:open": "cypress open"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,7 @@
     "@angular/compiler-cli": "^14.2.8",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^14.18.33",
+    "cypress": "^12.9.0",
     "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
