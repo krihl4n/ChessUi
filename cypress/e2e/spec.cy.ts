@@ -21,6 +21,7 @@ describe('Basic tests', () => {
     cy.wait(500)
 
     cy.get("div[id=boardcontainter")
+    cy.matchImageSnapshot()
   })
 })
 
