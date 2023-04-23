@@ -8,6 +8,7 @@ export class PieceMoveHandler {
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
 
         this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
+            console.log("***** MOVE HANDLER - POSITION UPDATE")
             if (update.reverted) {
                 this.movePiece(update.primaryMove.to, update.primaryMove.from)
                 if(update.pieceCapture) {
@@ -18,7 +19,12 @@ export class PieceMoveHandler {
                     this.piecesLocations.set(update.pieceCapture.field, piece)
                 }
             } else {
-                this.movePiece(update.primaryMove.from, update.primaryMove.to)
+                if(update.pawnPromotion != null) {
+                    //this.movePieceAndPromote(update.primaryMove.from, update.primaryMove.to)
+                }else {
+                    this.movePiece(update.primaryMove.from, update.primaryMove.to)
+                }
+                
             }
 
             if (update.secondaryMove) { // castling
@@ -54,5 +60,45 @@ export class PieceMoveHandler {
         this.piecesLocations.delete(from)
         this.piecesLocations.delete(to)
         this.piecesLocations.set(to, piece)
+    }
+
+    movePieceAndPromote(from: string, to: string) {
+        // console.log("MOVE PIECE AND PROMOTE")
+        // const piece = this.piecesLocations.get(from)
+        // if (!piece) {
+        //   // debugger
+        //     console.log("no piece at " + from)
+        //     return
+        // }
+
+        // const pieceAtDst = this.piecesLocations.get(to)
+        
+        // if (pieceAtDst) {
+        //     this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
+        // }
+        // const newPiece = this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
+        // this.piecesLocations.delete(from)
+        // this.piecesLocations.delete(to)
+        // this.piecesLocations.set(to, newPiece)
+        
+
+
+
+
+
+        // const newPiece = this.htmlPieceRenderer.renderPiece( // render piece
+        // "WHITE", 
+        // "QUEEN", 
+        // to)
+        //this.piecesLocations.set(update.pieceCapture.field, piece)
+
+        // const pieceAtDst = this.piecesLocations.get(to)
+        // this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
+        // if (pieceAtDst) {
+        //     this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
+        // }
+        // this.piecesLocations.delete(from)
+        // this.piecesLocations.delete(to)
+        // this.piecesLocations.set(to, newPiece)
     }
 }

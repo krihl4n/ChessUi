@@ -65,13 +65,36 @@ export class HtmlPieceReneder {
     }, 600)
   }
 
+  renderPieceMovementWithPieceChange(destinationField: string, piece: Piece) {
+    this.setElementAnimation(piece);
+    this.moveElementToTop(piece);
+    this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
+
+    // const newPiece = new Piece("white", "queen", this.fieldSize)
+    // this.preRenderPieces([newPiece])
+    this.renderPiece("white", "queen", destinationField)
+    this.renderPiece("black", "rook", "a1")
+    setTimeout(() => {
+       this.clearElementAnimation(piece);
+      // this.moveElementToBackground(piece);
+       this.deletePieceNow(piece)
+      //this.renderPiece("white", "queen", destinationField)
+      //this.renderPieceAtField(destinationField, newPiece)
+
+    }, 600)
+
+
+
+    // return newPiece
+  }
+
   deletePiece(piece: Piece, field: string) {
     setTimeout(() => {
       this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
     }, 300)
   }
 
-  deletePieceNow(piece: Piece) {
+  deletePieceNow(piece: Piece) { // todo remove completly or clear listeners?
       this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
   }
 

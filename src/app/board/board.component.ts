@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 import { DrawingService } from './tools/drawing.service';
 import { FieldUtilsService } from './tools/field-utils.service';
 import { PiecesLocations } from './tools/pieces-locations';
@@ -20,7 +20,7 @@ import { GameStartEvent } from '../model/game-start-event.model';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
   constructor(
     private drawingService: DrawingService,
@@ -94,6 +94,10 @@ export class BoardComponent implements OnInit {
           })
 
       })
+  }
+
+  ngOnDestroy(): void {
+    this.markAndMoveHandler.cleanup()
   }
 
   initializeBoard() {

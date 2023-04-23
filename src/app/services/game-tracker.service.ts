@@ -75,9 +75,9 @@ export class GameTrackerService {
       this.positions.set(update.secondaryMove.to, piece || this.unknownPiece);
     }
 
-    if (update.convertToQueen) {
-      this.positions.set(update.primaryMove.to, this.convertTokenToQueen(piece))
-    }
+    // if (update.convertToQueen) {
+    //   this.positions.set(update.primaryMove.to, this.convertTokenToQueen(piece))
+    // }
   }
 
   private handleMoveReverted(update: PiecePositionUpdate) {
@@ -96,9 +96,9 @@ export class GameTrackerService {
       this.positions.set(update.pieceCapture.field, this.getTokenFor(update.pieceCapture.capturedPiece))
     }
 
-    if (update.convertToQueen) {
-      this.positions.set(update.primaryMove.from, this.convertTokenToPawn(piece))
-    }
+    // if (update.convertToQueen) {
+    //   this.positions.set(update.primaryMove.from, this.convertTokenToPawn(piece))
+    // }
   }
 
   private convertTokenToQueen(token: String) {

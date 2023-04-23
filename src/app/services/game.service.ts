@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, ReplaySubject, Subject } from 'rxjs';
+import { from, Observable, ReplaySubject, Subject } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameResult } from '../model/game-result.model';
@@ -34,7 +34,8 @@ export class GameService {
   gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
   waitingForPlayersEvent: Subject<string> = new Subject()
   possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
-
+  private pawnPromotionClosed: Subject<{promotion: string, from: string, to: string}> = new Subject()
+  
   constructor(private gameControlService: GameControlService, private pawnPromotionService: PawnPromotionService) {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
@@ -43,14 +44,21 @@ export class GameService {
     this.subscribeToJoinedExistingGameEvent();
     this.subscribeToGameFinishedEvent();
 
-    this.pawnPromotionService.promotionClosed.subscribe(promotion => {
+    console.log("SUBSCRIBE GAME_SERV")
+    this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
       console.log(promotion)
       this.canPlayerMove = true
       if(promotion){
+        this.pawnPromotionClosed.next(promotion)
         this.requestMoveWithPromotion(promotion.from, promotion.to, promotion.promotion)
       }
     }
     )
+  }
+
+  getPromotionClosedObservable(): Observable<{promotion: string, from: string, to: string}>  {
+    console.log("SUBSCRIBE 1")
+    return this.pawnPromotionClosed.asObservable();
   }
 
   initiateNewGame(mode: string, colorPreference: string | null, pieceSetup: string) {

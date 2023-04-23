@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PawnPromotionService } from 'src/app/pawn-promotion.service';
 import { FieldUtilsService } from '../tools/field-utils.service';
 
@@ -7,7 +8,7 @@ import { FieldUtilsService } from '../tools/field-utils.service';
   templateUrl: './pawn-promotion.component.html',
   styleUrls: ['./pawn-promotion.component.css']
 })
-export class PawnPromotionComponent implements OnInit {
+export class PawnPromotionComponent implements OnInit, OnDestroy {
 
   constructor(private fieldUtils: FieldUtilsService, private pawnPromotionService: PawnPromotionService){}
 
@@ -17,15 +18,18 @@ export class PawnPromotionComponent implements OnInit {
   @Input()
   width: number
 
+  private openSubscription: Subscription
+  private closeSubscription: Subscription
 
   ngOnInit(): void {
 
-    this.pawnPromotionService.promotionOpened.subscribe(() => {
+    this.openSubscription = this.pawnPromotionService.promotionOpened.subscribe(() => {
       console.log("promotion opened")
       window.addEventListener('mousedown', this.listener)
     })
 
-    this.pawnPromotionService.promotionClosed.subscribe(() => {
+    console.log("--- SUBSCRIBE PAWN_PROM_COMP")
+    this.closeSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(() => {
       console.log("promotion closed")
       window.removeEventListener('mousedown', this.listener)
     })
@@ -33,9 +37,13 @@ export class PawnPromotionComponent implements OnInit {
 
     window.addEventListener('mousedown', (e: MouseEvent) => { // subscribe only when visible, unsubscribe when closed
       //this.pawnPromotionService.closeSelection()
-    })
+    }) 
+  }
 
-    
+  ngOnDestroy(): void {
+    console.log("PAWN_PROM_COMP DESTROY")
+    this.closeSubscription?.unsubscribe()
+    this.openSubscription?.unsubscribe()
   }
 
   listener = () => {

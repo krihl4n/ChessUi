@@ -36,7 +36,7 @@ export class StartGameDialogComponent implements OnInit {
   isFriendSelected = false
   isTestSelected = false
 
-  pieceSetup = ""
+  pieceSetup = "white-pawn-promotion"
 
   goToFirstScreen() {
     this.showFirstScreen = true
