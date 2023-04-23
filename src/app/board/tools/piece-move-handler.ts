@@ -20,7 +20,7 @@ export class PieceMoveHandler {
                 }
             } else {
                 if(update.pawnPromotion != null) {
-                    //this.movePieceAndPromote(update.primaryMove.from, update.primaryMove.to)
+                    this.movePieceAndPromote(update.primaryMove.from, update.primaryMove.to)
                 }else {
                     this.movePiece(update.primaryMove.from, update.primaryMove.to)
                 }
@@ -63,6 +63,21 @@ export class PieceMoveHandler {
     }
 
     movePieceAndPromote(from: string, to: string) {
+        const piece = this.piecesLocations.get(from)
+        if (!piece) {
+            console.log("no piece at " + from)
+            return
+        }
+
+        const pieceAtDst = this.piecesLocations.get(to)
+        const newPiece = this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
+        if (pieceAtDst) {
+            this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
+        }
+        this.piecesLocations.delete(from)
+        this.piecesLocations.delete(to)
+        this.piecesLocations.set(to, newPiece)
+
         // console.log("MOVE PIECE AND PROMOTE")
         // const piece = this.piecesLocations.get(from)
         // if (!piece) {
