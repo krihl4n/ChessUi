@@ -11,20 +11,20 @@ export class PieceMoveHandler {
             console.log("***** MOVE HANDLER - POSITION UPDATE")
             if (update.reverted) {
                 this.movePiece(update.primaryMove.to, update.primaryMove.from)
-                if(update.pieceCapture) {
+                if (update.pieceCapture) {
                     const piece = this.htmlPieceRenderer.renderPiece(
-                        update.pieceCapture.capturedPiece.color, 
-                        update.pieceCapture.capturedPiece.type, 
+                        update.pieceCapture.capturedPiece.color,
+                        update.pieceCapture.capturedPiece.type,
                         update.pieceCapture.field)
                     this.piecesLocations.set(update.pieceCapture.field, piece)
                 }
             } else {
-                if(update.pawnPromotion != null) {
+                if (update.pawnPromotion != null) {
                     this.movePieceAndPromote(update.primaryMove.from, update.primaryMove.to)
-                }else {
+                } else {
                     this.movePiece(update.primaryMove.from, update.primaryMove.to)
                 }
-                
+
             }
 
             if (update.secondaryMove) { // castling
@@ -77,43 +77,5 @@ export class PieceMoveHandler {
         this.piecesLocations.delete(from)
         this.piecesLocations.delete(to)
         this.piecesLocations.set(to, newPiece)
-
-        // console.log("MOVE PIECE AND PROMOTE")
-        // const piece = this.piecesLocations.get(from)
-        // if (!piece) {
-        //   // debugger
-        //     console.log("no piece at " + from)
-        //     return
-        // }
-
-        // const pieceAtDst = this.piecesLocations.get(to)
-        
-        // if (pieceAtDst) {
-        //     this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
-        // }
-        // const newPiece = this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
-        // this.piecesLocations.delete(from)
-        // this.piecesLocations.delete(to)
-        // this.piecesLocations.set(to, newPiece)
-        
-
-
-
-
-
-        // const newPiece = this.htmlPieceRenderer.renderPiece( // render piece
-        // "WHITE", 
-        // "QUEEN", 
-        // to)
-        //this.piecesLocations.set(update.pieceCapture.field, piece)
-
-        // const pieceAtDst = this.piecesLocations.get(to)
-        // this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
-        // if (pieceAtDst) {
-        //     this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
-        // }
-        // this.piecesLocations.delete(from)
-        // this.piecesLocations.delete(to)
-        // this.piecesLocations.set(to, newPiece)
     }
 }
