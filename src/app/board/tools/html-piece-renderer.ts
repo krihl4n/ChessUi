@@ -25,9 +25,6 @@ export class HtmlPieceReneder {
       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
 
-      // htmlElement.onload = () => {
-      //   return Promise.resolve()
-      // }
       this.renderer.appendChild(this.boardNativeElement, htmlElement)
       piece.setHtmlElement(htmlElement)   
     }
@@ -70,22 +67,14 @@ export class HtmlPieceReneder {
     this.moveElementToTop(piece);
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
 
-    // const newPiece = new Piece("white", "queen", this.fieldSize)
-    // this.preRenderPieces([newPiece])
-    this.renderPiece("white", "queen", destinationField)
-    this.renderPiece("black", "rook", "a1")
+    const newPiece = new Piece("white", "queen", this.fieldSize)
+    this.preRenderPieces([newPiece])
     setTimeout(() => {
        this.clearElementAnimation(piece);
-      // this.moveElementToBackground(piece);
        this.deletePieceNow(piece)
-      //this.renderPiece("white", "queen", destinationField)
-      //this.renderPieceAtField(destinationField, newPiece)
-
+      this.renderPieceAtField(destinationField, newPiece)
     }, 600)
-
-
-
-    // return newPiece
+     return newPiece
   }
 
   deletePiece(piece: Piece, field: string) {

@@ -43,25 +43,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
                 
                 const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece)
                 this.piecesLocations.delete(promotion.from)
-                //  this.piecesLocations.delete(promotion.to, "m&m promotion closed")
-                // this.piecesLocations.set(promotion.to, newPiece)
-
-                // setTimeout(() => {
-                //     this.renderer.renderPiece(
-                //       "white", 
-                //       "queen", 
-                //       promotion.to)
-                //   }, 3000)
-
-
-                // const piece1 = this.renderer.renderPiece(
-                //     "white", 
-                //     "queen", 
-                //     promotion.to)
-                // this.piecesLocations.set(update.pieceCapture.field, piece)
-
-                // this.previouslyMarkedField = this.markedField
-                // this.markedField = undefined
+                this.piecesLocations.set(promotion.to, newPiece)
             })
         }
 
