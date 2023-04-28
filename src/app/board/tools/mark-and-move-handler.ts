@@ -4,7 +4,7 @@ import { HtmlPieceReneder } from "./html-piece-renderer";
 import { PiecesLocations } from "./pieces-locations";
 import { Point } from "./point.model";
 import { Piece } from "./piece.model";
-import { GameService } from "src/app/services/game.service";
+import { GameService, MoveRequestResult } from "src/app/services/game.service";
 import { PossibleMoves } from "src/app/model/possible-moves.model";
 import { Subscription } from "rxjs";
 
@@ -120,7 +120,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
     private tryToMovePiece(from: string, to: string, piece: Piece) {
         console.log("tryToMove")
-        if(this.gameService.requestMove(from, to)){
+        if(this.gameService.requestMove(from, to) === MoveRequestResult.ACCEPTED){
             this.piecesLocations.delete(from)
             this.renderer.renderPieceMovement(to, piece)
             let pieceAtDst = this.piecesLocations.get(to)

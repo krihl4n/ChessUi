@@ -98,6 +98,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.markAndMoveHandler.cleanup()
+    this.dragHandler.cleanup()
   }
 
   initializeBoard() {

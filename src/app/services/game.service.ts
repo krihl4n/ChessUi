@@ -82,10 +82,10 @@ export class GameService {
     return true
   }
 
-  requestMove(from: string, to: string): boolean {
+  requestMove(from: string, to: string): MoveRequestResult {
 
     if (this.moveRequest) {
-      return false
+      return MoveRequestResult.REJECTED
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
@@ -94,14 +94,14 @@ export class GameService {
         console.log("last rank for white")
         this.pawnPromotionService.display(from, to)
         this.canPlayerMove = false
-        return false
+        return MoveRequestResult.DEFERRED
       }
 
       this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: null}
       this.gameControlService.moveRequest(this.playerId, from, to, null)
-      return true
+      return MoveRequestResult.ACCEPTED
     }
-    return false;
+    return MoveRequestResult.REJECTED;
   }
 
   canMove(color: string | null = null) {
@@ -196,4 +196,8 @@ export class GameService {
       this.gameResult = gameResult
     })
   }
+}
+
+export enum MoveRequestResult {
+    ACCEPTED, REJECTED, DEFERRED
 }

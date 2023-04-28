@@ -4,22 +4,41 @@ import { Point } from "./point.model";
 import { BoardSetup } from "./board-setup";
 import { HtmlPieceReneder } from "./html-piece-renderer";
 import { Piece } from "./piece.model";
-import { GameService } from "src/app/services/game.service";
+import { GameService, MoveRequestResult } from "src/app/services/game.service";
+import { Subscription } from "rxjs";
 
 export class PieceDragHandler {
 
   private pieceDraggedFromField: string
   private draggedPiece?: Piece
+  private promotionClosedSubscription: Subscription
+  private moveDeferredPiece?: Piece
 
   constructor(
     private fieldUtils: FieldUtilsService,
     private boardSetup: BoardSetup,
     private piecesLocations: PiecesLocations,
     private htmlPieceRenderer: HtmlPieceReneder,
-    private gameService: GameService) { }
+    private gameService: GameService) {
+
+    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
+
+      console.log("***** D & D PROMOTION CLOSED")
+
+      if(this.moveDeferredPiece) {
+        const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, this.moveDeferredPiece)
+        this.piecesLocations.set(promotion.to, newPiece)
+        this.moveDeferredPiece = undefined
+      }
+    })
+  }
+
+  cleanup() {
+    this.promotionClosedSubscription?.unsubscribe();
+  }
 
   notifyMouseDownEvent(p: Point, piece?: Piece) {
-    if(!this.gameService.canMove(piece?.color)) {
+    if (!this.gameService.canMove(piece?.color)) {
       return
     }
 
@@ -49,15 +68,21 @@ export class PieceDragHandler {
     const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
 
     if (this.draggedPiece) {
-      const moveSuccesful = field && this.gameService.requestMove(this.pieceDraggedFromField, field)
+      const moveSuccesful = field && this.gameService.requestMove(this.pieceDraggedFromField, field) === MoveRequestResult.ACCEPTED
+      const moveDeferred = field && this.gameService.requestMove(this.pieceDraggedFromField, field) === MoveRequestResult.DEFERRED
 
-      if (!moveSuccesful) {
+      if (moveDeferred) {
+        console.log("MOVE DEFERRED") // todo attack
+        this.piecesLocations.delete(this.pieceDraggedFromField)
+        this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
+        this.moveDeferredPiece = this.draggedPiece
+      } else if (!moveSuccesful) {
         this.piecesLocations.set(this.pieceDraggedFromField, this.draggedPiece)
         this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, this.draggedPiece)
       } else {
         this.piecesLocations.delete(this.pieceDraggedFromField)
         let pieceAtDst = this.piecesLocations.get(field)
-        if(pieceAtDst) {
+        if (pieceAtDst) {
           this.piecesLocations.delete(field)
           this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
         }
