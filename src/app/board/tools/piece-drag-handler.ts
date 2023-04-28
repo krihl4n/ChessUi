@@ -73,6 +73,10 @@ export class PieceDragHandler {
 
       if (moveDeferred) {
         console.log("MOVE DEFERRED") // todo attack
+        const pieceAtDst = this.piecesLocations.get(field)
+        if(pieceAtDst) {
+          this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
+        }
         this.piecesLocations.delete(this.pieceDraggedFromField)
         this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
         this.moveDeferredPiece = this.draggedPiece

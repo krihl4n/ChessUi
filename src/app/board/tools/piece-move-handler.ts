@@ -2,12 +2,15 @@ import { PiecesLocations } from "./pieces-locations";
 import { HtmlPieceReneder } from "./html-piece-renderer";
 import { GameService } from "src/app/services/game.service";
 import { PiecePositionUpdate } from "src/app/model/piece-position-update.model";
+import { Subscription } from "rxjs";
 
 export class PieceMoveHandler {
 
+    private positionChangeSubscription: Subscription
+
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
 
-        this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
+        this.positionChangeSubscription = this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
             console.log("***** MOVE HANDLER - POSITION UPDATE")
             if (update.reverted) {
                 this.movePiece(update.primaryMove.to, update.primaryMove.from)
@@ -43,6 +46,10 @@ export class PieceMoveHandler {
                 }
             }
         })
+    }
+
+    cleanup() {
+        this.positionChangeSubscription.unsubscribe()
     }
 
     movePiece(from: string, to: string) {
