@@ -14,6 +14,7 @@ import { MarkAndMoveHandler } from './tools/mark-and-move-handler';
 import { GameService } from '../services/game.service';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameStartEvent } from '../model/game-start-event.model';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -58,10 +59,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   private pieceMoveHandler: PieceMoveHandler
   private markAndMoveHandler: MarkAndMoveHandler
 
+  private fieldOccupationChange: Subscription
+  private gameStartedEvent: Subscription
+
   ngOnInit(): void {
     this.initializeBoard()
 
-    this.gameService.gameStartEvent
+    this.gameStartedEvent = this.gameService.getGameStartedEventObservable()
       .subscribe((gameStartEvent: GameStartEvent) => {
         if (gameStartEvent.playerColor == "BLACK") {
           this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
@@ -71,7 +75,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
         }
 
-        this.gameService.fieldOccupationChange // maybe also get initial position, or use ReplaySubject
+        this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
           .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
             positions.forEach(fieldOccupation => {
               if (fieldOccupation.piece) {
@@ -100,6 +104,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.markAndMoveHandler.cleanup()
     this.dragHandler.cleanup()
     this.pieceMoveHandler.cleanup()
+    this.fieldOccupationChange?.unsubscribe()
+    this.gameStartedEvent?.unsubscribe()
   }
 
   initializeBoard() {

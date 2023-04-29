@@ -10,7 +10,7 @@ export class PieceMoveHandler {
 
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
 
-        this.positionChangeSubscription = this.gameService.piecePositionChange.subscribe((update: PiecePositionUpdate) => {
+        this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable().subscribe((update: PiecePositionUpdate) => {
             console.log("***** MOVE HANDLER - POSITION UPDATE")
             if (update.reverted) {
                 this.movePiece(update.primaryMove.to, update.primaryMove.from)

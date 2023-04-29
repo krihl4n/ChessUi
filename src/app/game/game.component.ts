@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { GameStartEvent } from '../model/game-start-event.model';
 import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
@@ -10,7 +11,9 @@ import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+
+  private waitingForPlayersEventSubscription: Subscription
 
   constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
 
@@ -20,10 +23,14 @@ export class GameComponent implements OnInit {
       this.joinExistingGame(gameId)
     } else {
       this.openDialog()
-      this.gameService.waitingForPlayersEvent.subscribe((gameId: string) => {
+      this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
         this.router.navigate([gameId], {relativeTo: this.route})
       })
     }
+  }
+
+  ngOnDestroy(): void {
+    this.waitingForPlayersEventSubscription?.unsubscribe()
   }
 
   openDialog() {

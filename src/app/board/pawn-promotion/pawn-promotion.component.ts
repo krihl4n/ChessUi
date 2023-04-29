@@ -23,12 +23,11 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.openSubscription = this.pawnPromotionService.promotionOpened.subscribe(() => {
+    this.openSubscription = this.pawnPromotionService.getPromotionOpenedObservable().subscribe(() => {
       console.log("promotion opened")
       window.addEventListener('mousedown', this.listener)
     })
 
-    console.log("--- SUBSCRIBE PAWN_PROM_COMP")
     this.closeSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(() => {
       console.log("promotion closed")
       window.removeEventListener('mousedown', this.listener)
@@ -41,7 +40,6 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log("PAWN_PROM_COMP DESTROY")
     this.closeSubscription?.unsubscribe()
     this.openSubscription?.unsubscribe()
   }

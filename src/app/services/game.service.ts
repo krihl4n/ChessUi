@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { from, Observable, ReplaySubject, Subject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { from, Observable, ReplaySubject, Subject, Subscribable, Subscription } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameResult } from '../model/game-result.model';
@@ -15,7 +15,7 @@ import { PawnPromotionService } from '../pawn-promotion.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameService {
+export class GameService implements OnDestroy {
 
   private piecePositions: FieldOccupation[] // necessary?
   private moveRequest: MoveRequest | null
@@ -29,13 +29,15 @@ export class GameService {
   public colorPreference: string | null
   public lastMove: Move | null // for field marking
 
-  fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
-  piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
-  gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
-  waitingForPlayersEvent: Subject<string> = new Subject()
-  possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
+  private fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
+  private piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
+  private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
+  private waitingForPlayersEvent: Subject<string> = new Subject()
+  private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
   private pawnPromotionClosed: Subject<{promotion: string, from: string, to: string}> = new Subject()
   
+  private promotionClosedSubscription: Subscription
+
   constructor(private gameControlService: GameControlService, private pawnPromotionService: PawnPromotionService) {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
@@ -44,8 +46,7 @@ export class GameService {
     this.subscribeToJoinedExistingGameEvent();
     this.subscribeToGameFinishedEvent();
 
-    console.log("SUBSCRIBE GAME_SERV")
-    this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
+    this.promotionClosedSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
       console.log(promotion)
       this.canPlayerMove = true
       if(promotion){
@@ -56,9 +57,32 @@ export class GameService {
     )
   }
 
-  getPromotionClosedObservable(): Observable<{promotion: string, from: string, to: string}>  {
-    console.log("SUBSCRIBE 1")
+  ngOnDestroy(): void {
+    this.promotionClosedSubscription?.unsubscribe()
+  }
+  
+  getPromotionClosedObservable() {
     return this.pawnPromotionClosed.asObservable();
+  }
+
+  getFieldOccupationChangeObservable() {
+    return this.fieldOccupationChange.asObservable();
+  }
+
+  getPiecePositionChangeObservable() {
+    return this.piecePositionChange.asObservable()
+  }
+
+  getGameStartedEventObservable() {
+    return this.gameStartEvent.asObservable()
+  }
+
+  getWaitinForPlayersObservable() {
+    return this.waitingForPlayersEvent.asObservable()
+  }
+
+  getPossibleMovesUpdateObservable() {
+    return this.possibleMovesUpdate.asObservable()
   }
 
   initiateNewGame(mode: string, colorPreference: string | null, pieceSetup: string) {

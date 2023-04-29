@@ -1,28 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GameService } from '../services/game.service';
 import {Clipboard} from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-start-game-dialog',
   templateUrl: './start-game-dialog.component.html',
   styleUrls: ['./start-game-dialog.component.scss']
 })
-export class StartGameDialogComponent implements OnInit {
+export class StartGameDialogComponent implements OnInit, OnDestroy {
+
+  private gameStartedEventSubscription: Subscription
+  private waitingForPlayersEventSubscription: Subscription
 
   constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard, private router: Router) { }
   
   ngOnInit(): void {
-    this.gameService.waitingForPlayersEvent.subscribe((gameId: string) => {
+    this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
       if(this.isFriendSelected) {
         this.showFirstScreen = false
         this.invitationUrl = window.location.href + "/" + gameId
       }
     })
-    this.gameService.gameStartEvent.subscribe(() => {
+    this.gameStartedEventSubscription = this.gameService.getGameStartedEventObservable().subscribe(() => {
       this.dialogRef.close();
     })
+  }
+
+  ngOnDestroy(): void {
+    this.gameStartedEventSubscription?.unsubscribe()
+    this.waitingForPlayersEventSubscription?.unsubscribe()
   }
 
   invitationUrl = ""

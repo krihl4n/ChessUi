@@ -15,6 +15,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     private displayPossibleMoves = false
     private possibleMoves: PossibleMoves | null
     private promotionClosedSubscription: Subscription
+    private possibleMovesUpdateSubscription: Subscription
 
     constructor(
         private fieldUtils: FieldUtilsService,
@@ -22,7 +23,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         private piecesLocations: PiecesLocations,
         private renderer: HtmlPieceReneder,
         private gameService: GameService) { 
-            this.gameService.possibleMovesUpdate.subscribe((possibleMoves: PossibleMoves) => {
+            this.possibleMovesUpdateSubscription = this.gameService.getPossibleMovesUpdateObservable().subscribe((possibleMoves: PossibleMoves) => {
                 this.possibleMoves = possibleMoves
             })
 
@@ -49,6 +50,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
         cleanup() {
             this.promotionClosedSubscription?.unsubscribe()
+            this.possibleMovesUpdateSubscription?.unsubscribe()
         }
 
     notifyMouseDownEvent(point: Point) {

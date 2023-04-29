@@ -13,7 +13,7 @@ export class PawnPromotionService {
 
   private shouldDisplay = false
   private promotionSelected : string | null
-  promotionOpened: Subject<null> = new Subject()
+  private promotionOpened: Subject<null> = new Subject()
   private promotionClosed: Subject<{promotion: string, from: string, to: string} | null> = new Subject()
 
   private from: string = ""
@@ -62,8 +62,11 @@ export class PawnPromotionService {
     }
   }
 
-  getPromotionClosedObservable(): Observable<{promotion: string, from: string, to: string} | null> {
-    console.log("------------SUBSCRIBE")
+  getPromotionOpenedObservable() {
+    return this.promotionOpened.asObservable()
+  }
+
+  getPromotionClosedObservable() {
     return this.promotionClosed.asObservable()
   }
 }
