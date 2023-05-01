@@ -89,6 +89,23 @@ export class HtmlPieceReneder {
      return newPiece
   }
 
+  renderPieceChangeWithPieceMovement(startingField: string, destinationField: string, piece: Piece) {
+    const newPiece = new Piece("white", "pawn", this.fieldSize)
+    this.preRenderPieces([newPiece])
+    this.renderPieceAtField(startingField, newPiece)
+    this.deletePieceNow(piece)
+
+    this.setElementAnimation(newPiece);
+    this.moveElementToTop(newPiece);
+    this.setElementLocation(newPiece.htmlElement, this.getPieceLocationAtField(destinationField, newPiece))
+
+    setTimeout(() => {
+       this.clearElementAnimation(newPiece);
+       this.moveElementToBackground(newPiece)
+    }, 600)
+     return newPiece
+  }
+
   deletePiece(piece: Piece, field: string) {
     setTimeout(() => {
       this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')

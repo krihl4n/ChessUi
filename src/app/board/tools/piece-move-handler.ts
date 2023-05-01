@@ -13,7 +13,11 @@ export class PieceMoveHandler {
         this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable().subscribe((update: PiecePositionUpdate) => {
             console.log("***** MOVE HANDLER - POSITION UPDATE")
             if (update.reverted) {
-                this.movePiece(update.primaryMove.to, update.primaryMove.from)
+                if(update.pawnPromotion != null) {
+                    this.pieceChangeAndMove(update.primaryMove.to, update.primaryMove.from)
+                } else {
+                    this.movePiece(update.primaryMove.to, update.primaryMove.from)
+                }
                 if (update.pieceCapture) {
                     const piece = this.htmlPieceRenderer.renderPiece(
                         update.pieceCapture.capturedPiece.color,
@@ -81,6 +85,19 @@ export class PieceMoveHandler {
         if (pieceAtDst) {
             this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
         }
+        this.piecesLocations.delete(from)
+        this.piecesLocations.delete(to)
+        this.piecesLocations.set(to, newPiece)
+    }
+
+    pieceChangeAndMove(from: string, to: string) {
+        const piece = this.piecesLocations.get(from)
+        if (!piece) {
+            console.log("no piece at " + from)
+            return
+        }
+
+        const newPiece = this.htmlPieceRenderer.renderPieceChangeWithPieceMovement(from, to, piece)
         this.piecesLocations.delete(from)
         this.piecesLocations.delete(to)
         this.piecesLocations.set(to, newPiece)
