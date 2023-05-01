@@ -5,7 +5,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 import { AppComponent } from './app.component';
-import { CapturesComponent } from './captures/captures.component';
 import { GameFinishedDialogComponent } from './game-finished-dialog/game-finished-dialog.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BoardComponent } from './board/board.component';
@@ -18,7 +17,6 @@ import { PawnPromotionComponent } from './board/pawn-promotion/pawn-promotion.co
 @NgModule({
   declarations: [
     AppComponent,
-    CapturesComponent,
     GameFinishedDialogComponent,
     BoardComponent,
     StartGameDialogComponent,
