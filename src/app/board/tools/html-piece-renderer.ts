@@ -11,7 +11,6 @@ export class HtmlPieceReneder {
     private onPieceClickListener: any) { }
 
   renderPiece(color: string, type: string, field: string): Piece {
-    console.log("renderPiece")
     const piece = new Piece(color.toLowerCase(), type.toLowerCase(), this.fieldSize)
     this.preRenderPieces([piece])
     this.renderPieceAtField(field, piece)
@@ -19,7 +18,6 @@ export class HtmlPieceReneder {
   }
 
   preRenderPieces(pieces: Piece[]) {
-    console.log("preRenderPieces")
     for(let piece of pieces) {
       const htmlElement = this.renderer.createElement('img')
       this.renderer.setAttribute(htmlElement, 'hidden', 'true')
@@ -48,7 +46,6 @@ export class HtmlPieceReneder {
 
   renderPieceAtField(field: string, piece: Piece) {
     //this.createElementIfNotExists(piece)
-    console.log("renderPieceAtField")
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece))
@@ -56,7 +53,6 @@ export class HtmlPieceReneder {
   }
 
   renderPieceMovement(destinationField: string, piece: Piece) {
-    console.log("renderPieceMovement")
     this.setElementAnimation(piece);
     this.moveElementToTop(piece);
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
@@ -66,20 +62,18 @@ export class HtmlPieceReneder {
     }, 600)
   }
 
-  renderPieceChange(field: string, piece: Piece) {
-    console.log("renderPieceChange")
+  renderPieceChange(field: string, newPieceType: string, piece: Piece) {
     this.deletePieceNow(piece)
-    const newPiece = this.renderPiece("white", "queen", field)
+    const newPiece = this.renderPiece("white", newPieceType, field)
     return newPiece
   }
 
-  renderPieceMovementWithPieceChange(destinationField: string, piece: Piece) {
-    console.log("renderPieceMovementWithPieceChange")
+  renderPieceMovementWithPieceChange(destinationField: string, piece: Piece, newPieceType: string, ) {
     this.setElementAnimation(piece);
     this.moveElementToTop(piece);
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
 
-    const newPiece = new Piece("white", "queen", this.fieldSize)
+    const newPiece = new Piece("white", newPieceType, this.fieldSize)
     this.preRenderPieces([newPiece])
     setTimeout(() => {
        this.clearElementAnimation(piece);

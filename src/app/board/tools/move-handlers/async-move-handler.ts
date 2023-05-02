@@ -26,7 +26,7 @@ export class AsyncMoveHandler {
 
     private handlePiecePositionUpdate(update: PiecePositionUpdate) {
         if (update.pawnPromotion != null) {
-            this.moveAndChangePiece(update.primaryMove.from, update.primaryMove.to)
+            this.moveAndChangePiece(update.primaryMove.from, update.primaryMove.to, update.pawnPromotion)
         } else {
             this.movePiece(update.primaryMove.from, update.primaryMove.to)
         }
@@ -84,7 +84,7 @@ export class AsyncMoveHandler {
         this.piecesLocations.set(to, piece)
     }
 
-    private moveAndChangePiece(from: string, to: string) {
+    private moveAndChangePiece(from: string, to: string, promotion: string) {
         const piece = this.piecesLocations.get(from)
         if (!piece) {
             console.log("no piece at " + from)
@@ -92,7 +92,7 @@ export class AsyncMoveHandler {
         }
 
         const pieceAtDst = this.piecesLocations.get(to)
-        const newPiece = this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece)
+        const newPiece = this.htmlPieceRenderer.renderPieceMovementWithPieceChange(to, piece, promotion.toLowerCase()) // todo commonize casing?
         if (pieceAtDst) {
             this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
         }

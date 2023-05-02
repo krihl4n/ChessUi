@@ -21,12 +21,12 @@ export class PieceDragHandler {
     private htmlPieceRenderer: HtmlPieceReneder,
     private gameService: GameService) {
 
-    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
+    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => { // todo type
 
       console.log("***** D & D PROMOTION CLOSED")
       // todo unsuccesful cases? senario with not selecting promotion at all
       if (this.moveDeferredPiece) {
-        const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, this.moveDeferredPiece)
+        const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, promotion.promotion, this.moveDeferredPiece)
         this.piecesLocations.set(promotion.to, newPiece)
         this.moveDeferredPiece = undefined
       }

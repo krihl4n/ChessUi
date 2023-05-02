@@ -22,21 +22,19 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
   private closeSubscription: Subscription
 
   ngOnInit(): void {
-
     this.openSubscription = this.pawnPromotionService.getPromotionOpenedObservable().subscribe(() => {
       console.log("promotion opened")
-      window.addEventListener('mousedown', this.listener)
+      window.addEventListener('mouseup', this.listener)
     })
 
     this.closeSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(() => {
       console.log("promotion closed")
-      window.removeEventListener('mousedown', this.listener)
+      window.removeEventListener('mouseup', this.listener)
     })
 
-
-    window.addEventListener('mousedown', (e: MouseEvent) => { // subscribe only when visible, unsubscribe when closed
-      //this.pawnPromotionService.closeSelection()
-    }) 
+    // window.addEventListener('mousedown', (e: MouseEvent) => { // subscribe only when visible, unsubscribe when closed
+    //   //this.pawnPromotionService.closeSelection()
+    // }) 
   }
 
   ngOnDestroy(): void {
@@ -45,7 +43,14 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
   }
 
   listener = () => {
-    this.pawnPromotionService.closeSelection()
+    console.log("listener trigerred")
+    this.pawnPromotionService.closeSelection(null)
+  }
+
+  promotionSelected(event: Event, promotion: string) {
+    console.log("************ PROMOTION SELECTED")
+    console.log(promotion)
+    this.pawnPromotionService.closeSelection(promotion)
   }
 
   fieldSize() {

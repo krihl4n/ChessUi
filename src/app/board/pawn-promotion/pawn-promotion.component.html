@@ -1,8 +1,8 @@
 <div *ngIf="visible()" id="wrapper" [style.width.px]="width" [style.height.px]="height">
     <div [style.margin-left.px]="getSelectorLocation()">
-        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;"></div>
-        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;"></div>
-        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;"></div>
-        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;"></div>
+        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;" (mouseup)="promotionSelected($event, 'queen')">Q</div>
+        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;" (mouseup)="promotionSelected($event, 'knight')">K</div>
+        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;" (mouseup)="promotionSelected($event, 'rook')">R</div>
+        <div [style.height.px]="fieldSize()" [style.width.px]="fieldSize()" style="background-color: white; border: 2px solid red;" (mouseup)="promotionSelected($event, 'bishop')">B</div>
     </div>
 </div>

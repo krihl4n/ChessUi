@@ -47,7 +47,6 @@ export class GameService implements OnDestroy {
     this.subscribeToGameFinishedEvent();
 
     this.promotionClosedSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
-      console.log(promotion)
       this.canPlayerMove = true
       if(promotion){
         this.pawnPromotionClosed.next(promotion)
@@ -99,7 +98,6 @@ export class GameService implements OnDestroy {
   }
 
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
-    console.log("move with promotion: " + pawnPromotion)
     this.pawnPromotionService.moveWithPromotionPerformed()
     this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: pawnPromotion }
     this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion)
@@ -115,7 +113,6 @@ export class GameService implements OnDestroy {
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
 
       if(this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)){ 
-        console.log("last rank for white")
         this.pawnPromotionService.display(from, to)
         this.canPlayerMove = false
         return MoveRequestResult.DEFERRED

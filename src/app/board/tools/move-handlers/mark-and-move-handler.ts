@@ -27,6 +27,8 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         })
         this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
             console.log("***** M & M PROMOTION CLOSED")
+            this.markedField = undefined // todo extract field marking
+            this.previouslyMarkedField = undefined
             const piece = this.piecesLocations.get(promotion.from)
             if (!piece) {
                 console.log("no piece at " + promotion.from)
@@ -38,7 +40,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
                 this.renderer.deletePiece(pieceAtDst, promotion.to)
             }
 
-            const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece)
+            const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece, promotion.promotion)
             this.piecesLocations.delete(promotion.from)
             this.piecesLocations.set(promotion.to, newPiece)
         })
