@@ -12,7 +12,6 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
     private markedField?: string
     private previouslyMarkedField?: string
-    private displayPossibleMoves = false
     private possibleMoves: PossibleMoves | null
     private promotionClosedSubscription: Subscription
     private possibleMovesUpdateSubscription: Subscription
@@ -22,39 +21,36 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         private boardSetup: BoardSetup,
         private piecesLocations: PiecesLocations,
         private renderer: HtmlPieceReneder,
-        private gameService: GameService) { 
-            this.possibleMovesUpdateSubscription = this.gameService.getPossibleMovesUpdateObservable().subscribe((possibleMoves: PossibleMoves) => {
-                this.possibleMoves = possibleMoves
-            })
+        private gameService: GameService) {
+        this.possibleMovesUpdateSubscription = this.gameService.getPossibleMovesUpdateObservable().subscribe((possibleMoves: PossibleMoves) => {
+            this.possibleMoves = possibleMoves
+        })
+        this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
+            console.log("***** M & M PROMOTION CLOSED")
+            const piece = this.piecesLocations.get(promotion.from)
+            if (!piece) {
+                console.log("no piece at " + promotion.from)
+                return
+            }
 
-            console.log("--- M & M SUBSCRIBE")
-            this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: {promotion: string, from: string, to: string}) => {
-                console.log("***** M & M PROMOTION CLOSED")
-                const piece = this.piecesLocations.get(promotion.from)
-                if (!piece) {
-                    console.log("no piece at " + promotion.from)
-                    return
-                }
-        
-                const pieceAtDst = this.piecesLocations.get(promotion.to)
-                
-                if (pieceAtDst) {
-                    this.renderer.deletePiece(pieceAtDst, promotion.to)
-                }
-                
-                const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece)
-                this.piecesLocations.delete(promotion.from)
-                this.piecesLocations.set(promotion.to, newPiece)
-            })
-        }
+            const pieceAtDst = this.piecesLocations.get(promotion.to)
+            if (pieceAtDst) {
+                this.renderer.deletePiece(pieceAtDst, promotion.to)
+            }
 
-        cleanup() {
-            this.promotionClosedSubscription?.unsubscribe()
-            this.possibleMovesUpdateSubscription?.unsubscribe()
-        }
+            const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece)
+            this.piecesLocations.delete(promotion.from)
+            this.piecesLocations.set(promotion.to, newPiece)
+        })
+    }
+
+    cleanup() {
+        this.promotionClosedSubscription?.unsubscribe()
+        this.possibleMovesUpdateSubscription?.unsubscribe()
+    }
 
     notifyMouseDownEvent(point: Point) {
-        if(!this.gameService.canMove()) {
+        if (!this.gameService.canMove()) {
             return
         }
 
@@ -71,14 +67,12 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     notifyMouseUpEvent(point: Point) {
-        if(!this.gameService.canMove()) {
+        if (!this.gameService.canMove()) {
             return
         }
 
         console.log("***** M & M MOUSE UP")
-        
         const field = this.fieldUtils.determineFieldAtPos(point, this.boardSetup.fieldSize)
-
         if (field && this.previouslyMarkedField && field != this.previouslyMarkedField) {
             const pieceToMove = this.piecesLocations.get(this.previouslyMarkedField)
             if (pieceToMove && this.gameService.canMove(pieceToMove.color)) {
@@ -106,10 +100,10 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     fieldIsMarkedForPossibleMove(field: string): boolean {
-        if(!this.possibleMoves) {
+        if (!this.possibleMoves) {
             return false
         }
-        if(this.possibleMoves.from == this.markedField) {
+        if (this.possibleMoves.from == this.markedField) {
             return this.possibleMoves.to.includes(field)
         }
         return false
@@ -121,12 +115,11 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     private tryToMovePiece(from: string, to: string, piece: Piece) {
-        console.log("tryToMove")
-        if(this.gameService.requestMove(from, to) === MoveRequestResult.ACCEPTED){
+        if (this.gameService.requestMove(from, to) === MoveRequestResult.ACCEPTED) {
             this.piecesLocations.delete(from)
             this.renderer.renderPieceMovement(to, piece)
             let pieceAtDst = this.piecesLocations.get(to)
-            if(pieceAtDst) {
+            if (pieceAtDst) {
                 this.renderer.deletePiece(pieceAtDst, to)
             }
             this.piecesLocations.set(to, piece)
