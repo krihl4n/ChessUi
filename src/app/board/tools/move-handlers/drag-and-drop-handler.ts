@@ -24,7 +24,7 @@ export class PieceDragHandler {
     this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
 
       console.log("***** D & D PROMOTION CLOSED")
-      // todo unsuccesful cases?
+      // todo unsuccesful cases? senario with not selecting promotion at all
       if (this.moveDeferredPiece) {
         const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, this.moveDeferredPiece)
         this.piecesLocations.set(promotion.to, newPiece)
@@ -77,23 +77,9 @@ export class PieceDragHandler {
 
     const result = this.gameService.requestMove(this.pieceDraggedFromField, field)
     if (result === MoveRequestResult.DEFERRED) {
-      // this.piecesLocations.delete(this.pieceDraggedFromField)
-      // const pieceAtDst = this.piecesLocations.get(field)
-      // if (pieceAtDst) {
-      //   this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
-      // }
-      // this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
-
       this.displayPieceAtField(field, this.draggedPiece)
       this.moveDeferredPiece = this.draggedPiece
     } else if (result === MoveRequestResult.ACCEPTED) {
-      // this.piecesLocations.delete(this.pieceDraggedFromField)
-      // let pieceAtDst = this.piecesLocations.get(field)
-      // if (pieceAtDst) {
-      //   this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
-      // }
-      // this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
-
       this.displayPieceAtField(field, this.draggedPiece)
       this.piecesLocations.set(field, this.draggedPiece)
     } else {
@@ -116,6 +102,5 @@ export class PieceDragHandler {
     this.piecesLocations.set(this.pieceDraggedFromField, draggedPiece)
     this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, draggedPiece)
     this.draggedPiece = undefined
-
   }
 }
