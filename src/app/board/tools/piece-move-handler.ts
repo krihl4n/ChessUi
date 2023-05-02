@@ -3,60 +3,73 @@ import { HtmlPieceReneder } from "./html-piece-renderer";
 import { GameService } from "src/app/services/game.service";
 import { PiecePositionUpdate } from "src/app/model/piece-position-update.model";
 import { Subscription } from "rxjs";
+import { Piece } from "./piece.model";
 
 export class PieceMoveHandler {
 
     private positionChangeSubscription: Subscription
 
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
-
-        this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable().subscribe((update: PiecePositionUpdate) => {
-            console.log("***** MOVE HANDLER - POSITION UPDATE")
-            if (update.reverted) {
-                if(update.pawnPromotion != null) {
-                    this.pieceChangeAndMove(update.primaryMove.to, update.primaryMove.from)
+        this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
+            .subscribe((update: PiecePositionUpdate) => {
+                console.log("***** M&M HANDLER - POSITION UPDATE")
+                if (!update.reverted) {
+                    this.handlePiecePositionUpdate(update)
                 } else {
-                    this.movePiece(update.primaryMove.to, update.primaryMove.from)
+                    this.handleRevertedPiecePositionUpdate(update)
                 }
-                if (update.pieceCapture) {
-                    const piece = this.htmlPieceRenderer.renderPiece(
-                        update.pieceCapture.capturedPiece.color,
-                        update.pieceCapture.capturedPiece.type,
-                        update.pieceCapture.field)
-                    this.piecesLocations.set(update.pieceCapture.field, piece)
-                }
-            } else {
-                if (update.pawnPromotion != null) {
-                    this.movePieceAndPromote(update.primaryMove.from, update.primaryMove.to)
-                } else {
-                    this.movePiece(update.primaryMove.from, update.primaryMove.to)
-                }
-
-            }
-
-            if (update.secondaryMove) { // castling
-                if (update.reverted) {
-                    this.movePiece(update.secondaryMove.to, update.secondaryMove.from)
-                } else {
-                    this.movePiece(update.secondaryMove.from, update.secondaryMove.to)
-                }
-            }
-
-            if (update.pieceCapture && update.primaryMove.to != update.pieceCapture.field && !update.reverted) { // en passant
-                const pieceAtDst = this.piecesLocations.get(update.pieceCapture.field)
-                if (pieceAtDst) {
-                    this.piecesLocations.delete(update.pieceCapture.field)
-                    this.htmlPieceRenderer.deletePiece(pieceAtDst, update.pieceCapture.field)
-                }
-            }
-        })
+            })
     }
 
     cleanup() {
-        this.positionChangeSubscription.unsubscribe()
+        this.positionChangeSubscription?.unsubscribe()
     }
 
-    movePiece(from: string, to: string) {
+    private handlePiecePositionUpdate(update: PiecePositionUpdate) {
+        if (update.pawnPromotion != null) {
+            this.moveAndChangePiece(update.primaryMove.from, update.primaryMove.to)
+        } else {
+            this.movePiece(update.primaryMove.from, update.primaryMove.to)
+        }
+
+        if (update.secondaryMove) {
+            this.movePiece(update.secondaryMove.from, update.secondaryMove.to)
+        }
+
+        if (update.pieceCapture && this.isEnPassantAttack(update)) {
+            const pieceAtDst = this.piecesLocations.get(update.pieceCapture.field) // todo also handle en passant in m&m and d&d handlers?
+            if (pieceAtDst) {
+                this.piecesLocations.delete(update.pieceCapture.field)
+                this.htmlPieceRenderer.deletePiece(pieceAtDst, update.pieceCapture.field)
+            }
+        }
+    }
+
+    private handleRevertedPiecePositionUpdate(update: PiecePositionUpdate) {
+        if (update.pawnPromotion) {
+            this.changeAndMovePiece(update.primaryMove.to, update.primaryMove.from)
+        } else {
+            this.movePiece(update.primaryMove.to, update.primaryMove.from)
+        }
+
+        if (update.pieceCapture) {
+            const piece = this.htmlPieceRenderer.renderPiece(
+                update.pieceCapture.capturedPiece.color,
+                update.pieceCapture.capturedPiece.type,
+                update.pieceCapture.field)
+            this.piecesLocations.set(update.pieceCapture.field, piece)
+        }
+
+        if (update.secondaryMove) {
+            this.movePiece(update.secondaryMove.to, update.secondaryMove.from)
+        }
+    }
+
+    private isEnPassantAttack(update: PiecePositionUpdate) {
+        return update.pieceCapture && update.primaryMove.to != update.pieceCapture.field
+    }
+
+    private movePiece(from: string, to: string) {
         const piece = this.piecesLocations.get(from)
         if (!piece) {
             console.log("no piece at " + from)
@@ -69,11 +82,10 @@ export class PieceMoveHandler {
             this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
         }
         this.piecesLocations.delete(from)
-        this.piecesLocations.delete(to)
         this.piecesLocations.set(to, piece)
     }
 
-    movePieceAndPromote(from: string, to: string) {
+    private moveAndChangePiece(from: string, to: string) {
         const piece = this.piecesLocations.get(from)
         if (!piece) {
             console.log("no piece at " + from)
@@ -86,11 +98,10 @@ export class PieceMoveHandler {
             this.htmlPieceRenderer.deletePiece(pieceAtDst, to)
         }
         this.piecesLocations.delete(from)
-        this.piecesLocations.delete(to)
         this.piecesLocations.set(to, newPiece)
     }
 
-    pieceChangeAndMove(from: string, to: string) {
+    private changeAndMovePiece(from: string, to: string) {
         const piece = this.piecesLocations.get(from)
         if (!piece) {
             console.log("no piece at " + from)
@@ -99,7 +110,6 @@ export class PieceMoveHandler {
 
         const newPiece = this.htmlPieceRenderer.renderPieceChangeWithPieceMovement(from, to, piece)
         this.piecesLocations.delete(from)
-        this.piecesLocations.delete(to)
         this.piecesLocations.set(to, newPiece)
     }
 }
