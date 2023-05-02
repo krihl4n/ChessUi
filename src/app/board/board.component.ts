@@ -6,15 +6,15 @@ import { Point } from './tools/point.model';
 import { BoardSetup } from './tools/board-setup';
 import { CoordinationsUtil } from './tools/coordinations-utils';
 import { HtmlPieceReneder } from './tools/html-piece-renderer';
-import { PieceDragHandler } from './tools/piece-drag-handler';
-import { PieceMoveHandler } from './tools/piece-move-handler';
+import { PieceDragHandler } from './tools/move-handlers/drag-and-drop-handler';
+import { AsyncMoveHandler } from './tools/move-handlers/async-move-handler';
 import { Piece } from './tools/piece.model';
 import { Pieces } from './tools/pieces';
-import { MarkAndMoveHandler } from './tools/mark-and-move-handler';
+import { MarkAndMoveHandler } from './tools/move-handlers/mark-and-move-handler';
 import { GameService } from '../services/game.service';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameStartEvent } from '../model/game-start-event.model';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -56,7 +56,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private pieces = new Pieces()
   private dragHandler: PieceDragHandler;
-  private pieceMoveHandler: PieceMoveHandler
+  private pieceMoveHandler: AsyncMoveHandler
   private markAndMoveHandler: MarkAndMoveHandler
 
   private fieldOccupationChange: Subscription
@@ -117,7 +117,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize, this)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
-    this.pieceMoveHandler = new PieceMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
+    this.pieceMoveHandler = new AsyncMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
     this.pieces.initialize(this.boardSetup.fieldSize)

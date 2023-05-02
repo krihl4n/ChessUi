@@ -1,9 +1,9 @@
-import { BoardSetup } from "./board-setup";
-import { FieldUtilsService } from "./field-utils.service";
-import { HtmlPieceReneder } from "./html-piece-renderer";
-import { PiecesLocations } from "./pieces-locations";
-import { Point } from "./point.model";
-import { Piece } from "./piece.model";
+import { BoardSetup } from "../board-setup";
+import { FieldUtilsService } from "../field-utils.service";
+import { HtmlPieceReneder } from "../html-piece-renderer";
+import { PiecesLocations } from "../pieces-locations";
+import { Point } from "../point.model";
+import { Piece } from "../piece.model";
 import { GameService, MoveRequestResult } from "src/app/services/game.service";
 import { PossibleMoves } from "src/app/model/possible-moves.model";
 import { Subscription } from "rxjs";

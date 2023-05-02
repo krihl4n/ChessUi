@@ -1,11 +1,10 @@
-import { PiecesLocations } from "./pieces-locations";
-import { HtmlPieceReneder } from "./html-piece-renderer";
+import { PiecesLocations } from "../pieces-locations";
+import { HtmlPieceReneder } from "../html-piece-renderer";
 import { GameService } from "src/app/services/game.service";
 import { PiecePositionUpdate } from "src/app/model/piece-position-update.model";
 import { Subscription } from "rxjs";
-import { Piece } from "./piece.model";
 
-export class PieceMoveHandler {
+export class AsyncMoveHandler {
 
     private positionChangeSubscription: Subscription
 
