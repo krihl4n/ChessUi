@@ -24,8 +24,8 @@ export class PieceDragHandler {
     this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
 
       console.log("***** D & D PROMOTION CLOSED")
-
-      if(this.moveDeferredPiece) {
+      // todo unsuccesful cases?
+      if (this.moveDeferredPiece) {
         const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, this.moveDeferredPiece)
         this.piecesLocations.set(promotion.to, newPiece)
         this.moveDeferredPiece = undefined
@@ -65,36 +65,57 @@ export class PieceDragHandler {
   }
 
   notifyMouseUpEvent(p: Point) {
-    const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
-
-    if (this.draggedPiece) {
-      const moveSuccesful = field && this.gameService.requestMove(this.pieceDraggedFromField, field) === MoveRequestResult.ACCEPTED
-      const moveDeferred = field && this.gameService.requestMove(this.pieceDraggedFromField, field) === MoveRequestResult.DEFERRED
-
-      if (moveDeferred) {
-        console.log("MOVE DEFERRED") // todo attack
-        const pieceAtDst = this.piecesLocations.get(field)
-        if(pieceAtDst) {
-          this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
-        }
-        this.piecesLocations.delete(this.pieceDraggedFromField)
-        this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
-        this.moveDeferredPiece = this.draggedPiece
-      } else if (!moveSuccesful) {
-        this.piecesLocations.set(this.pieceDraggedFromField, this.draggedPiece)
-        this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, this.draggedPiece)
-      } else {
-        this.piecesLocations.delete(this.pieceDraggedFromField)
-        let pieceAtDst = this.piecesLocations.get(field)
-        if (pieceAtDst) {
-          this.piecesLocations.delete(field)
-          this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
-        }
-        this.piecesLocations.set(field, this.draggedPiece)
-        this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
-      }
-
-      this.draggedPiece = undefined
+    if (!this.draggedPiece) {
+      return
     }
+
+    const field = this.fieldUtils.determineFieldAtPos(p, this.boardSetup.fieldSize)
+    if (!field) {
+      this.returnToOriginalPosition(this.draggedPiece)
+      return
+    }
+
+    const result = this.gameService.requestMove(this.pieceDraggedFromField, field)
+    if (result === MoveRequestResult.DEFERRED) {
+      // this.piecesLocations.delete(this.pieceDraggedFromField)
+      // const pieceAtDst = this.piecesLocations.get(field)
+      // if (pieceAtDst) {
+      //   this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
+      // }
+      // this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
+
+      this.displayPieceAtField(field, this.draggedPiece)
+      this.moveDeferredPiece = this.draggedPiece
+    } else if (result === MoveRequestResult.ACCEPTED) {
+      // this.piecesLocations.delete(this.pieceDraggedFromField)
+      // let pieceAtDst = this.piecesLocations.get(field)
+      // if (pieceAtDst) {
+      //   this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
+      // }
+      // this.htmlPieceRenderer.renderPieceAtField(field, this.draggedPiece)
+
+      this.displayPieceAtField(field, this.draggedPiece)
+      this.piecesLocations.set(field, this.draggedPiece)
+    } else {
+      this.returnToOriginalPosition(this.draggedPiece)
+    }
+
+    this.draggedPiece = undefined
+  }
+
+  private displayPieceAtField(field: string, draggedPiece: Piece) {
+    this.piecesLocations.delete(this.pieceDraggedFromField)
+    let pieceAtDst = this.piecesLocations.get(field)
+    if (pieceAtDst) {
+      this.htmlPieceRenderer.deletePieceNow(pieceAtDst)
+    }
+    this.htmlPieceRenderer.renderPieceAtField(field, draggedPiece)
+  }
+
+  private returnToOriginalPosition(draggedPiece: Piece) {
+    this.piecesLocations.set(this.pieceDraggedFromField, draggedPiece)
+    this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, draggedPiece)
+    this.draggedPiece = undefined
+
   }
 }
