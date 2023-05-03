@@ -12,41 +12,41 @@ export class FieldUtilsService {
 
   fieldSize: number;
   private boardFlipped: boolean;
-  
+
   initialize(boardFlipped: boolean, fieldSize: number) { // figure out a better way (maybe pass boardSetup object)
     this.fieldSize = fieldSize;
     this.boardFlipped = boardFlipped;
   }
 
-  determinePieceLocationAtField(field: string, fieldSize: number, piece: Piece) : {x: number, y: number} {
+  determinePieceLocationAtField(field: string, fieldSize: number, piece: Piece): { x: number, y: number } {
     const fieldLocation = this.determineFieldLocation(field, fieldSize)
     return {
       x: (fieldLocation.x + this.fieldSize / 2) - piece.htmlElement.width / 2,
-      y: fieldLocation.y + this.fieldSize* 0.96 - piece.htmlElement.height
-    }   
+      y: fieldLocation.y + this.fieldSize * 0.96 - piece.htmlElement.height
+    }
   }
 
-  determineFieldLocation(field: string, fieldSize: number): {x: number, y: number} {
+  determineFieldLocation(field: string, fieldSize: number): { x: number, y: number } {
     const col = field.charAt(0)
     let columnsCopy = this.columns.slice()
     if (this.boardFlipped) {
       columnsCopy.reverse();
     }
     const x = columnsCopy.indexOf(col) * fieldSize
-    
+
     const row = field.charAt(1)
     let rowsCopy = this.rows.slice()
     if (this.boardFlipped) {
       rowsCopy.reverse();
     }
     const y = rowsCopy.indexOf(row) * fieldSize
-    
-    return {x, y}
+
+    return { x, y }
   }
 
   determineFieldAtPos(point: Point, fieldSize: number = this.fieldSize): string | undefined {
     const field = this.determineColAtPos(point.x, fieldSize) + this.determineRowAtPos(point.y, fieldSize);
-    if(field.includes('x')) {
+    if (field.includes('x')) {
       return
     }
     return field
@@ -84,5 +84,14 @@ export class FieldUtilsService {
       }
     }
     return "x";
+  }
+
+  getColumnIndex(field: string) {
+    let columnsCopy = this.columns.slice()
+    if (this.boardFlipped) {
+      return columnsCopy.reverse().indexOf(field[0])
+    } else {
+      return columnsCopy.indexOf(field[0])
+    }
   }
 }

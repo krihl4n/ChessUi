@@ -52,7 +52,7 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
   }
 
   getSelectorLocation() {
-    return this.fieldSize() * 5
+    return this.fieldSize() * this.fieldUtils.getColumnIndex(this.pawnPromotionService.getDestingationField())
   }
 
   visible() {

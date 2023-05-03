@@ -41,12 +41,16 @@ export class PawnPromotionService {
     this.promotionSelected = promotionSelected
 
     let promotion = null
-    
+
     if(promotionSelected) {
       promotion = { promotion: promotionSelected, from: this.from, to: this.to } 
     }
 
     this.promotionClosed.next(promotion)
+  }
+
+  getDestingationField() {
+    return this.to
   }
 
   private hasPlayerSelectedPromotion() {

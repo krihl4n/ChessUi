@@ -88,9 +88,7 @@ export class PieceDragHandler {
         attackedPiece: this.piecesLocations.get(field),
         toField: field
       }
-      //this.moveDeferredAttackedPiece = this.piecesLocations.get(field)
       this.displayPieceAtField(field, this.draggedPiece)
-      //this.moveDeferredPiece = this.draggedPiece
     } else if (result === MoveRequestResult.ACCEPTED) {
       this.displayPieceAtField(field, this.draggedPiece)
       this.piecesLocations.set(field, this.draggedPiece)
