@@ -101,7 +101,7 @@ export class GameService implements OnDestroy {
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     this.pawnPromotionService.moveWithPromotionPerformed()
     this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: pawnPromotion }
-    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion)
+    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion) // TODO what happens if move failes on the backend side?
     return true
   }
 
@@ -112,7 +112,6 @@ export class GameService implements OnDestroy {
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
-
       if (this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)) {
         this.pawnPromotionService.display(from, to)
         this.canPlayerMove = false
@@ -120,7 +119,7 @@ export class GameService implements OnDestroy {
       }
 
       this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: null }
-      this.gameControlService.moveRequest(this.playerId, from, to, null)
+      this.gameControlService.moveRequest(this.playerId, from, to, null) // TODO what happens if move failes on the backend side?
       return MoveRequestResult.ACCEPTED
     }
     return MoveRequestResult.REJECTED;
