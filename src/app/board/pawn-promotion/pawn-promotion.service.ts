@@ -33,16 +33,23 @@ export class PawnPromotionService {
     this.shouldDisplay = true
   }
 
-  closeSelection(selection: string | null) {
+  closeSelection(promotionSelected: string | null) {
     if (!this.shouldDisplay) {
       return
     }
     this.shouldDisplay = false
-    this.promotionSelected = selection || "queen" // todo nullability
-    this.promotionClosed.next({ promotion: this.promotionSelected, from: this.from, to: this.to })
+    this.promotionSelected = promotionSelected
+
+    let promotion = null
+    
+    if(promotionSelected) {
+      promotion = { promotion: promotionSelected, from: this.from, to: this.to } 
+    }
+
+    this.promotionClosed.next(promotion)
   }
 
-  hasPlayerSelectedPromotion() {
+  private hasPlayerSelectedPromotion() {
     return this.promotionSelected
   }
 

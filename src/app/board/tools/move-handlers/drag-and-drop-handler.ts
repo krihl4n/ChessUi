@@ -6,13 +6,14 @@ import { HtmlPieceReneder } from "../html-piece-renderer";
 import { Piece } from "../piece.model";
 import { GameService, MoveRequestResult } from "src/app/services/game.service";
 import { Subscription } from "rxjs";
+import { Promotion } from "../../pawn-promotion/promotion.model";
 
 export class PieceDragHandler {
 
   private pieceDraggedFromField: string
   private draggedPiece?: Piece
   private promotionClosedSubscription: Subscription
-  private moveDeferredPiece?: Piece
+  private deferredMove: DeferredMove | undefined
 
   constructor(
     private fieldUtils: FieldUtilsService,
@@ -21,14 +22,19 @@ export class PieceDragHandler {
     private htmlPieceRenderer: HtmlPieceReneder,
     private gameService: GameService) {
 
-    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => { // todo type
-
+    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: Promotion | null) => {
       console.log("***** D & D PROMOTION CLOSED")
-      // todo unsuccesful cases? senario with not selecting promotion at all
-      if (this.moveDeferredPiece) {
-        const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, promotion.promotion, this.moveDeferredPiece)
-        this.piecesLocations.set(promotion.to, newPiece)
-        this.moveDeferredPiece = undefined
+      if (this.deferredMove) {
+        if (promotion) {
+          const newPiece = this.htmlPieceRenderer.renderPieceChange(promotion.to, promotion.promotion, this.deferredMove.piece)
+          this.piecesLocations.set(promotion.to, newPiece)
+        } else {
+          if (this.deferredMove.attackedPiece) {
+            this.htmlPieceRenderer.renderPieceAtField(this.deferredMove.toField, this.deferredMove.attackedPiece)
+          }
+          this.returnToOriginalPosition(this.deferredMove.piece)
+        }
+        this.deferredMove = undefined
       }
     })
   }
@@ -77,8 +83,14 @@ export class PieceDragHandler {
 
     const result = this.gameService.requestMove(this.pieceDraggedFromField, field)
     if (result === MoveRequestResult.DEFERRED) {
+      this.deferredMove = {
+        piece: this.draggedPiece,
+        attackedPiece: this.piecesLocations.get(field),
+        toField: field
+      }
+      //this.moveDeferredAttackedPiece = this.piecesLocations.get(field)
       this.displayPieceAtField(field, this.draggedPiece)
-      this.moveDeferredPiece = this.draggedPiece
+      //this.moveDeferredPiece = this.draggedPiece
     } else if (result === MoveRequestResult.ACCEPTED) {
       this.displayPieceAtField(field, this.draggedPiece)
       this.piecesLocations.set(field, this.draggedPiece)
@@ -103,4 +115,10 @@ export class PieceDragHandler {
     this.htmlPieceRenderer.renderPieceAtField(this.pieceDraggedFromField, draggedPiece)
     this.draggedPiece = undefined
   }
+}
+
+interface DeferredMove {
+  piece: Piece,
+  attackedPiece: Piece | undefined,
+  toField: string
 }

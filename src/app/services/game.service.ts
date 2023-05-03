@@ -35,8 +35,8 @@ export class GameService implements OnDestroy {
   private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
   private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
-  private pawnPromotionClosed: Subject<Promotion> = new Subject()
-  
+  private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
+
   private promotionClosedSubscription: Subscription
 
   constructor(private gameControlService: GameControlService, private pawnPromotionService: PawnPromotionService) {
@@ -49,8 +49,8 @@ export class GameService implements OnDestroy {
 
     this.promotionClosedSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
       this.canPlayerMove = true
-      if(promotion){
-        this.pawnPromotionClosed.next(promotion)
+      this.pawnPromotionClosed.next(promotion)
+      if (promotion) {
         this.requestMoveWithPromotion(promotion.from, promotion.to, promotion.promotion)
       }
     }
@@ -60,7 +60,7 @@ export class GameService implements OnDestroy {
   ngOnDestroy(): void {
     this.promotionClosedSubscription?.unsubscribe()
   }
-  
+
   getPromotionClosedObservable() {
     return this.pawnPromotionClosed.asObservable();
   }
@@ -100,7 +100,7 @@ export class GameService implements OnDestroy {
 
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     this.pawnPromotionService.moveWithPromotionPerformed()
-    this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: pawnPromotion }
+    this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: pawnPromotion }
     this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion)
     return true
   }
@@ -113,13 +113,13 @@ export class GameService implements OnDestroy {
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
 
-      if(this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)){ 
+      if (this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)) {
         this.pawnPromotionService.display(from, to)
         this.canPlayerMove = false
         return MoveRequestResult.DEFERRED
       }
 
-      this.moveRequest = {playerId : this.playerId, from, to, pawnPromotion: null}
+      this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: null }
       this.gameControlService.moveRequest(this.playerId, from, to, null)
       return MoveRequestResult.ACCEPTED
     }
@@ -127,8 +127,8 @@ export class GameService implements OnDestroy {
   }
 
   canMove(color: string | null = null) {
-    if(color && this.gameMode != "TEST_MODE") {
-        return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
+    if (color && this.gameMode != "TEST_MODE") {
+      return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
     }
     return this.canPlayerMove
   }
@@ -155,16 +155,16 @@ export class GameService implements OnDestroy {
 
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
-      if(update.reverted) {
+      if (update.reverted) {
         this.lastMove = null
       } else {
-        this.lastMove = { from: update.primaryMove.from, to: update.primaryMove.to}
+        this.lastMove = { from: update.primaryMove.from, to: update.primaryMove.to }
       }
-      
+
       const from = update.primaryMove.from
       const to = update.primaryMove.to
 
-     // const piece = this.piecePositions[from] necessary?
+      // const piece = this.piecePositions[from] necessary?
       this.moveRequest = null // todo something better
 
       this.turn = update.turn
@@ -186,15 +186,15 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToJoinedExistingGameEvent() {
-      this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfo) => {
-        this.gameStarted(gameInfo)
-      })
+    this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfo) => {
+      this.gameStarted(gameInfo)
+    })
   }
 
   private gameStarted(gameInfo: GameInfo) {
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-    
+
     if (this.piecePositions != gameInfo.piecePositions) {
       this.fieldOccupationChange.next(gameInfo.piecePositions)
       this.piecePositions = gameInfo.piecePositions
@@ -203,7 +203,7 @@ export class GameService implements OnDestroy {
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
-    this.gameStartEvent.next({playerColor: this.playerColor})
+    this.gameStartEvent.next({ playerColor: this.playerColor })
   }
 
   private subscribeToWaitingForOtherPlayersEvent() {
@@ -221,5 +221,5 @@ export class GameService implements OnDestroy {
 }
 
 export enum MoveRequestResult {
-    ACCEPTED, REJECTED, DEFERRED
+  ACCEPTED, REJECTED, DEFERRED
 }

@@ -7,6 +7,7 @@ import { Piece } from "../piece.model";
 import { GameService, MoveRequestResult } from "src/app/services/game.service";
 import { PossibleMoves } from "src/app/model/possible-moves.model";
 import { Subscription } from "rxjs";
+import { Promotion } from "../../pawn-promotion/promotion.model";
 
 export class MarkAndMoveHandler { // todo maybe separate handlers for pieve movement and fields marking
 
@@ -25,24 +26,27 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         this.possibleMovesUpdateSubscription = this.gameService.getPossibleMovesUpdateObservable().subscribe((possibleMoves: PossibleMoves) => {
             this.possibleMoves = possibleMoves
         })
-        this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: { promotion: string, from: string, to: string }) => {
+        this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: Promotion | null) => {
             console.log("***** M & M PROMOTION CLOSED")
             this.markedField = undefined // todo extract field marking
             this.previouslyMarkedField = undefined
-            const piece = this.piecesLocations.get(promotion.from)
-            if (!piece) {
-                console.log("no piece at " + promotion.from)
-                return
-            }
 
-            const pieceAtDst = this.piecesLocations.get(promotion.to)
-            if (pieceAtDst) {
-                this.renderer.deletePiece(pieceAtDst, promotion.to)
-            }
+            if (promotion) {
+                const piece = this.piecesLocations.get(promotion.from)
+                if (!piece) {
+                    console.log("no piece at " + promotion.from)
+                    return
+                }
 
-            const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece, promotion.promotion)
-            this.piecesLocations.delete(promotion.from)
-            this.piecesLocations.set(promotion.to, newPiece)
+                const pieceAtDst = this.piecesLocations.get(promotion.to)
+                if (pieceAtDst) {
+                    this.renderer.deletePiece(pieceAtDst, promotion.to)
+                }
+
+                const newPiece = this.renderer.renderPieceMovementWithPieceChange(promotion.to, piece, promotion.promotion)
+                this.piecesLocations.delete(promotion.from)
+                this.piecesLocations.set(promotion.to, newPiece)
+            }
         })
     }
 
