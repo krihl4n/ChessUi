@@ -49,7 +49,7 @@ export class HtmlPieceReneder {
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece))
-    piece.setMouseDownListener(this.onPieceClickListener.notifyPieceClicked.bind(this.onPieceClickListener))
+    piece.setMouseDownListener(this.onPieceClickListener.notifyPieceClicked.bind(this.onPieceClickListener)) // todo moze nie przekazywać tutaj onPieceClickListenera? 
   }
 
   renderPieceMovement(destinationField: string, piece: Piece) {
@@ -64,16 +64,16 @@ export class HtmlPieceReneder {
 
   renderPieceChange(field: string, newPieceType: string, piece: Piece) {
     this.deletePieceNow(piece)
-    const newPiece = this.renderPiece("white", newPieceType, field)
+    const newPiece = this.renderPiece(piece.color, newPieceType, field)
     return newPiece
   }
 
-  renderPieceMovementWithPieceChange(destinationField: string, piece: Piece, newPieceType: string, ) {
+  renderPieceMovementWithPieceChange(destinationField: string, piece: Piece, newPieceType: string) {
     this.setElementAnimation(piece);
     this.moveElementToTop(piece);
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
 
-    const newPiece = new Piece("white", newPieceType, this.fieldSize)
+    const newPiece = new Piece(piece.color, newPieceType, this.fieldSize)
     this.preRenderPieces([newPiece])
     setTimeout(() => {
        this.clearElementAnimation(piece);
@@ -84,7 +84,7 @@ export class HtmlPieceReneder {
   }
 
   renderPieceChangeWithPieceMovement(startingField: string, destinationField: string, piece: Piece) {
-    const newPiece = new Piece("white", "pawn", this.fieldSize)
+    const newPiece = new Piece(piece.color, "pawn", this.fieldSize)
     this.preRenderPieces([newPiece])
     this.renderPieceAtField(startingField, newPiece)
     this.deletePieceNow(piece)
