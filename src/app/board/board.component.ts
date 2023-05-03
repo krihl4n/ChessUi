@@ -106,6 +106,9 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.pieceMoveHandler.cleanup()
     this.fieldOccupationChange?.unsubscribe()
     this.gameStartedEvent?.unsubscribe()
+    this.canvas.nativeElement.removeEventListener('mousedown', this.mouseDownListener)
+    window.removeEventListener('mouseup', this.mouseUpListener)
+    window.removeEventListener('mousemove', this.mouseMoveListener)
   }
 
   initializeBoard() {
@@ -123,30 +126,32 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.pieces.initialize(this.boardSetup.fieldSize)
     this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
-    //this.testPieceMovement()
-
-    this.canvas.nativeElement.addEventListener('mousedown', (e: MouseEvent) => {
-      e.preventDefault()
-      let leftClick = 0; // todo check other OSes
-      if (e.button == leftClick) {
-        this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
-        this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
-      }
-    })
-
-    window.addEventListener('mouseup', (e: MouseEvent) => {
-      this.dragHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
-      this.markAndMoveHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
-    })
-
-    window.addEventListener('mousemove', (e: MouseEvent) => {
-      this.dragHandler.notifyMouseMove(this.getEventLocationOnBoard(e))
-    })
+    this.canvas.nativeElement.addEventListener('mousedown', this.mouseDownListener)
+    window.addEventListener('mouseup', this.mouseUpListener)
+    window.addEventListener('mousemove', this.mouseMoveListener)
 
     window.requestAnimationFrame(this.drawEverything.bind(this));
   }
 
-  renderPieces() {
+  private mouseUpListener = ((e: MouseEvent) => {
+    this.dragHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
+    this.markAndMoveHandler.notifyMouseUpEvent(this.getEventLocationOnBoard(e))
+  }).bind(this)
+
+  private mouseMoveListener = ((e : MouseEvent) => {
+    this.dragHandler.notifyMouseMove(this.getEventLocationOnBoard(e))
+  }).bind(this)
+
+  private mouseDownListener = ((e: MouseEvent) => {
+    e.preventDefault()
+    let leftClick = 0; // todo check other OSes
+    if (e.button == leftClick) {
+      this.markAndMoveHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
+      this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
+    }
+  }).bind(this)
+
+  private renderPieces() {
     this.piecesLocations.getAll().forEach((piece, field) => {
       this.htmlPieceRender.renderPieceAtField(field, piece)
       //piece.setMouseDownListener(this.notifyPieceClicked.bind(this)) // moved to renderer 
