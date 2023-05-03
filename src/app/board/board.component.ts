@@ -76,7 +76,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
 
         this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
-          .subscribe((positions: FieldOccupation[]) => { // todo unsubscribe?
+          .subscribe((positions: FieldOccupation[]) => {
             positions.forEach(fieldOccupation => {
               if (fieldOccupation.piece) {
                 const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)

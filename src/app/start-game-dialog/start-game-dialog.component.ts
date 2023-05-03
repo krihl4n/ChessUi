@@ -45,7 +45,7 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
   isFriendSelected = false
   isTestSelected = false
 
-  pieceSetup ="black-pawn-promotion"
+  pieceSetup ="white-pawn-promotion"
 
   goToFirstScreen() {
     this.showFirstScreen = true

@@ -10,7 +10,8 @@ import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
 import { Move } from '../model/move.model'
-import { PawnPromotionService } from '../pawn-promotion.service';
+import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.service';
+import { Promotion } from '../board/pawn-promotion/promotion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class GameService implements OnDestroy {
   private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
   private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
-  private pawnPromotionClosed: Subject<{promotion: string, from: string, to: string}> = new Subject()
+  private pawnPromotionClosed: Subject<Promotion> = new Subject()
   
   private promotionClosedSubscription: Subscription
 
