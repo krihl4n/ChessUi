@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameControlService } from 'src/app/services/game-control.service';
+import { GameService } from 'src/app/services/game.service';
 
 @Component({
   selector: 'app-rematch',
@@ -12,7 +13,7 @@ export class RematchComponent implements OnInit, OnDestroy {
   private gameResultSubscription: Subscription
   private shouldBeVisible = false
 
-  constructor(private gameConstrolService: GameControlService) {}
+  constructor(private gameConstrolService: GameControlService, private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameResultSubscription = this.gameConstrolService.getGameResultSubscription().subscribe(result => {
@@ -29,6 +30,6 @@ export class RematchComponent implements OnInit, OnDestroy {
   }
 
   rematch() {
-    console.log("REMATCH")  
+    this.gameService.rematch()    
   }
 }

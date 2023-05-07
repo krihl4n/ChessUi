@@ -74,29 +74,28 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.boardSetup = new BoardSetup(false, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
         }
+      })
 
-        this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
-          .subscribe((positions: FieldOccupation[]) => {
-            positions.forEach(fieldOccupation => {
-              if (fieldOccupation.piece) {
-                const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
-                if (pieceElement) {
-                  this.piecesLocations.set(
-                    fieldOccupation.field,
-                    pieceElement
-                  )
-                }
-              }
-            })
-            setTimeout(() => {
-              this.renderPieces()
-            }, 100) // pieces not diplayed at proper locations fix.
-            
-            // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
-            //   this.renderPieces()
-            // })
-          })
-
+      this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
+      .subscribe((positions: FieldOccupation[]) => {
+        positions.forEach(fieldOccupation => {
+          if (fieldOccupation.piece) {
+            const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
+            if (pieceElement) {
+              this.piecesLocations.set(
+                fieldOccupation.field,
+                pieceElement
+              )
+            }
+          }
+        })
+        setTimeout(() => {
+          this.renderPieces()
+       }, 100) // pieces not diplayed at proper locations fix.
+        
+        // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
+        //   this.renderPieces()
+        // })
       })
   }
 
@@ -123,6 +122,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.pieceMoveHandler = new AsyncMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
+    this.pieces = new Pieces()
+    this.piecesLocations.reset()
     this.pieces.initialize(this.boardSetup.fieldSize)
     this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 

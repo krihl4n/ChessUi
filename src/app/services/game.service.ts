@@ -26,11 +26,11 @@ export class GameService implements OnDestroy {
   private playerColor = ""
   private turn = ""
   private gameMode: string | null
-  public gameResult: GameResult | null
+  public gameResult: GameResult | null // todo remove?
   public colorPreference: string | null
   public lastMove: Move | null // for field marking
 
-  private fieldOccupationChange: Subject<FieldOccupation[]> = new ReplaySubject()
+  private fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
   private piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
@@ -92,6 +92,10 @@ export class GameService implements OnDestroy {
 
   joinExistingGame(joinGameRequest: JoinGameRequest) {
     this.gameControlService.joinExistingGame(joinGameRequest)
+  }
+
+  rematch() {
+    this.gameControlService.requestRematch()
   }
 
   initiateMoveFrom(from: String) {

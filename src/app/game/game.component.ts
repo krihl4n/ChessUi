@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameStartEvent } from '../model/game-start-event.model';
 import { GameService } from '../services/game.service';
@@ -18,15 +18,25 @@ export class GameComponent implements OnInit, OnDestroy {
   constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    const gameId = this.route.snapshot.params['id']
-    if(gameId) {
-      this.joinExistingGame(gameId)
-    } else {
-      this.openDialog()
-      this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
-        this.router.navigate([gameId], {relativeTo: this.route})
-      })
-    }
+    // const gameId = this.route.snapshot.params['id']
+    // if(gameId) {
+    //   this.joinExistingGame(gameId)
+    // } else {
+    //   this.openDialog()
+    // }
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false
+    this.route.params.subscribe((params: Params) => {
+      const gameId = params['id']
+      if (gameId) {
+        this.joinExistingGame(gameId)
+      } else {
+        this.openDialog()
+      }
+    })
+
+    this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
+      this.router.navigate(['/game', gameId])
+    })
   }
 
   ngOnDestroy(): void {
@@ -54,10 +64,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   joinExistingGame(gameId: string) {
     this.gameService.joinExistingGame({
-        gameId: gameId,
-        colorPreference: this.gameService.colorPreference,
-        playerId: null
-      }
+      gameId: gameId,
+      colorPreference: this.gameService.colorPreference,
+      playerId: null
+    }
     )
   }
 }

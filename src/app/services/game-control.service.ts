@@ -13,7 +13,7 @@ import { StorageService } from '../storage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameControlService {
+export class GameControlService { // rethink this component. is it needed? if so, who should be allowed to use it?
 
   connected = false
 
@@ -62,6 +62,10 @@ export class GameControlService {
           this.joinGame(req)
         })
     }
+  }
+
+  requestRematch() {
+    this.webSocketApiService.sendRematchMsg()
   }
 
   private joinGame(req: JoinGameRequest){ 

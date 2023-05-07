@@ -109,6 +109,10 @@ export class WebSocketAPIService {
         this.publish("/chess-app/game-controls", message)
     }
 
+    sendRematchMsg() {
+        this.publish("/chess-app/rematch", "rematch")
+    }
+
     sendResignMsg(playerId: string) {
         this.publish("/chess-app/resign", playerId)
     }

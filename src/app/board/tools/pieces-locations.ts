@@ -8,6 +8,10 @@ export class PiecesLocations {
 
     private locations = new Map<string, Piece>() 
 
+    reset() {
+        this.locations.clear()
+    }
+
     set(field:string, piece: Piece) {
         this.locations.set(field, piece)
     }
