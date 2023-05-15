@@ -34,6 +34,7 @@ export class GameService implements OnDestroy {
   private piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
   private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
+  private rematchRequestedEvent: Subject<string> = new Subject()
   private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
   private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
 
@@ -46,6 +47,7 @@ export class GameService implements OnDestroy {
     this.subscribeToWaitingForOtherPlayersEvent();
     this.subscribeToJoinedExistingGameEvent();
     this.subscribeToGameFinishedEvent();
+    this.subscribeToRematchRequestedEvent();
 
     this.promotionClosedSubscription = this.pawnPromotionService.getPromotionClosedObservable().subscribe(promotion => {
       this.canPlayerMove = true
@@ -79,6 +81,10 @@ export class GameService implements OnDestroy {
 
   getWaitinForPlayersObservable() {
     return this.waitingForPlayersEvent.asObservable()
+  }
+
+  getRematchRequestedObservable() {
+    return this.rematchRequestedEvent.asObservable()
   }
 
   getPossibleMovesUpdateObservable() {
@@ -212,6 +218,12 @@ export class GameService implements OnDestroy {
   private subscribeToWaitingForOtherPlayersEvent() {
     this.gameControlService.getWaitingForOtherPlayersSubscription().subscribe((gameId: string) => {
       this.waitingForPlayersEvent.next(gameId)
+    })
+  }
+
+  private subscribeToRematchRequestedEvent() {
+    this.gameControlService.getRematchRequestedSubscription().subscribe((gameId: string) => {
+      this.rematchRequestedEvent.next(gameId)
     })
   }
 

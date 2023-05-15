@@ -14,16 +14,11 @@ import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog
 export class GameComponent implements OnInit, OnDestroy {
 
   private waitingForPlayersEventSubscription: Subscription
-
+  private rematchRequestedSubscription: Subscription
+ 
   constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    // const gameId = this.route.snapshot.params['id']
-    // if(gameId) {
-    //   this.joinExistingGame(gameId)
-    // } else {
-    //   this.openDialog()
-    // }
     this.router.routeReuseStrategy.shouldReuseRoute = () => false
     this.route.params.subscribe((params: Params) => {
       const gameId = params['id']
@@ -35,6 +30,10 @@ export class GameComponent implements OnInit, OnDestroy {
     })
 
     this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
+      this.router.navigate(['/game', gameId])
+    })
+
+    this.rematchRequestedSubscription = this.gameService.getRematchRequestedObservable().subscribe((gameId: string) => {
       this.router.navigate(['/game', gameId])
     })
   }
@@ -54,12 +53,6 @@ export class GameComponent implements OnInit, OnDestroy {
       panelClass: 'custom-modalbox',
       backdropClass: 'cutom-modal-backdrop'
     })
-
-    // dialogRef.afterClosed().subscribe(
-    //   data => {
-    //    // this.gameService.initiateNewGame(data.selectedMode, data.selectedColor)
-    //   }
-    // )
   }
 
   joinExistingGame(gameId: string) {

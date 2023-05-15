@@ -28,6 +28,7 @@ export class WebSocketAPIService {
     gameStartedSubject: Subject<GameInfo> = new Subject()
     joinedExistingGameSubject: Subject<GameInfo> = new Subject()
     waitingForOtherPlayersSubject: Subject<string> = new Subject()
+    rematchRequestedSubject: Subject<string> = new Subject()
 
     constructor(){
     }
@@ -75,6 +76,9 @@ export class WebSocketAPIService {
                 this.subscribe('/user/queue/possible-moves', function (msg) {
                     _this.onPossibleMovesReceived(msg);
                 });
+                this.subscribe('/user/queue/rematch-requested', function(msg) {
+                    _this.onRematchRequestedReceived(msg)
+                })
 
                 resolve()
             }
@@ -178,5 +182,9 @@ export class WebSocketAPIService {
 
     onWaitingForOtherPlayersReceived(message: Message) {
         this.waitingForOtherPlayersSubject.next(message.body)
+    }
+
+    onRematchRequestedReceived(message: Message) {
+        this.rematchRequestedSubject.next(message.body)
     }
 }

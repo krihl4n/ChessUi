@@ -8,3 +8,5 @@
 - game finished info
 - what happens if move fails on the backend? 
 - enter link with finished game
+- undo attacks on safari renders pieces at incorrect location
+- string or String? 
