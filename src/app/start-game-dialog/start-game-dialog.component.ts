@@ -45,7 +45,7 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
   isFriendSelected = false
   isTestSelected = false
 
-  pieceSetup ="about-to-check-mate"
+  pieceSetup ="default"
 
   goToFirstScreen() {
     this.showFirstScreen = true

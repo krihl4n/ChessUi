@@ -31,8 +31,8 @@ export class GameService implements OnDestroy {
   public lastMove: Move | null // for field marking
 
   private fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
-  private piecePositionChange: Subject<PiecePositionUpdate> = new ReplaySubject()
-  private gameStartEvent: Subject<GameStartEvent> = new ReplaySubject()
+  private piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
+  private gameStartEvent: Subject<GameStartEvent> = new Subject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
   private rematchRequestedEvent: Subject<string> = new Subject()
   private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
@@ -189,7 +189,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribteToGameStartEvent() {
-    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => {
+    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => { // TODO unsubscribe?
       this.gameStarted(gameInfo)
     })
   }

@@ -76,7 +76,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
       })
 
-      this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
+    this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
       .subscribe((positions: FieldOccupation[]) => {
         positions.forEach(fieldOccupation => {
           if (fieldOccupation.piece) {
@@ -153,6 +153,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   }).bind(this)
 
   private renderPieces() {
+    console.log("RENDER PIECES")
+    console.log(this.piecesLocations.getAll())
     this.piecesLocations.getAll().forEach((piece, field) => {
       this.htmlPieceRender.renderPieceAtField(field, piece)
       //piece.setMouseDownListener(this.notifyPieceClicked.bind(this)) // moved to renderer 

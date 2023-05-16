@@ -40,6 +40,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.waitingForPlayersEventSubscription?.unsubscribe()
+    this.rematchRequestedSubscription?.unsubscribe()
   }
 
   openDialog() {
