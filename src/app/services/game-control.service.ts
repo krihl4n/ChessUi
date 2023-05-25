@@ -70,8 +70,11 @@ export class GameControlService { // rethink this component. is it needed? if so
 
   private joinGame(req: JoinGameRequest){ 
     var savedGame = this.storageService.getGame();
-    if(savedGame && savedGame.gameId == req.gameId) {
+    if(savedGame) {
       req.playerId = savedGame.playerId
+    }
+    if(savedGame?.gameId === req.gameId) {
+      req.rejoin = true
     }
     this.webSocketApiService.sendJoinGameMsg(req)
   }
