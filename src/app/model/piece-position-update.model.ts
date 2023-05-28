@@ -4,7 +4,7 @@ export interface PiecePositionUpdate {
     primaryMove: Move,
     secondaryMove: Move | null,
     pieceCapture: PieceCapture | null,
-    pawnPromotion: string, // QUEEN, KNIGHT, BISHOP, ROOK
+    pawnPromotion: string, // queen, knight, bishop, rook
     reverted: Boolean,
     turn: string
 }
