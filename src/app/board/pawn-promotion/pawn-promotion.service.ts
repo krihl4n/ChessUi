@@ -62,7 +62,7 @@ export class PawnPromotionService {
   }
 
   private isLastRank(to: string, playerColor: string) {
-    if (playerColor == 'WHITE') {
+    if (playerColor == 'white') {
       return to[1] == '8'
     } else {
       return to[1] == '1'

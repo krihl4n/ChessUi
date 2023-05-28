@@ -16,10 +16,10 @@ export class MessageComponent implements OnInit {
   getMessage(): string {
     const result = this.gameService.gameResult
     if(result) {
-      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'WHITE' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'BLACK') {
+      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'white' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'black') {
         return "You won!"
       }
-      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'BLACK' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'WHITE') {
+      if(result.result == "WHITE_PLAYER_WON" && this.gameService.getPlayerColor() == 'black' || result.result == "BLACK_PLAYER_WON" && this.gameService.getPlayerColor() == 'white') {
         return "You lost!"
       }
       if(result.result == "DRAW") {

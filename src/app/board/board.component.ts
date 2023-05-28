@@ -67,7 +67,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.gameStartedEvent = this.gameService.getGameStartedEventObservable()
       .subscribe((gameStartEvent: GameStartEvent) => {
-        if (gameStartEvent.playerColor == "BLACK") {
+        if (gameStartEvent.playerColor == "black") {
           this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(true, this.boardSetup.fieldSize)
         } else {
