@@ -136,7 +136,7 @@ export class GameService implements OnDestroy {
   }
 
   canMove(color: string | null = null) {
-    if (color && this.gameMode != "TEST_MODE") {
+    if (color && this.gameMode != "test_mode") {
       return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
     }
     return this.canPlayerMove
