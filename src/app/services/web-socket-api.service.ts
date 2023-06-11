@@ -12,6 +12,7 @@ import { GameResult } from '../model/game-result.model';
 import { StartGameRequest } from '../model/start-game-request.model';
 import { GameInfo } from '../model/game-info.model';
 import { JoinGameRequest } from '../model/join-game-request.model';
+import { RejoinGameRequest } from '../model/rejoin-game-request.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -135,6 +136,10 @@ export class WebSocketAPIService {
 
     sendJoinGameMsg(req: JoinGameRequest) {
         this.publish("/chess-app/join-game", JSON.stringify(req))
+    }
+
+    sendRejoinGameMsg(req: RejoinGameRequest) {
+        this.publish("/chess-app/rejoin-game", JSON.stringify(req))
     }
 
     sendRequestPiecePositionsMsg(message: String) {

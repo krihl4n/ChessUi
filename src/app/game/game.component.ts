@@ -57,13 +57,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   joinExistingGame(gameId: string) {
-    this.gameService.joinExistingGame({
-      gameId: gameId,
-      colorPreference: this.gameService.colorPreference,
-      playerId: null,
-      rejoin: false
-    }
-    )
+    this.gameService.joinExistingGame(gameId, this.gameService.colorPreference, null)
   }
 }
 

@@ -17,13 +17,13 @@ export class GameControlService { // rethink this component. is it needed? if so
 
   connected = false
 
-  constructor(private webSocketApiService: WebSocketAPIService, private storageService: StorageService) { 
+  constructor(private webSocketApiService: WebSocketAPIService, private storageService: StorageService) {
     this.subscribeToGameStartedEvent()
   }
 
   subscribeToGameStartedEvent() {
     this.webSocketApiService.gameStartedSubject.subscribe((gameInfo: GameInfo) => {
-        this.storageService.save(gameInfo.gameId, gameInfo.player.id)
+      this.storageService.save(gameInfo.gameId, gameInfo.player.id)
     })
   }
 
@@ -52,14 +52,14 @@ export class GameControlService { // rethink this component. is it needed? if so
       })
   }
 
-  joinExistingGame(req: JoinGameRequest) {
+  joinExistingGame(gameId: string, colorPreference: string | null, playerId: string | null) {
     if (this.connected) {
-      this.joinGame(req)
+      this.joinGame(gameId, colorPreference, playerId)
     } else {
       this.webSocketApiService.connect()
         .then(() => {
           this.connected = true
-          this.joinGame(req)
+          this.joinGame(gameId, colorPreference, playerId)
         })
     }
   }
@@ -68,18 +68,28 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.webSocketApiService.sendRematchMsg()
   }
 
-  private joinGame(req: JoinGameRequest){ 
+  private joinGame(gameId: string,
+    colorPreference: string | null,
+    playerId: string | null) {
     var savedGame = this.storageService.getGame();
-    if(savedGame) {
-      req.playerId = savedGame.playerId
+    if (savedGame) {
+      playerId = savedGame.playerId
     }
-    if(savedGame?.gameId === req.gameId) {
-      req.rejoin = true
+    if (savedGame?.gameId === gameId) {
+      this.webSocketApiService.sendRejoinGameMsg({
+        gameId: savedGame.gameId,
+        playerId: savedGame.playerId
+      })
+    } else {
+      this.webSocketApiService.sendJoinGameMsg({
+        gameId: gameId,
+        colorPreference: colorPreference,
+        playerId: playerId
+      })
     }
-    this.webSocketApiService.sendJoinGameMsg(req)
   }
 
-  private startNewGame(playerId: string, mode: string, pieceSetup: string, ) {
+  private startNewGame(playerId: string, mode: string, pieceSetup: string,) {
     this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, setup: pieceSetup })
   }
 
@@ -132,7 +142,7 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   getRematchRequestedSubscription(): Subject<string> {
-    return this,this.webSocketApiService.rematchRequestedSubject
+    return this, this.webSocketApiService.rematchRequestedSubject
   }
 
   getJoinedExistingGameSubscription(): Subject<GameInfo> {
