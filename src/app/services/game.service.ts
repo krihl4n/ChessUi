@@ -1,10 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { from, Observable, ReplaySubject, Subject, Subscribable, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameResult } from '../model/game-result.model';
 import { GameStartEvent } from '../model/game-start-event.model';
-import { JoinGameRequest } from '../model/join-game-request.model';
 import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';

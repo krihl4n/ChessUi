@@ -7,7 +7,6 @@ import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { GameInfo } from '../model/game-info.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { WebSocketAPIService } from './web-socket-api.service';
-import { JoinGameRequest } from '../model/join-game-request.model';
 import { StorageService } from '../storage.service';
 
 @Injectable({
@@ -65,7 +64,12 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   requestRematch() {
-    this.webSocketApiService.sendRematchMsg()
+    var savedGame = this.storageService.getGame();
+    if(savedGame) {
+      this.webSocketApiService.sendRematchMsg(savedGame.gameId)
+    } else {
+      console.log("cannot request rematch because there is no saved game")
+    }
   }
 
   private joinGame(gameId: string,

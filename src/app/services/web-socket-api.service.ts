@@ -114,8 +114,8 @@ export class WebSocketAPIService {
         this.publish("/chess-app/game-controls", message)
     }
 
-    sendRematchMsg() {
-        this.publish("/chess-app/rematch", "rematch")
+    sendRematchMsg(gameId: String) {
+        this.publish("/chess-app/rematch", gameId)
     }
 
     sendResignMsg(playerId: string) {
