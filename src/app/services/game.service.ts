@@ -102,7 +102,7 @@ export class GameService implements OnDestroy {
     this.gameControlService.requestRematch()
   }
 
-  initiateMoveFrom(from: String) {
+  initiateMoveFrom(from: string) {
     this.gameControlService.requestPossibleMoves(from)
   }
 

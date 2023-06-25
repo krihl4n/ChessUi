@@ -129,8 +129,11 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.webSocketApiService.sendResignMsg(playerId)
   }
 
-  requestPossibleMoves(field: String) {
-    this.webSocketApiService.sendRequestPossibleMovesRequest(field)
+  requestPossibleMoves(field: string) {
+    var savedGame = this.storageService.getGame();
+    if(savedGame) {
+      this.webSocketApiService.sendRequestPossibleMovesRequest({gameId: savedGame.gameId, field: field})
+    }
   }
 
   fieldOccupationChange(): Subject<FieldOccupation[]> {
