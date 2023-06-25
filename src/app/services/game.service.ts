@@ -4,7 +4,6 @@ import { FieldOccupation } from '../model/field-occupation.model';
 import { GameInfo } from '../model/game-info.model';
 import { GameResult } from '../model/game-result.model';
 import { GameStartEvent } from '../model/game-start-event.model';
-import { MoveRequest } from '../model/move-request.model';
 import { PiecePositionUpdate } from '../model/piece-position-update.model';
 import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
@@ -18,7 +17,7 @@ import { Promotion } from '../board/pawn-promotion/promotion.model';
 export class GameService implements OnDestroy {
 
   private piecePositions: FieldOccupation[] // necessary?
-  private moveRequest: MoveRequest | null
+  private moveRequestInProgress: boolean = false
   private possibleMoves: PossibleMoves | null
   private canPlayerMove: boolean = false
   private playerId = ""
@@ -109,14 +108,14 @@ export class GameService implements OnDestroy {
 
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     this.pawnPromotionService.moveWithPromotionPerformed()
-    this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: pawnPromotion }
+    this.moveRequestInProgress = true
     this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion) // TODO what happens if move failes on the backend side?
     return true
   }
 
   requestMove(from: string, to: string): MoveRequestResult {
 
-    if (this.moveRequest) {
+    if (this.moveRequestInProgress) {
       return MoveRequestResult.REJECTED
     }
 
@@ -127,7 +126,7 @@ export class GameService implements OnDestroy {
         return MoveRequestResult.DEFERRED
       }
 
-      this.moveRequest = { playerId: this.playerId, from, to, pawnPromotion: null }
+      this.moveRequestInProgress = true
       this.gameControlService.moveRequest(this.playerId, from, to, null) // TODO what happens if move failes on the backend side?
       return MoveRequestResult.ACCEPTED
     }
@@ -173,7 +172,7 @@ export class GameService implements OnDestroy {
       const to = update.primaryMove.to
 
       // const piece = this.piecePositions[from] necessary?
-      this.moveRequest = null // todo something better
+      this.moveRequestInProgress = false // todo something better
 
       this.turn = update.turn
       this.piecePositionChange.next(update)

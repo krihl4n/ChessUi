@@ -40,7 +40,20 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   moveRequest(playerId: String, from: String, to: String, pawnPromotion: String | null) {
-    this.webSocketApiService.sendMoveMsg({ playerId, from, to, pawnPromotion })
+    var savedGame = this.storageService.getGame();
+    if(savedGame) {
+      this.webSocketApiService.sendMoveMsg(
+        {
+          gameId: savedGame.gameId, 
+          playerId: playerId, 
+          from: from, 
+          to: to, 
+          pawnPromotion: pawnPromotion 
+        }
+      )
+    } else {
+      console.log("cannot send move request because there is no saved game")
+    }
   }
 
   initiateNewGame(playerId: string, mode: string, pieceSetup: string) {
