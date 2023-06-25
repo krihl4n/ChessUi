@@ -142,8 +142,8 @@ export class WebSocketAPIService {
         this.publish("/chess-app/rejoin-game", JSON.stringify(req))
     }
 
-    sendRequestPiecePositionsMsg(message: String) {
-        this.publish("/chess-app/fields-occupation", JSON.stringify(message))
+    sendRequestPiecePositionsMsg(gameId: String) {
+        this.publish("/chess-app/fields-occupation", JSON.stringify(gameId))
     }
 
     sendRequestPossibleMovesRequest(message: String) {

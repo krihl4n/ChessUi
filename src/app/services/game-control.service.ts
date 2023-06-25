@@ -30,7 +30,10 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.webSocketApiService.connect()
       .then(() => {
         this.connected = true
-        this.webSocketApiService.sendRequestPiecePositionsMsg("request_positions")
+        var savedGame = this.storageService.getGame();
+        if(savedGame) {
+          this.webSocketApiService.sendRequestPiecePositionsMsg(savedGame.gameId)
+        }
       });
   }
 
