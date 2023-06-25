@@ -126,7 +126,10 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   resign(playerId: string) {
-    this.webSocketApiService.sendResignMsg(playerId)
+    var savedGame = this.storageService.getGame();
+    if(savedGame) {
+      this.webSocketApiService.sendResignMsg({gameId: savedGame.gameId, playerId})
+    }
   }
 
   requestPossibleMoves(field: string) {
