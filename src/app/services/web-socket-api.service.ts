@@ -114,11 +114,11 @@ export class WebSocketAPIService {
        this.publish("/chess-app/move", JSON.stringify(message))
     }
 
-    sendGameControlsMsg(message: String) {
+    sendGameControlsMsg(message: string) {
         this.publish("/chess-app/game-controls", message)
     }
 
-    sendRematchMsg(gameId: String) {
+    sendRematchMsg(gameId: string) {
         this.publish("/chess-app/rematch", gameId)
     }
 
@@ -146,7 +146,7 @@ export class WebSocketAPIService {
         this.publish("/chess-app/rejoin-game", JSON.stringify(req))
     }
 
-    sendRequestPiecePositionsMsg(gameId: String) {
+    sendRequestPiecePositionsMsg(gameId: string) {
         this.publish("/chess-app/fields-occupation", JSON.stringify(gameId))
     }
 

@@ -1,3 +1,3 @@
 export interface GameStartEvent {
-    playerColor: String
+    playerColor: string
 }

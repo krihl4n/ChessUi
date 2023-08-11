@@ -1,4 +1,4 @@
 export interface GameResult {
-    result: String,
-    reason: String
+    result: string,
+    reason: string
 }

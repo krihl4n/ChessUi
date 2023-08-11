@@ -1,7 +1,7 @@
 export interface MoveRequest {
-    gameId: String,
-    playerId: String,
-    from: String,
-    to: String,
-    pawnPromotion: String | null
+    gameId: string,
+    playerId: string,
+    from: string,
+    to: string,
+    pawnPromotion: string | null
 }

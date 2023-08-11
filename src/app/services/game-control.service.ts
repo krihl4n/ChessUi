@@ -42,7 +42,7 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.connected = false
   }
 
-  moveRequest(playerId: String, from: String, to: String, pawnPromotion: String | null) {
+  moveRequest(playerId: string, from: string, to: string, pawnPromotion: string | null) {
     var savedGame = this.storageService.getGame();
     if(savedGame) {
       this.webSocketApiService.sendMoveMsg(
@@ -113,7 +113,7 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, setup: pieceSetup })
   }
 
-  startGame(mode: String) {
+  startGame(mode: string) {
     this.webSocketApiService.sendGameControlsMsg("start_" + mode)
   }
 

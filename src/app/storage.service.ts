@@ -9,7 +9,7 @@ export class StorageService {
   constructor(private cookieService: CookieService) { 
   }
 
-  public save(gameId: String, playerId: String) {
+  public save(gameId: string, playerId: string) {
       this.cookieService.delete('chess-game')
       this.cookieService.set('chess-game', JSON.stringify({gameId, playerId}), undefined, "/game")
   }
