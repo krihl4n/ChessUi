@@ -6,7 +6,8 @@ export interface PiecePositionUpdate {
     pieceCapture: PieceCapture | null,
     pawnPromotion: string, // queen, knight, bishop, rook
     reverted: Boolean,
-    turn: string
+    turn: string,
+    label: string
 }
 
 interface Move {
