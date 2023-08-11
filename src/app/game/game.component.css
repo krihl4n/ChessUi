@@ -23,9 +23,11 @@
 /* use flex here? */ 
 
 .recorded-moves-box {
+    color: lightgrey;
     background-color: #36555D;
     /* align-self: center; */
     height: 300px;
+    padding: 5px
 }
 
 .controls-box {
