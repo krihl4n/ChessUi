@@ -18,7 +18,11 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
     .subscribe((update: PiecePositionUpdate) => {
-      this.moves.push(update.label)
+      if(update.reverted) {
+        this.moves.pop()
+      } else {
+        this.moves.push(update.label)
+      }
     })
   }
 
