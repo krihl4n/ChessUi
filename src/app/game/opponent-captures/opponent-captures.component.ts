@@ -17,13 +17,16 @@ export class OpponentCapturesComponent implements OnInit {
     this.gameService.getPiecePositionChangeObservable().subscribe((update: PiecePositionUpdate) => {
       let capturedPiece = update.pieceCapture?.capturedPiece
       if(capturedPiece && this.gameService.getPlayerColor() == capturedPiece.color) {
-        if(capturedPiece.type == "knight") {
-          this.captures.push("n")
+        if(update.reverted) {
+          this.captures.pop()
         } else {
-          this.captures.push(capturedPiece.type[0].toLowerCase())
+          if(capturedPiece.type == "knight") {
+            this.captures.push("n")
+          } else {
+            this.captures.push(capturedPiece.type[0].toLowerCase())
+          }
         }
       }
     })
   }
-
 }
