@@ -5,7 +5,8 @@ export interface GameInfo {
     mode: string,
     player: Player,
     piecePositions: FieldOccupation[],
-    turn: string
+    turn: string,
+    recordedMoves: string[]
 }
 
 interface Player {

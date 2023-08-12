@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { GameStartEvent } from 'src/app/model/game-start-event.model';
 import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
 import { GameService } from 'src/app/services/game.service';
 
@@ -12,6 +13,7 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
 
   moves: {white: string, black: string | null}[] = []
   private positionChangeSubscription: Subscription
+  private gameStartedSubscription: Subscription
   
   constructor(private gameService: GameService) { }
 
@@ -23,6 +25,13 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
       } else {
         this.push(update.label)
       }
+    })
+
+    this.gameStartedSubscription = this.gameService.getGameStartedEventObservable()
+    .subscribe((gameStarted: GameStartEvent) => {
+      gameStarted.recordedMoves.forEach((move: string) => {
+        this.push(move)
+      })
     })
   }
 
@@ -46,5 +55,6 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.positionChangeSubscription?.unsubscribe()
+    this.gameStartedSubscription?.unsubscribe()
   }
 }

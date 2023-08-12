@@ -1,3 +1,4 @@
 export interface GameStartEvent {
-    playerColor: string
+    playerColor: string,
+    recordedMoves: string[]
 }
