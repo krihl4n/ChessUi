@@ -10,7 +10,7 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class RecordedMovesComponent implements OnInit, OnDestroy {
 
-  moves: string[] = []
+  moves: {white: string, black: string | null}[] = []
   private positionChangeSubscription: Subscription
   
   constructor(private gameService: GameService) { }
@@ -19,15 +19,32 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
     this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
     .subscribe((update: PiecePositionUpdate) => {
       if(update.reverted) {
-        this.moves.pop()
+        this.pop()
       } else {
-        this.moves.push(update.label)
+        this.push(update.label)
       }
     })
+  }
+
+  push(label: string) {
+    let lastMove = this.moves[this.moves.length - 1]
+    if(lastMove && !lastMove.black) {
+      this.moves[this.moves.length - 1] = {white: lastMove.white, black: label}
+    } else {
+      this.moves.push({white: label, black: null})
+    }
+  }
+
+  pop() {
+    let lastMove = this.moves[this.moves.length - 1]
+    if(lastMove && lastMove.black) {
+      this.moves[this.moves.length - 1] = {white: lastMove.white, black: null}
+    } else {
+      this.moves.pop()
+    }
   }
 
   ngOnDestroy(): void {
     this.positionChangeSubscription?.unsubscribe()
   }
-
 }

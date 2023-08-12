@@ -27,7 +27,8 @@
     background-color: #36555D;
     /* align-self: center; */
     height: 300px;
-    padding: 5px
+    padding: 5px;
+    overflow-y: scroll;
 }
 
 .controls-box {
