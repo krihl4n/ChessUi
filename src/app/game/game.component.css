@@ -23,6 +23,7 @@
 /* use flex here? */ 
 
 .recorded-moves-box {
+    margin-top: 20px;
     color: lightgrey;
     background-color: #36555D;
     /* align-self: center; */
@@ -39,8 +40,18 @@
     color: lightgrey;
     font-size: 14px;
     font-weight: 400;
+    margin-top: 20px
 }
 
 .rematch-box {
     margin-top: 20px
+}
+
+.player-captures-box {
+    margin-top: 20px;
+    color: lightgrey;
+}
+
+.opponent-captures-box {
+    color: lightgrey;
 }

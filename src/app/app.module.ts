@@ -14,6 +14,8 @@ import { ControlsComponent } from './game/controls/controls.component';
 import { PawnPromotionComponent } from './board/pawn-promotion/pawn-promotion.component';
 import { RematchComponent } from './game/rematch/rematch.component';
 import { RecordedMovesComponent } from './game/recorded-moves/recorded-moves.component';
+import { PlayerCapturesComponent } from './game/player-captures/player-captures.component';
+import { OpponentCapturesComponent } from './game/opponent-captures/opponent-captures.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { RecordedMovesComponent } from './game/recorded-moves/recorded-moves.com
     ControlsComponent,
     PawnPromotionComponent,
     RematchComponent,
-    RecordedMovesComponent
+    RecordedMovesComponent,
+    PlayerCapturesComponent,
+    OpponentCapturesComponent
   ],
   imports: [
     BrowserModule,
