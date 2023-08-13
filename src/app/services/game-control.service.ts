@@ -124,13 +124,6 @@ export class GameControlService { // rethink this component. is it needed? if so
     }
   }
 
-  redoMove(playerId: string) {
-    var savedGame = this.storageService.getGame();
-    if(savedGame) {
-      this.webSocketApiService.sendRedoMoveMsg({gameId: savedGame.gameId, playerId})
-    }
-  }
-
   resign(playerId: string) {
     var savedGame = this.storageService.getGame();
     if(savedGame) {

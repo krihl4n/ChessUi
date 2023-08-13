@@ -20,8 +20,4 @@ export class ControlsComponent implements OnInit {
   undoMove() {
     this.gameService.undoMove()
   }
-
-  redoMove() {
-    this.gameService.redoMove()
-  }
 }

@@ -156,10 +156,6 @@ export class GameService implements OnDestroy {
     this.gameControlService.undoMove(this.playerId)
   }
 
-  redoMove() {
-    this.gameControlService.redoMove(this.playerId)
-  }
-
   private subscribeToMoveUpdates() {
     this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
       if (update.reverted) {

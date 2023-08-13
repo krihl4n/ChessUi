@@ -16,7 +16,6 @@ import { RejoinGameRequest } from '../model/rejoin-game-request.model';
 import { PossibleMovesRequest } from '../model/possible-moves-request.model';
 import { ResignRequest } from '../model/resign-request.model';
 import { UndoMoveRequest } from '../model/undo-move-request.model';
-import { RedoMoveRequest } from '../model/redo-move-request.model';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -53,17 +52,16 @@ export class WebSocketAPIService {
 
             const _this = this
             this.client.onConnect = function(frame) {
+                this.subscribe("/user/queue/game-started", function(msg) {
+                    _this.onGameStarted(msg)
+                })
+
                 this.subscribe("/user/queue/game-state-updates", function(msg) {
                     _this.onGameStateUpdate(msg)
                 })
 
                 this.subscribe("/user/queue/waiting-for-other-player", function(msg) {
                     _this.onWaitingForOtherPlayersReceived(msg)
-                })
-
-                this.subscribe("/user/queue/game-started", function(msg) {
-                    console.log("GAME STARTED EVENT RECEIVED")
-                    _this.onGameStarted(msg)
                 })
 
                 this.subscribe("/user/queue/game-result", function (msg) {
@@ -129,10 +127,6 @@ export class WebSocketAPIService {
 
     sendUndoMoveMsg(message: UndoMoveRequest) {
         this.publish("/chess-app/undo-move", JSON.stringify(message))
-    }
-
-    sendRedoMoveMsg(message: RedoMoveRequest) {
-        this.publish("/chess-app/redo-move", JSON.stringify(message))
     }
 
     sendStartNewGameMsg(message: StartGameRequest) {
