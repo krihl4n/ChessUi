@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { GameStartEvent } from 'src/app/model/game-start-event.model';
 import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
+import { Piece } from 'src/app/model/piece.model';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -28,5 +30,27 @@ export class OpponentCapturesComponent implements OnInit {
         }
       }
     })
+
+    this.gameService.getGameStartedEventObservable()
+    .subscribe((gameStarted: GameStartEvent) => {
+
+      if(this.gameService.getPlayerColor() == "black") {
+        gameStarted.captures.capturesOfWhitePlayer.forEach((piece: Piece) => {
+          this.push(piece.type)
+        })
+      } else {
+        gameStarted.captures.capturesOfBlackPlayer.forEach((piece: Piece) => {
+          this.push(piece.type)
+        })
+      }
+    })
+  }
+
+  private push(pieceType: string) {
+    if(pieceType == "knight") {
+      this.captures.push("n")
+    } else {
+      this.captures.push(pieceType[0].toLowerCase())
+    }
   }
 }

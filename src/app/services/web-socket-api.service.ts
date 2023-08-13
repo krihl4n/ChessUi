@@ -62,6 +62,7 @@ export class WebSocketAPIService {
                 })
 
                 this.subscribe("/user/queue/game-started", function(msg) {
+                    console.log("GAME STARTED EVENT RECEIVED")
                     _this.onGameStarted(msg)
                 })
 

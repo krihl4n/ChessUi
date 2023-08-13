@@ -1,3 +1,4 @@
+import { Piece } from "../board/tools/piece.model"
 import { FieldOccupation } from "./field-occupation.model"
 
 export interface GameInfo {
@@ -6,10 +7,16 @@ export interface GameInfo {
     player: Player,
     piecePositions: FieldOccupation[],
     turn: string,
-    recordedMoves: string[]
+    recordedMoves: string[],
+    captures: Captures
 }
 
 interface Player {
     id: string,
     color: string
+}
+
+export interface Captures {
+    capturesOfWhitePlayer: Piece[],
+    capturesOfBlackPlayer: Piece[],
 }
