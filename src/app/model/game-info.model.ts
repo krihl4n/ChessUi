@@ -8,7 +8,8 @@ export interface GameInfo {
     piecePositions: FieldOccupation[],
     turn: string,
     recordedMoves: string[],
-    captures: Captures
+    captures: Captures,
+    score: Score
 }
 
 interface Player {
@@ -19,4 +20,9 @@ interface Player {
 export interface Captures {
     capturesOfWhitePlayer: Piece[],
     capturesOfBlackPlayer: Piece[],
+}
+
+export interface Score {
+    white: number,
+    black: number
 }

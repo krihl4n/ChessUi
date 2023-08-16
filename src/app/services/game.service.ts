@@ -206,7 +206,7 @@ export class GameService implements OnDestroy {
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
-    this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures})
+    this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score})
   }
 
   private subscribeToWaitingForOtherPlayersEvent() {

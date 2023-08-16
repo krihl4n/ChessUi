@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Score } from 'src/app/model/game-info.model';
 import { GameStartEvent } from 'src/app/model/game-start-event.model';
 import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
 import { Piece } from 'src/app/model/piece.model';
@@ -12,6 +13,7 @@ import { GameService } from 'src/app/services/game.service';
 export class PlayerCapturesComponent implements OnInit {
 
   captures: string[] = []
+  score: string
 
   constructor(private gameService: GameService) { }
 
@@ -23,13 +25,9 @@ export class PlayerCapturesComponent implements OnInit {
           this.captures.pop()
         } else {
           this.push(capturedPiece.type)
-          // if(capturedPiece.type == "knight") {
-          //   this.captures.push("n")
-          // } else {
-          //   this.captures.push(capturedPiece.type[0].toLowerCase())
-          // }
         }
       }
+      this.setScore(update.score)
     })
 
     this.gameService.getGameStartedEventObservable()
@@ -44,7 +42,25 @@ export class PlayerCapturesComponent implements OnInit {
           this.push(piece.type)
         })
       }
+      
+      this.setScore(gameStarted.score)
     })
+  }
+
+  private setScore(score: Score) {
+    let s
+    if(this.gameService.getPlayerColor() == "white") {
+      s = score.white
+    } else {
+      s = score.black
+    }
+
+    s = Math.floor(s)
+    if(s == 0) {
+      this.score = ""
+    } else {
+      this.score = "+" + s
+    }
   }
 
   private push(pieceType: string) {

@@ -1,7 +1,8 @@
-import { Captures } from "./game-info.model";
+import { Captures, Score } from "./game-info.model";
 
 export interface GameStartEvent {
     playerColor: string,
     recordedMoves: string[],
-    captures: Captures
+    captures: Captures,
+    score: Score
 }

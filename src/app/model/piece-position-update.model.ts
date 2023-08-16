@@ -1,3 +1,4 @@
+import { Score } from "./game-info.model";
 import { Piece } from "./piece.model";
 
 export interface PiecePositionUpdate {
@@ -7,7 +8,8 @@ export interface PiecePositionUpdate {
     pawnPromotion: string, // queen, knight, bishop, rook
     reverted: Boolean,
     turn: string,
-    label: string
+    label: string,
+    score: Score
 }
 
 interface Move {
