@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { GameResult } from 'src/app/model/game-result.model';
 import { GameStartEvent } from 'src/app/model/game-start-event.model';
 import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
 import { GameService } from 'src/app/services/game.service';
@@ -11,43 +12,56 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class RecordedMovesComponent implements OnInit, OnDestroy {
 
-  moves: {white: string, black: string | null}[] = []
+  moves: { white: string, black: string | null }[] = []
+  result = ""
   private positionChangeSubscription: Subscription
   private gameStartedSubscription: Subscription
-  
+  private gameFinishedSubscription: Subscription
+
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
     this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
-    .subscribe((update: PiecePositionUpdate) => {
-      if(update.reverted) {
-        this.pop()
-      } else {
-        this.push(update.label)
-      }
-    })
+      .subscribe((update: PiecePositionUpdate) => {
+        if (update.reverted) {
+          this.pop()
+        } else {
+          this.push(update.label)
+        }
+      })
 
     this.gameStartedSubscription = this.gameService.getGameStartedEventObservable()
-    .subscribe((gameStarted: GameStartEvent) => {
-      gameStarted.recordedMoves.forEach((move: string) => {
-        this.push(move)
+      .subscribe((gameStarted: GameStartEvent) => {
+        gameStarted.recordedMoves.forEach((move: string) => {
+          this.push(move)
+        })
       })
-    })
+
+    this.gameFinishedSubscription = this.gameService.getGameFinishedObservable()
+      .subscribe((gameResult: GameResult) => {
+        if (gameResult.result == "white_player_won") {
+          this.result = "1-0"
+        } else if (gameResult.result == "black_player_won") {
+          this.result = "0-1"
+        } else if (gameResult.result == "draw") {
+          this.result = "1/2-1/2"
+        }
+      })
   }
 
   push(label: string) {
     let lastMove = this.moves[this.moves.length - 1]
-    if(lastMove && !lastMove.black) {
-      this.moves[this.moves.length - 1] = {white: lastMove.white, black: label}
+    if (lastMove && !lastMove.black) {
+      this.moves[this.moves.length - 1] = { white: lastMove.white, black: label }
     } else {
-      this.moves.push({white: label, black: null})
+      this.moves.push({ white: label, black: null })
     }
   }
 
   pop() {
     let lastMove = this.moves[this.moves.length - 1]
-    if(lastMove && lastMove.black) {
-      this.moves[this.moves.length - 1] = {white: lastMove.white, black: null}
+    if (lastMove && lastMove.black) {
+      this.moves[this.moves.length - 1] = { white: lastMove.white, black: null }
     } else {
       this.moves.pop()
     }
@@ -56,5 +70,6 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.positionChangeSubscription?.unsubscribe()
     this.gameStartedSubscription?.unsubscribe()
+    this.gameFinishedSubscription?.unsubscribe()
   }
 }

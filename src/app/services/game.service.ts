@@ -34,6 +34,7 @@ export class GameService implements OnDestroy {
   private rematchRequestedEvent: Subject<string> = new Subject()
   private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
   private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
+  private gameFinishedEvent: Subject<GameResult> = new Subject()
 
   private promotionClosedSubscription: Subscription
 
@@ -86,6 +87,10 @@ export class GameService implements OnDestroy {
 
   getPossibleMovesUpdateObservable() {
     return this.possibleMovesUpdate.asObservable()
+  }
+
+  getGameFinishedObservable() {
+    return this.gameFinishedEvent.asObservable()
   }
 
   initiateNewGame(mode: string, colorPreference: string | null, pieceSetup: string) {
@@ -231,6 +236,7 @@ export class GameService implements OnDestroy {
     this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResult) => {
       this.canPlayerMove = false
       this.gameResult = gameResult
+      this.gameFinishedEvent.next(gameResult)
     })
   }
 }
