@@ -15,7 +15,6 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private waitingForPlayersEventSubscription: Subscription
   private rematchRequestedSubscription: Subscription
- 
   constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {

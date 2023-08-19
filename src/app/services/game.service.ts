@@ -148,6 +148,17 @@ export class GameService implements OnDestroy {
     return this.playerColor
   }
 
+  getOpponentColor() {
+    if(this.playerColor === "white") {
+      return "black"
+    }
+    if(this.playerColor === "black") {
+      return "white"
+    }
+
+    return ""
+  }
+
   resign() {
     this.gameControlService.resign(this.playerId)
   }
