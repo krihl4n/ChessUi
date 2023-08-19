@@ -16,7 +16,6 @@ import { Promotion } from '../board/pawn-promotion/promotion.model';
 })
 export class GameService implements OnDestroy {
 
-  private piecePositions: FieldOccupation[] // necessary?
   private moveRequestInProgress: boolean = false
   private possibleMoves: PossibleMoves | null
   private canPlayerMove: boolean = false
@@ -208,11 +207,7 @@ export class GameService implements OnDestroy {
   private gameStarted(gameInfo: GameInfo) {
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-
-    if (this.piecePositions != gameInfo.piecePositions) {
-      this.fieldOccupationChange.next(gameInfo.piecePositions)
-      this.piecePositions = gameInfo.piecePositions
-    }
+    this.fieldOccupationChange.next(gameInfo.piecePositions)
 
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
