@@ -2,20 +2,10 @@
 //import * as SockJS from 'sockjs-client';
 import { Client, Message } from '@stomp/stompjs';
 import { Injectable } from '@angular/core';
-import { MoveRequest } from '../model/move-request.model';
 import { Subject } from 'rxjs';
-import { FieldOccupation } from '../model/field-occupation.model';
-import { PiecePositionUpdate } from '../model/piece-position-update.model';
-import { PossibleMoves } from '../model/possible-moves.model';
-import { GameStateUpdate } from '../model/game-state-update.model';
-import { GameResult } from '../model/game-result.model';
-import { StartGameRequest } from '../model/start-game-request.model';
-import { GameInfo } from '../model/game-info.model';
-import { JoinGameRequest } from '../model/join-game-request.model';
-import { RejoinGameRequest } from '../model/rejoin-game-request.model';
-import { PossibleMovesRequest } from '../model/possible-moves-request.model';
-import { ResignRequest } from '../model/resign-request.model';
-import { UndoMoveRequest } from '../model/undo-move-request.model';
+import { JoinGameRequest, MoveRequest, PossibleMovesRequest, RejoinGameRequest, ResignRequest, StartGameRequest, UndoMoveRequest } from '../model/requests';
+import { FieldOccupation } from '../model/typings';
+import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -27,10 +17,10 @@ export class WebSocketAPIService {
     fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
     piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
     gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
-    gameResultSubject: Subject<GameResult> = new Subject()
-    possibleMovesSubject: Subject<PossibleMoves> = new Subject()
-    gameStartedSubject: Subject<GameInfo> = new Subject()
-    joinedExistingGameSubject: Subject<GameInfo> = new Subject()
+    gameResultSubject: Subject<GameResultMessage> = new Subject()
+    possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
+    gameStartedSubject: Subject<GameInfoMessage> = new Subject()
+    joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     waitingForOtherPlayersSubject: Subject<string> = new Subject()
     rematchRequestedSubject: Subject<string> = new Subject()
 

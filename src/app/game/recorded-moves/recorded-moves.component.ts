@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GameResult } from 'src/app/model/game-result.model';
-import { GameStartEvent } from 'src/app/model/game-start-event.model';
-import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
+import { GameStartEvent, PiecePositionUpdate } from 'src/app/model/messages';
+import { GameResult } from 'src/app/model/typings';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({

@@ -1,9 +1,7 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Captures, Score } from 'src/app/model/game-info.model';
-import { GameStartEvent } from 'src/app/model/game-start-event.model';
-import { PiecePositionUpdate } from 'src/app/model/piece-position-update.model';
-import { Piece } from 'src/app/model/piece.model';
+import { GameStartEvent, PiecePositionUpdate } from 'src/app/model/messages';
+import { Captures, Piece, Score } from 'src/app/model/typings';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({

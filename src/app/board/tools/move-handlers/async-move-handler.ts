@@ -1,8 +1,8 @@
 import { PiecesLocations } from "../pieces-locations";
 import { HtmlPieceReneder } from "../html-piece-renderer";
 import { GameService } from "src/app/services/game.service";
-import { PiecePositionUpdate } from "src/app/model/piece-position-update.model";
 import { Subscription } from "rxjs";
+import { PiecePositionUpdate } from "src/app/model/messages";
 
 export class AsyncMoveHandler {
 

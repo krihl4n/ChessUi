@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { FieldOccupation } from '../model/field-occupation.model';
-import { GameResult } from '../model/game-result.model';
-import { GameStateUpdate } from '../model/game-state-update.model';
-import { PiecePositionUpdate } from '../model/piece-position-update.model';
-import { GameInfo } from '../model/game-info.model';
-import { PossibleMoves } from '../model/possible-moves.model';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
+import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
+import { FieldOccupation } from '../model/typings';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +17,7 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   subscribeToGameStartedEvent() {
-    this.webSocketApiService.gameStartedSubject.subscribe((gameInfo: GameInfo) => {
+    this.webSocketApiService.gameStartedSubject.subscribe((gameInfo: GameInfoMessage) => {
       this.storageService.save(gameInfo.gameId, gameInfo.player.id)
     })
   }
@@ -150,15 +146,15 @@ export class GameControlService { // rethink this component. is it needed? if so
     return this.webSocketApiService.gameStateUpdateSubject
   }
 
-  getPossibleMovesSubscription(): Subject<PossibleMoves> {
+  getPossibleMovesSubscription(): Subject<PossibleMovesMessage> {
     return this.webSocketApiService.possibleMovesSubject
   }
 
-  getGameResultSubscription(): Observable<GameResult> {
+  getGameResultSubscription(): Observable<GameResultMessage> {
     return this.webSocketApiService.gameResultSubject.asObservable()
   }
 
-  getGameStartedSubscription(): Subject<GameInfo> {
+  getGameStartedSubscription(): Subject<GameInfoMessage> {
     return this.webSocketApiService.gameStartedSubject
   }
 
@@ -170,7 +166,7 @@ export class GameControlService { // rethink this component. is it needed? if so
     return this, this.webSocketApiService.rematchRequestedSubject
   }
 
-  getJoinedExistingGameSubscription(): Subject<GameInfo> {
+  getJoinedExistingGameSubscription(): Subject<GameInfoMessage> {
     return this.webSocketApiService.joinedExistingGameSubject
   }
 }

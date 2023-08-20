@@ -1,15 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { FieldOccupation } from '../model/field-occupation.model';
-import { GameInfo } from '../model/game-info.model';
-import { GameResult } from '../model/game-result.model';
-import { GameStartEvent } from '../model/game-start-event.model';
-import { PiecePositionUpdate } from '../model/piece-position-update.model';
-import { PossibleMoves } from '../model/possible-moves.model';
 import { GameControlService } from './game-control.service';
-import { Move } from '../model/move.model'
 import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.service';
 import { Promotion } from '../board/pawn-promotion/promotion.model';
+import { GameInfoMessage, GameResultMessage, GameStartEvent, PiecePositionUpdate } from '../model/messages';
+import { FieldOccupation, GameResult, Move, PossibleMoves } from '../model/typings';
 
 @Injectable({
   providedIn: 'root'
@@ -198,18 +193,18 @@ export class GameService implements OnDestroy {
   }
 
   private subscribteToGameStartEvent() {
-    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfo) => { // TODO unsubscribe?
+    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfoMessage) => { // TODO unsubscribe?
       this.gameStarted(gameInfo)
     })
   }
 
   private subscribeToJoinedExistingGameEvent() {
-    this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfo) => {
+    this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfoMessage) => {
       this.gameStarted(gameInfo)
     })
   }
 
-  private gameStarted(gameInfo: GameInfo) {
+  private gameStarted(gameInfo: GameInfoMessage) {
     this.gameResult = null
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
@@ -239,7 +234,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToGameFinishedEvent() {
-    this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResult) => {
+    this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResultMessage) => {
       this.canPlayerMove = false
       this.gameResult = gameResult
       this.gameFinishedEvent.next(gameResult)
