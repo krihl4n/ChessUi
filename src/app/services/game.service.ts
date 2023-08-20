@@ -210,6 +210,7 @@ export class GameService implements OnDestroy {
   }
 
   private gameStarted(gameInfo: GameInfo) {
+    this.gameResult = null
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
     this.fieldOccupationChange.next(gameInfo.piecePositions)
@@ -218,6 +219,11 @@ export class GameService implements OnDestroy {
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
     this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score})
+    if(gameInfo.result) {
+      this.canPlayerMove = false
+      this.gameResult = gameInfo.result
+      this.gameFinishedEvent.next(gameInfo.result)
+    }
   }
 
   private subscribeToWaitingForOtherPlayersEvent() {

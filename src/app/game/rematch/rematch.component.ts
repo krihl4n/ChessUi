@@ -13,12 +13,12 @@ export class RematchComponent implements OnInit, OnDestroy {
   private gameResultSubscription: Subscription
   private shouldBeVisible = false
 
-  constructor(private gameConstrolService: GameControlService, private gameService: GameService) {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameResultSubscription = this.gameConstrolService.getGameResultSubscription().subscribe(result => {
+    this.gameResultSubscription = this.gameService.getGameFinishedObservable().subscribe(result => {
       this.shouldBeVisible = true
-    })    
+    })
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,6 @@
 import { Piece } from "../board/tools/piece.model"
 import { FieldOccupation } from "./field-occupation.model"
+import { GameResult } from "./game-result.model"
 
 export interface GameInfo {
     gameId: string,
@@ -9,7 +10,8 @@ export interface GameInfo {
     turn: string,
     recordedMoves: string[],
     captures: Captures,
-    score: Score
+    score: Score,
+    result: GameResult | null
 }
 
 interface Player {

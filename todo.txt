@@ -6,7 +6,6 @@
 - proper move command dispatcher? 
 - game finished info
 - what happens if move fails on the backend? 
-- enter link with finished game
 - undo attacks on safari renders pieces at incorrect location
 - rematch proposal send while opponent is not active, and rejoins 
 - pawn promotion - if there is more figures than standard amount (eg two white queens) they are not displayed after refresh
