@@ -1,4 +1,4 @@
-export interface PossibleMovesRequest {
+export type PossibleMovesRequest = {
     gameId: string,
     field: string,
 }

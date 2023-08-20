@@ -1,4 +1,4 @@
-export interface GameResult {
+export type GameResult = {
     result: string,
     reason: string
 }

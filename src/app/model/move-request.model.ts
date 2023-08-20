@@ -1,4 +1,4 @@
-export interface MoveRequest {
+export type MoveRequest = {
     gameId: string,
     playerId: string,
     from: string,

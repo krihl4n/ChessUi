@@ -1,3 +1,3 @@
-export interface GameStateUpdate {
+export type GameStateUpdate  = {
     gameState: string
 }

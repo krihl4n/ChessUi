@@ -2,7 +2,7 @@ import { Piece } from "../board/tools/piece.model"
 import { FieldOccupation } from "./field-occupation.model"
 import { GameResult } from "./game-result.model"
 
-export interface GameInfo {
+export type GameInfo = {
     gameId: string,
     mode: string,
     player: Player,
@@ -14,17 +14,17 @@ export interface GameInfo {
     result: GameResult | null
 }
 
-interface Player {
+type Player = {
     id: string,
     color: string
 }
 
-export interface Captures {
+export type Captures = {
     capturesOfWhitePlayer: Piece[],
     capturesOfBlackPlayer: Piece[],
 }
 
-export interface Score {
+export type Score = {
     white: number,
     black: number
 }

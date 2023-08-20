@@ -1,4 +1,4 @@
-export interface RejoinGameRequest {
+export type RejoinGameRequest = {
     gameId: string,
     playerId: string,
 }

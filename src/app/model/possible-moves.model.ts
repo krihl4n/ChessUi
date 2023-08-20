@@ -1,4 +1,4 @@
-export interface PossibleMoves {
+export type PossibleMoves = {
     from: string,
     to: string[]
 }

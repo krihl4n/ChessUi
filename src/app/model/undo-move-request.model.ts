@@ -1,4 +1,4 @@
-export interface UndoMoveRequest {
+export type UndoMoveRequest = {
     gameId: string,
     playerId: string,
 }

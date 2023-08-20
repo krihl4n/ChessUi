@@ -1,7 +1,7 @@
 import { Score } from "./game-info.model";
 import { Piece } from "./piece.model";
 
-export interface PiecePositionUpdate {
+export type PiecePositionUpdate = {
     primaryMove: Move,
     secondaryMove: Move | null,
     pieceCapture: PieceCapture | null,
@@ -12,12 +12,12 @@ export interface PiecePositionUpdate {
     score: Score
 }
 
-interface Move {
+type Move = {
     from: string,
     to: string
 }
 
-interface PieceCapture {
+type PieceCapture = {
     field: string,
     capturedPiece: Piece
 }

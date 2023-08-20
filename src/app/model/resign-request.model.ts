@@ -1,4 +1,4 @@
-export interface ResignRequest {
+export type ResignRequest = {
     gameId: string,
     playerId: string,
 }

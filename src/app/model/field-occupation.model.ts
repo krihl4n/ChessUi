@@ -1,6 +1,6 @@
 import { Piece } from "./piece.model";
 
-export interface FieldOccupation {
+export type FieldOccupation = {
     field: string,
     piece: Piece
 }

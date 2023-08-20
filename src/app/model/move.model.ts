@@ -1,4 +1,4 @@
-export interface Move {
+export type Move = {
     from: string,
     to: string
 }
