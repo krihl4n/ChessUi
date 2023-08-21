@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { JoinGameRequest, MoveRequest, PossibleMovesRequest, RejoinGameRequest, ResignRequest, StartGameRequest, UndoMoveRequest } from '../model/requests';
 import { FieldOccupation } from '../model/typings';
 import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
+import { GameEventsService } from './game-events.service';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
 
@@ -15,7 +16,7 @@ import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdat
 export class WebSocketAPIService {
     client: Client;
     fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
-    piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
+   // piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
     gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
     gameResultSubject: Subject<GameResultMessage> = new Subject()
     possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
@@ -24,7 +25,7 @@ export class WebSocketAPIService {
     waitingForOtherPlayersSubject: Subject<string> = new Subject()
     rematchRequestedSubject: Subject<string> = new Subject()
 
-    constructor(){
+    constructor(private gameEventsService: GameEventsService){
     }
 
     connect(): Promise<void> {
@@ -62,7 +63,8 @@ export class WebSocketAPIService {
                     _this.onJoinedExistingGame(msg)
                 });
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
-                    _this.onPiecePositionUpdate(msg);
+                    _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
+                    //_this.onPiecePositionUpdate(msg);
                 });
                 this.subscribe('/user/queue/fields-occupation', function (msg) {
                     _this.onPiecePositionsReceived(msg);
@@ -154,10 +156,10 @@ export class WebSocketAPIService {
         this.joinedExistingGameSubject.next(value)
     }
 
-    onPiecePositionUpdate(message: Message) {
-        let value = JSON.parse(message.body)
-        this.piecePositionUpdateSubject.next(value)
-    }
+    // onPiecePositionUpdate(message: Message) {
+    //     let value = JSON.parse(message.body)
+    //     this.piecePositionUpdateSubject.next(value)
+    // }
 
     onPiecePositionsReceived(message: Message) {
         let value = JSON.parse(message.body)

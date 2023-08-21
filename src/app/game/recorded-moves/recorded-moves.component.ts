@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameStartEvent, PiecePositionUpdate } from 'src/app/model/messages';
 import { GameResult } from 'src/app/model/typings';
+import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -17,10 +18,10 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
   private gameStartedSubscription: Subscription
   private gameFinishedSubscription: Subscription
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private gameEventsService: GameEventsService) { }
 
   ngOnInit(): void {
-    this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
+    this.positionChangeSubscription = this.gameEventsService.getPiecePositionUpdatedObservable()
       .subscribe((update: PiecePositionUpdate) => {
         if (update.reverted) {
           this.pop()

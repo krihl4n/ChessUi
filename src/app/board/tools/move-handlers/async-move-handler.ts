@@ -1,15 +1,15 @@
 import { PiecesLocations } from "../pieces-locations";
 import { HtmlPieceReneder } from "../html-piece-renderer";
-import { GameService } from "src/app/services/game.service";
 import { Subscription } from "rxjs";
 import { PiecePositionUpdate } from "src/app/model/messages";
+import { GameEventsService } from "src/app/services/game-events.service";
 
 export class AsyncMoveHandler {
 
     private positionChangeSubscription: Subscription
 
-    constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameService: GameService) {
-        this.positionChangeSubscription = this.gameService.getPiecePositionChangeObservable()
+    constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameEventsService: GameEventsService) {
+        this.positionChangeSubscription = this.gameEventsService.getPiecePositionUpdatedObservable()
             .subscribe((update: PiecePositionUpdate) => {
                 console.log("***** M&M HANDLER - POSITION UPDATE")
                 if (!update.reverted) {

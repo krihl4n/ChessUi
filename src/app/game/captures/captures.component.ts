@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameStartEvent, PiecePositionUpdate } from 'src/app/model/messages';
 import { Captures, Piece, Score } from 'src/app/model/typings';
+import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -18,10 +19,10 @@ export class CapturesComponent implements OnInit, OnDestroy {
   private piecePositionSubscription: Subscription
   private gameStartedSubscription: Subscription
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private gameEventsService: GameEventsService) { }
 
   ngOnInit(): void {
-    this.piecePositionSubscription = this.gameService.getPiecePositionChangeObservable().subscribe((update: PiecePositionUpdate) => {
+    this.piecePositionSubscription = this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdate) => {
       let playerColor = this.getPlayerColor(this.player)
       this.updateCaptures(playerColor, update)
       this.setScore(playerColor, update.score)

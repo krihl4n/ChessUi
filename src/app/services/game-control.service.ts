@@ -138,9 +138,9 @@ export class GameControlService { // rethink this component. is it needed? if so
     return this.webSocketApiService.fieldOccupationChange
   }
 
-  piecePositionUpdate(): Subject<PiecePositionUpdate> {
-    return this.webSocketApiService.piecePositionUpdateSubject
-  }
+  // piecePositionUpdate(): Subject<PiecePositionUpdate> {
+  //   return this.webSocketApiService.piecePositionUpdateSubject
+  // }
 
   getGameStateUpdatesSubscription(): Subject<GameStateUpdate> {
     return this.webSocketApiService.gameStateUpdateSubject

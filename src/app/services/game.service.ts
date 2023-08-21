@@ -5,6 +5,7 @@ import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.ser
 import { Promotion } from '../board/pawn-promotion/promotion.model';
 import { GameInfoMessage, GameResultMessage, GameStartEvent, PiecePositionUpdate } from '../model/messages';
 import { FieldOccupation, GameResult, Move, PossibleMoves } from '../model/typings';
+import { GameEventsService } from './game-events.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class GameService implements OnDestroy {
   public lastMove: Move | null // for field marking
 
   private fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
-  private piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
+  //private piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
   private rematchRequestedEvent: Subject<string> = new Subject()
@@ -33,7 +34,7 @@ export class GameService implements OnDestroy {
 
   private promotionClosedSubscription: Subscription
 
-  constructor(private gameControlService: GameControlService, private pawnPromotionService: PawnPromotionService) {
+  constructor(private gameControlService: GameControlService, private gameEventsService: GameEventsService, private pawnPromotionService: PawnPromotionService) {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
@@ -64,9 +65,9 @@ export class GameService implements OnDestroy {
     return this.fieldOccupationChange.asObservable();
   }
 
-  getPiecePositionChangeObservable() {
-    return this.piecePositionChange.asObservable()
-  }
+  // getPiecePositionChangeObservable() {
+  //   return this.piecePositionChange.asObservable()
+  // }
 
   getGameStartedEventObservable() {
     return this.gameStartEvent.asObservable()
@@ -167,7 +168,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToMoveUpdates() {
-    this.gameControlService.piecePositionUpdate().subscribe((update: PiecePositionUpdate) => {
+    this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdate) => {
       if (update.reverted) {
         this.lastMove = null
       } else {
@@ -181,7 +182,7 @@ export class GameService implements OnDestroy {
       this.moveRequestInProgress = false // todo something better
 
       this.turn = update.turn
-      this.piecePositionChange.next(update)
+      //this.piecePositionChange.next(update)
     })
   }
 

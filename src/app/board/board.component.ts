@@ -15,6 +15,7 @@ import { GameService } from '../services/game.service';
 import { Subscription } from 'rxjs';
 import { GameStartEvent } from '../model/messages';
 import { FieldOccupation } from '../model/typings';
+import { GameEventsService } from '../services/game-events.service';
 
 @Component({
   selector: 'app-board',
@@ -28,6 +29,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService,
     private gameService: GameService,
+    private gameEventsService: GameEventsService,
     private piecesLocations: PiecesLocations) { }
 
   @ViewChild('canvas', { static: true })
@@ -119,7 +121,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.htmlPieceRender = new HtmlPieceReneder(this.renderer, this.fieldUtils, this.boardContainer.nativeElement, this.boardSetup.fieldSize, this)
     this.dragHandler = new PieceDragHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
-    this.pieceMoveHandler = new AsyncMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameService)
+    this.pieceMoveHandler = new AsyncMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameEventsService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
     this.pieces = new Pieces()
