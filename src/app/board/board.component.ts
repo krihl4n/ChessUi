@@ -76,11 +76,7 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.boardSetup = new BoardSetup(false, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
         }
-      })
-
-    this.fieldOccupationChange = this.gameService.getFieldOccupationChangeObservable() // maybe also get initial position, or use ReplaySubject
-      .subscribe((positions: FieldOccupation[]) => {
-        positions.forEach(fieldOccupation => {
+        gameStartEvent.piecePositions.forEach(fieldOccupation => {
           if (fieldOccupation.piece) {
             const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
             if (pieceElement) {
@@ -93,11 +89,7 @@ export class BoardComponent implements OnInit, OnDestroy {
         })
         setTimeout(() => {
           this.renderPieces()
-       }, 100) // pieces not diplayed at proper locations fix.
-        
-        // this.htmlPieceRender.preRenderPieces(Array.from(this.piecesLocations.getAll().values()), () => {
-        //   this.renderPieces()
-        // })
+       }, 200) // pieces not diplayed at proper locations fix.
       })
   }
 

@@ -134,10 +134,6 @@ export class GameControlService { // rethink this component. is it needed? if so
     }
   }
 
-  fieldOccupationChange(): Subject<FieldOccupation[]> {
-    return this.webSocketApiService.fieldOccupationChange
-  }
-
   getPossibleMovesSubscription(): Subject<PossibleMovesMessage> {
     return this.webSocketApiService.possibleMovesSubject
   }

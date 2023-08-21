@@ -4,7 +4,6 @@ import { Client, Message } from '@stomp/stompjs';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { JoinGameRequest, MoveRequest, PossibleMovesRequest, RejoinGameRequest, ResignRequest, StartGameRequest, UndoMoveRequest } from '../model/requests';
-import { FieldOccupation } from '../model/typings';
 import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
 import { GameEventsService } from './game-events.service';
 
@@ -15,7 +14,6 @@ import { GameEventsService } from './game-events.service';
 })
 export class WebSocketAPIService {
     client: Client;
-    fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
     gameResultSubject: Subject<GameResultMessage> = new Subject()
     possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
     gameStartedSubject: Subject<GameInfoMessage> = new Subject()
@@ -58,9 +56,6 @@ export class WebSocketAPIService {
                 });
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
                     _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
-                });
-                this.subscribe('/user/queue/fields-occupation', function (msg) {
-                    _this.onPiecePositionsReceived(msg);
                 });
                 this.subscribe('/user/queue/possible-moves', function (msg) {
                     _this.onPossibleMovesReceived(msg);
@@ -142,11 +137,6 @@ export class WebSocketAPIService {
     onJoinedExistingGame(message: Message) {
         let value = JSON.parse(message.body)
         this.joinedExistingGameSubject.next(value)
-    }
-
-    onPiecePositionsReceived(message: Message) {
-        let value = JSON.parse(message.body)
-        this.fieldOccupationChange.next(value)
     }
 
     onPossibleMovesReceived(message: Message) {

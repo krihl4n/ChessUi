@@ -23,8 +23,6 @@ export class GameService implements OnDestroy {
   public colorPreference: string | null
   public lastMove: Move | null // for field marking
 
-  private fieldOccupationChange: Subject<FieldOccupation[]> = new Subject()
-  //private piecePositionChange: Subject<PiecePositionUpdate> = new Subject()
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
   private waitingForPlayersEvent: Subject<string> = new Subject()
   private rematchRequestedEvent: Subject<string> = new Subject()
@@ -60,14 +58,6 @@ export class GameService implements OnDestroy {
   getPromotionClosedObservable() {
     return this.pawnPromotionClosed.asObservable();
   }
-
-  getFieldOccupationChangeObservable() {
-    return this.fieldOccupationChange.asObservable();
-  }
-
-  // getPiecePositionChangeObservable() {
-  //   return this.piecePositionChange.asObservable()
-  // }
 
   getGameStartedEventObservable() {
     return this.gameStartEvent.asObservable()
@@ -209,12 +199,12 @@ export class GameService implements OnDestroy {
     this.gameResult = null
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-    this.fieldOccupationChange.next(gameInfo.piecePositions)
+  //  this.fieldOccupationChange.next(gameInfo.piecePositions)
 
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
-    this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score})
+    this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score, piecePositions: gameInfo.piecePositions})
     if(gameInfo.result) {
       this.canPlayerMove = false
       this.gameResult = gameInfo.result
