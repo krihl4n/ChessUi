@@ -16,8 +16,6 @@ import { GameEventsService } from './game-events.service';
 export class WebSocketAPIService {
     client: Client;
     fieldOccupationChange: Subject<FieldOccupation[]>  = new Subject()
-   // piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
-    gameStateUpdateSubject: Subject<GameStateUpdate> = new Subject()
     gameResultSubject: Subject<GameResultMessage> = new Subject()
     possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
     gameStartedSubject: Subject<GameInfoMessage> = new Subject()
@@ -47,10 +45,6 @@ export class WebSocketAPIService {
                     _this.onGameStarted(msg)
                 })
 
-                this.subscribe("/user/queue/game-state-updates", function(msg) {
-                    _this.onGameStateUpdate(msg)
-                })
-
                 this.subscribe("/user/queue/waiting-for-other-player", function(msg) {
                     _this.onWaitingForOtherPlayersReceived(msg)
                 })
@@ -64,7 +58,6 @@ export class WebSocketAPIService {
                 });
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
                     _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
-                    //_this.onPiecePositionUpdate(msg);
                 });
                 this.subscribe('/user/queue/fields-occupation', function (msg) {
                     _this.onPiecePositionsReceived(msg);
@@ -141,11 +134,6 @@ export class WebSocketAPIService {
         this.publish("/chess-app/possible-moves", JSON.stringify(message))
     }
 
-    onGameStateUpdate(message: Message) {
-        let value = JSON.parse(message.body)
-        this.gameStateUpdateSubject.next(value)
-    }
-
     onGameStarted(message: Message) {
         let value = JSON.parse(message.body)
         this.gameStartedSubject.next(value)
@@ -155,11 +143,6 @@ export class WebSocketAPIService {
         let value = JSON.parse(message.body)
         this.joinedExistingGameSubject.next(value)
     }
-
-    // onPiecePositionUpdate(message: Message) {
-    //     let value = JSON.parse(message.body)
-    //     this.piecePositionUpdateSubject.next(value)
-    // }
 
     onPiecePositionsReceived(message: Message) {
         let value = JSON.parse(message.body)
