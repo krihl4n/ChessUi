@@ -63,7 +63,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
     if (s == 0) {
       this.score = ""
     } else {
-      this.score = "+" + s
+      this.score = " | +" + s
     }
   }
 
