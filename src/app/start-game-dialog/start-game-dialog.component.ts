@@ -4,6 +4,7 @@ import { GameService } from '../services/game.service';
 import {Clipboard} from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GameEventsService } from '../services/game-events.service';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -15,10 +16,10 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
   private gameStartedEventSubscription: Subscription
   private waitingForPlayersEventSubscription: Subscription
 
-  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard, private router: Router) { }
+  constructor(private dialogRef: MatDialogRef<StartGameDialogComponent>, private gameService: GameService, private clipboard: Clipboard, private router: Router, private gameEventsService: GameEventsService) { }
   
   ngOnInit(): void {
-    this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
+    this.waitingForPlayersEventSubscription = this.gameEventsService.getWaitingForOtherPlayersObservable().subscribe((gameId: string) => {
       if(this.isFriendSelected) {
         this.showFirstScreen = false
         this.invitationUrl = window.location.href + "/" + gameId

@@ -141,8 +141,4 @@ export class GameControlService { // rethink this component. is it needed? if so
   getGameStartedSubscription(): Subject<GameInfoMessage> {
     return this.webSocketApiService.gameStartedSubject
   }
-
-  getWaitingForOtherPlayersSubscription(): Subject<string> {
-    return this.webSocketApiService.waitingForOtherPlayersSubject
-  }
 }

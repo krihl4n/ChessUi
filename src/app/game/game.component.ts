@@ -28,7 +28,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.waitingForPlayersEventSubscription = this.gameService.getWaitinForPlayersObservable().subscribe((gameId: string) => {
+    this.waitingForPlayersEventSubscription = this.gameEventsService.getWaitingForOtherPlayersObservable().subscribe((gameId: string) => {
       this.router.navigate(['/game', gameId])
     })
 

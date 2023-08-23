@@ -17,8 +17,6 @@ export class WebSocketAPIService {
     gameResultSubject: Subject<GameResultMessage> = new Subject()
     possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
     gameStartedSubject: Subject<GameInfoMessage> = new Subject() // next 
-    waitingForOtherPlayersSubject: Subject<string> = new Subject()
-
 
     constructor(private gameEventsService: GameEventsService){
     }
@@ -43,7 +41,7 @@ export class WebSocketAPIService {
                 })
 
                 this.subscribe("/user/queue/waiting-for-other-player", function(msg) {
-                    _this.onWaitingForOtherPlayersReceived(msg)
+                    _this.gameEventsService.waitingForOtherPlayersMsgReceived(msg.body)
                 })
 
                 this.subscribe("/user/queue/game-result", function (msg) {
@@ -137,9 +135,5 @@ export class WebSocketAPIService {
     onGameResultReceived(message: Message) {
         let value = JSON.parse(message.body)
         this.gameResultSubject.next(value)
-    }
-
-    onWaitingForOtherPlayersReceived(message: Message) {
-        this.waitingForOtherPlayersSubject.next(message.body)
     }
 }

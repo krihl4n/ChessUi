@@ -12,6 +12,7 @@ export class GameEventsService {
     private piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
     private rematchRequestedSubject: Subject<string> = new Subject()
     private joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
+    private waitingForOtherPlayersSubject: Subject<string> = new Subject()
 
     piecePositionUpdated(piecePosition: PiecePositionUpdate) {
         this.piecePositionUpdateSubject.next(piecePosition)
@@ -25,6 +26,10 @@ export class GameEventsService {
         this.joinedExistingGameSubject.next(gameInfo)
     }
 
+    waitingForOtherPlayersMsgReceived(gameId: string) {
+        this.waitingForOtherPlayersSubject.next(gameId)
+    }
+
     getPiecePositionUpdatedObservable() {
         return this.piecePositionUpdateSubject.asObservable()
     }
@@ -35,5 +40,9 @@ export class GameEventsService {
 
     getJoinedExistingGameObservable() {
         return this.joinedExistingGameSubject.asObservable()
+    }
+
+    getWaitingForOtherPlayersObservable() {
+        return this.waitingForOtherPlayersSubject.asObservable()
     }
 }
