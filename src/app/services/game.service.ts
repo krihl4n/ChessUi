@@ -4,7 +4,7 @@ import { GameControlService } from './game-control.service';
 import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.service';
 import { Promotion } from '../board/pawn-promotion/promotion.model';
 import { GameInfoMessage, GameResultMessage, GameStartEvent, PiecePositionUpdate } from '../model/messages';
-import { FieldOccupation, GameResult, Move, PossibleMoves } from '../model/typings';
+import { GameResult, Move, PossibleMoves } from '../model/typings';
 import { GameEventsService } from './game-events.service';
 
 @Injectable({
@@ -93,7 +93,7 @@ export class GameService implements OnDestroy {
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     this.pawnPromotionService.moveWithPromotionPerformed()
     this.moveRequestInProgress = true
-    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion) // TODO what happens if move failes on the backend side?
+    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion) // TODO what happens if move fails on the backend side?
     return true
   }
 
@@ -111,7 +111,7 @@ export class GameService implements OnDestroy {
       }
 
       this.moveRequestInProgress = true
-      this.gameControlService.moveRequest(this.playerId, from, to, null) // TODO what happens if move failes on the backend side?
+      this.gameControlService.moveRequest(this.playerId, from, to, null) // TODO what happens if move fails on the backend side?
       return MoveRequestResult.ACCEPTED
     }
     return MoveRequestResult.REJECTED;
@@ -161,12 +161,8 @@ export class GameService implements OnDestroy {
 
       const from = update.primaryMove.from
       const to = update.primaryMove.to
-
-      // const piece = this.piecePositions[from] necessary?
       this.moveRequestInProgress = false // todo something better
-
       this.turn = update.turn
-      //this.piecePositionChange.next(update)
     })
   }
 
