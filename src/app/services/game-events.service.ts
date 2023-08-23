@@ -10,12 +10,21 @@ import { WebSocketAPIService } from "./web-socket-api.service";
 export class GameEventsService {
 
     private piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
+    private rematchRequestedSubject: Subject<string> = new Subject()
 
     piecePositionUpdated(piecePosition: PiecePositionUpdate) {
         this.piecePositionUpdateSubject.next(piecePosition)
     }
     
+    rematchRequested(gameId: string) {
+        this.rematchRequestedSubject.next(gameId)
+    }
+
     getPiecePositionUpdatedObservable() {
         return this.piecePositionUpdateSubject.asObservable()
+    }
+
+    getRematchRequestedObservable() {
+        return this.rematchRequestedSubject.asObservable()
     }
 }

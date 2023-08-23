@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { GameEventsService } from '../services/game-events.service';
 import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
 
@@ -14,7 +15,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private waitingForPlayersEventSubscription: Subscription
   private rematchRequestedSubscription: Subscription
-  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router, private gameEventsService: GameEventsService) { }
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false
@@ -31,7 +32,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.router.navigate(['/game', gameId])
     })
 
-    this.rematchRequestedSubscription = this.gameService.getRematchRequestedObservable().subscribe((gameId: string) => {
+    this.rematchRequestedSubscription = this.gameEventsService.getRematchRequestedObservable().subscribe((gameId: string) => {
       this.router.navigate(['/game', gameId])
     })
   }
