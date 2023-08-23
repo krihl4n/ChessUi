@@ -184,7 +184,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToJoinedExistingGameEvent() {
-    this.gameControlService.getJoinedExistingGameSubscription().subscribe((gameInfo: GameInfoMessage) => {
+    this.gameEventsService.getJoinedExistingGameObservable().subscribe((gameInfo: GameInfoMessage) => {
       this.gameStarted(gameInfo)
     })
   }

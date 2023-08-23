@@ -17,7 +17,6 @@ export class WebSocketAPIService {
     gameResultSubject: Subject<GameResultMessage> = new Subject()
     possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
     gameStartedSubject: Subject<GameInfoMessage> = new Subject() // next 
-    joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     waitingForOtherPlayersSubject: Subject<string> = new Subject()
 
 
@@ -52,7 +51,7 @@ export class WebSocketAPIService {
                 });
 
                 this.subscribe("/user/queue/joined-existing-game", function (msg) {
-                    _this.onJoinedExistingGame(msg)
+                    _this.gameEventsService.joinedExistingGame(JSON.parse(msg.body))
                 });
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
                     _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
@@ -128,11 +127,6 @@ export class WebSocketAPIService {
     onGameStarted(message: Message) {
         let value = JSON.parse(message.body)
         this.gameStartedSubject.next(value)
-    }
-
-    onJoinedExistingGame(message: Message) {
-        let value = JSON.parse(message.body)
-        this.joinedExistingGameSubject.next(value)
     }
 
     onPossibleMovesReceived(message: Message) {
