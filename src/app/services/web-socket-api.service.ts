@@ -15,7 +15,6 @@ import { GameEventsService } from './game-events.service';
 export class WebSocketAPIService {
     client: Client;
     gameResultSubject: Subject<GameResultMessage> = new Subject()
-    possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
     gameStartedSubject: Subject<GameInfoMessage> = new Subject() // next 
 
     constructor(private gameEventsService: GameEventsService){
@@ -43,11 +42,9 @@ export class WebSocketAPIService {
                 this.subscribe("/user/queue/waiting-for-other-player", function(msg) {
                     _this.gameEventsService.waitingForOtherPlayersMsgReceived(msg.body)
                 })
-
                 this.subscribe("/user/queue/game-result", function (msg) {
                     _this.onGameResultReceived(msg);
                 });
-
                 this.subscribe("/user/queue/joined-existing-game", function (msg) {
                     _this.gameEventsService.joinedExistingGame(JSON.parse(msg.body))
                 });
@@ -55,7 +52,7 @@ export class WebSocketAPIService {
                     _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
                 });
                 this.subscribe('/user/queue/possible-moves', function (msg) {
-                    _this.onPossibleMovesReceived(msg);
+                    _this.gameEventsService.possibleMovesReceived(JSON.parse(msg.body))
                 });
                 this.subscribe('/user/queue/rematch-requested', function(msg) {
                     _this.gameEventsService.rematchRequested(msg.body)
@@ -125,11 +122,6 @@ export class WebSocketAPIService {
     onGameStarted(message: Message) {
         let value = JSON.parse(message.body)
         this.gameStartedSubject.next(value)
-    }
-
-    onPossibleMovesReceived(message: Message) {
-        let value = JSON.parse(message.body)
-        this.possibleMovesSubject.next(value)
     }
 
     onGameResultReceived(message: Message) {

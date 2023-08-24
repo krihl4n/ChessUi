@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { GameInfoMessage, GameStateUpdate, PiecePositionUpdate } from "../model/messages";
+import { GameInfoMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
 import { FieldOccupation } from "../model/typings";
 import { WebSocketAPIService } from "./web-socket-api.service";
 
@@ -13,7 +13,8 @@ export class GameEventsService {
     private rematchRequestedSubject: Subject<string> = new Subject()
     private joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     private waitingForOtherPlayersSubject: Subject<string> = new Subject()
-
+    private possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
+    
     piecePositionUpdated(piecePosition: PiecePositionUpdate) {
         this.piecePositionUpdateSubject.next(piecePosition)
     }
@@ -30,6 +31,10 @@ export class GameEventsService {
         this.waitingForOtherPlayersSubject.next(gameId)
     }
 
+    possibleMovesReceived(possibleMovesMessage: PossibleMovesMessage) {
+        this.possibleMovesSubject.next(possibleMovesMessage)
+    }
+
     getPiecePositionUpdatedObservable() {
         return this.piecePositionUpdateSubject.asObservable()
     }
@@ -44,5 +49,9 @@ export class GameEventsService {
 
     getWaitingForOtherPlayersObservable() {
         return this.waitingForOtherPlayersSubject.asObservable()
+    }
+
+    getPossibleMovesObservable() {
+        return this.possibleMovesSubject.asObservable()
     }
 }

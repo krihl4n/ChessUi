@@ -129,11 +129,7 @@ export class GameControlService { // rethink this component. is it needed? if so
       this.webSocketApiService.sendRequestPossibleMovesRequest({gameId: savedGame.gameId, field: field})
     }
   }
-
-  getPossibleMovesSubscription(): Subject<PossibleMovesMessage> {
-    return this.webSocketApiService.possibleMovesSubject
-  }
-
+  
   getGameResultSubscription(): Observable<GameResultMessage> {
     return this.webSocketApiService.gameResultSubject.asObservable()
   }

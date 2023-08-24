@@ -13,7 +13,6 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
 
     private markedField?: string
     private previouslyMarkedField?: string
-    private possibleMoves: PossibleMoves | null
     private promotionClosedSubscription: Subscription
     private possibleMovesUpdateSubscription: Subscription
 
@@ -23,9 +22,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         private piecesLocations: PiecesLocations,
         private renderer: HtmlPieceReneder,
         private gameService: GameService) {
-        this.possibleMovesUpdateSubscription = this.gameService.getPossibleMovesUpdateObservable().subscribe((possibleMoves: PossibleMoves) => {
-            this.possibleMoves = possibleMoves
-        })
+
         this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: Promotion | null) => {
             console.log("***** M & M PROMOTION CLOSED")
             this.markedField = undefined // todo extract field marking
@@ -106,11 +103,12 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
     }
 
     fieldIsMarkedForPossibleMove(field: string): boolean {
-        if (!this.possibleMoves) {
+        let possibleMoves = this.gameService.getPossibleMoves()
+        if(!possibleMoves) {
             return false
         }
-        if (this.possibleMoves.from == this.markedField) {
-            return this.possibleMoves.to.includes(field)
+        if (possibleMoves.from == this.markedField) {
+            return possibleMoves.to.includes(field)
         }
         return false
     }

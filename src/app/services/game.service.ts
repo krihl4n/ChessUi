@@ -24,7 +24,6 @@ export class GameService implements OnDestroy {
   public lastMove: Move | null // for field marking
 
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
-  private possibleMovesUpdate: Subject<PossibleMoves> = new Subject()
   private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
   private gameFinishedEvent: Subject<GameResult> = new Subject()
 
@@ -59,8 +58,8 @@ export class GameService implements OnDestroy {
     return this.gameStartEvent.asObservable()
   }
 
-  getPossibleMovesUpdateObservable() {
-    return this.possibleMovesUpdate.asObservable()
+  getPossibleMoves() {
+    return this.possibleMoves
   }
 
   getGameFinishedObservable() {
@@ -161,9 +160,8 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToPossibleMoves() {
-    this.gameControlService.getPossibleMovesSubscription().subscribe((possibleMoves: PossibleMoves) => {
+    this.gameEventsService.getPossibleMovesObservable().subscribe((possibleMoves: PossibleMoves) => {
       this.possibleMoves = possibleMoves
-      this.possibleMovesUpdate.next(possibleMoves)
     })
   }
 
