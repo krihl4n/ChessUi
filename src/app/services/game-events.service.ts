@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { GameInfoMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
-import { FieldOccupation } from "../model/typings";
-import { WebSocketAPIService } from "./web-socket-api.service";
+import { GameInfoMessage, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
 
 @Injectable({
     providedIn: "root"

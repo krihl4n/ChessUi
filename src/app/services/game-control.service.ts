@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
-import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
-import { FieldOccupation } from '../model/typings';
+import { GameInfoMessage, GameResultMessage} from '../model/messages';
 
 @Injectable({
   providedIn: 'root'

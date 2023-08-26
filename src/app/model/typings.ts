@@ -1,4 +1,3 @@
-
 export type Player = {
     id: string,
     color: string
@@ -18,7 +17,6 @@ export type Piece  = {
     color: string,
     type: string
 }
-
 
 export type Move = {
     from: string,
@@ -43,4 +41,16 @@ export type GameResult = {
 export type PossibleMoves = {
     from: string,
     to: string[]
+}
+
+export type GameStartEvent = {
+    playerColor: string,
+    recordedMoves: string[],
+    captures: Captures,
+    score: Score,
+    piecePositions:  FieldOccupation[]
+}
+
+export type GameFinishedEvent = {
+    gameResult: GameResult
 }

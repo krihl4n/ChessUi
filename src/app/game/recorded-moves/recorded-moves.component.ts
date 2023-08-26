@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GameStartEvent, PiecePositionUpdate } from 'src/app/model/messages';
-import { GameResult } from 'src/app/model/typings';
+import { PiecePositionUpdate } from 'src/app/model/messages';
+import { GameFinishedEvent, GameResult, GameStartEvent } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameService } from 'src/app/services/game.service';
 
@@ -38,12 +38,13 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
       })
 
     this.gameFinishedSubscription = this.gameService.getGameFinishedObservable()
-      .subscribe((gameResult: GameResult) => {
-        if (gameResult.result == "white_player_won") {
+      .subscribe((gameFinishedEvent: GameFinishedEvent) => {
+        let result = gameFinishedEvent.gameResult.result
+        if (result == "white_player_won") {
           this.result = "1-0"
-        } else if (gameResult.result == "black_player_won") {
+        } else if (result == "black_player_won") {
           this.result = "0-1"
-        } else if (gameResult.result == "draw") {
+        } else if (result == "draw") {
           this.result = "1/2-1/2"
         }
       })

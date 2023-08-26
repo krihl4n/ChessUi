@@ -13,9 +13,8 @@ import { Pieces } from './tools/pieces';
 import { MarkAndMoveHandler } from './tools/move-handlers/mark-and-move-handler';
 import { GameService } from '../services/game.service';
 import { Subscription } from 'rxjs';
-import { GameStartEvent } from '../model/messages';
-import { FieldOccupation } from '../model/typings';
 import { GameEventsService } from '../services/game-events.service';
+import { GameStartEvent } from '../model/typings';
 
 @Component({
   selector: 'app-board',

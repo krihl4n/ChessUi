@@ -23,14 +23,6 @@ export type PiecePositionUpdate = {
     score: Score
 }
 
-export type GameStartEvent = {
-    playerColor: string,
-    recordedMoves: string[],
-    captures: Captures,
-    score: Score,
-    piecePositions:  FieldOccupation[]
-}
-
 export type FieldOccupationMessage = {
     field: string,
     piece: Piece
@@ -39,10 +31,6 @@ export type FieldOccupationMessage = {
 export type GameResultMessage = {
     result: string,
     reason: string
-}
-
-export type GameStateUpdate  = {
-    gameState: string
 }
 
 export type PossibleMovesMessage = {

@@ -4,7 +4,7 @@ import { Client, Message } from '@stomp/stompjs';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { JoinGameRequest, MoveRequest, PossibleMovesRequest, RejoinGameRequest, ResignRequest, StartGameRequest, UndoMoveRequest } from '../model/requests';
-import { GameInfoMessage, GameResultMessage, GameStateUpdate, PiecePositionUpdate, PossibleMovesMessage } from '../model/messages';
+import { GameInfoMessage, GameResultMessage} from '../model/messages';
 import { GameEventsService } from './game-events.service';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html

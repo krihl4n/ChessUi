@@ -3,8 +3,8 @@ import { Subject, Subscription } from 'rxjs';
 import { GameControlService } from './game-control.service';
 import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.service';
 import { Promotion } from '../board/pawn-promotion/promotion.model';
-import { GameInfoMessage, GameResultMessage, GameStartEvent, PiecePositionUpdate } from '../model/messages';
-import { GameResult, Move, PossibleMoves } from '../model/typings';
+import { GameInfoMessage, GameResultMessage, PiecePositionUpdate } from '../model/messages';
+import { GameResult, GameFinishedEvent, GameStartEvent, Move, PossibleMoves } from '../model/typings';
 import { GameEventsService } from './game-events.service';
 
 @Injectable({
@@ -24,8 +24,9 @@ export class GameService implements OnDestroy {
   public lastMove: Move | null // for field marking
 
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
+  private gameFinishedEvent: Subject<GameFinishedEvent> = new Subject()
+
   private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
-  private gameFinishedEvent: Subject<GameResult> = new Subject()
 
   private promotionClosedSubscription: Subscription
 
@@ -181,8 +182,6 @@ export class GameService implements OnDestroy {
     this.gameResult = null
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-  //  this.fieldOccupationChange.next(gameInfo.piecePositions)
-
     this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
@@ -190,7 +189,7 @@ export class GameService implements OnDestroy {
     if(gameInfo.result) {
       this.canPlayerMove = false
       this.gameResult = gameInfo.result
-      this.gameFinishedEvent.next(gameInfo.result)
+      this.gameFinishedEvent.next({ gameResult: gameInfo.result} )
     }
   }
 
@@ -198,7 +197,7 @@ export class GameService implements OnDestroy {
     this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResultMessage) => {
       this.canPlayerMove = false
       this.gameResult = gameResult
-      this.gameFinishedEvent.next(gameResult)
+      this.gameFinishedEvent.next({ gameResult: gameResult} )
     })
   }
 }
