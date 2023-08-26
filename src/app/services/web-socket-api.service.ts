@@ -71,46 +71,53 @@ export class WebSocketAPIService {
         console.log("Disconnected");
     }
 
+    sendMoveMsg(msg: MoveRequest) {
+       this.publish("/chess-app/move", msg)
+    }
+
+    sendGameControlsMsg(msg: string) {
+        this.publishRaw("/chess-app/game-controls", msg)
+    }
+
+    sendRematchMsg(msg: string) {
+        this.publishRaw("/chess-app/rematch", msg)
+    }
+
+    sendResignMsg(msg: ResignRequest) {
+        this.publish("/chess-app/resign", msg)
+    }
+
+    sendUndoMoveMsg(msg: UndoMoveRequest) {
+        this.publish("/chess-app/undo-move", msg)
+    }
+
+    sendStartNewGameMsg(msg: StartGameRequest) {
+        this.publish("/chess-app/start-new-game", msg)
+    }
+
+    sendJoinGameMsg(msg: JoinGameRequest) {
+        this.publish("/chess-app/join-game", msg)
+    }
+
+    sendRejoinGameMsg(msg: RejoinGameRequest) {
+        this.publish("/chess-app/rejoin-game", msg)
+    }
+
+    sendRequestPossibleMovesRequest(msg: PossibleMovesRequest) {
+        this.publish("/chess-app/possible-moves", msg)
+    }
+
     private publish(dst: string, msg: any) {
+        this.client.publish({
+            destination: dst,
+            body: JSON.stringify(msg)
+        })
+    }
+
+    private publishRaw(dst: string, msg: any) {
         this.client.publish({
             destination: dst,
             body: msg
         })
-    }
-
-    sendMoveMsg(msg: MoveRequest) {
-       this.publish("/chess-app/move", JSON.stringify(msg))
-    }
-
-    sendGameControlsMsg(msg: string) {
-        this.publish("/chess-app/game-controls", msg)
-    }
-
-    sendRematchMsg(msg: string) {
-        this.publish("/chess-app/rematch", msg)
-    }
-
-    sendResignMsg(msg: ResignRequest) {
-        this.publish("/chess-app/resign", JSON.stringify(msg))
-    }
-
-    sendUndoMoveMsg(msg: UndoMoveRequest) {
-        this.publish("/chess-app/undo-move", JSON.stringify(msg))
-    }
-
-    sendStartNewGameMsg(msg: StartGameRequest) {
-        this.publish("/chess-app/start-new-game", JSON.stringify(msg))
-    }
-
-    sendJoinGameMsg(msg: JoinGameRequest) {
-        this.publish("/chess-app/join-game", JSON.stringify(msg))
-    }
-
-    sendRejoinGameMsg(msg: RejoinGameRequest) {
-        this.publish("/chess-app/rejoin-game", JSON.stringify(msg))
-    }
-
-    sendRequestPossibleMovesRequest(msg: PossibleMovesRequest) {
-        this.publish("/chess-app/possible-moves", JSON.stringify(msg))
     }
 }
