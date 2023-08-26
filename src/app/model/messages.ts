@@ -9,15 +9,15 @@ export type GameInfoMessage = {
     recordedMoves: string[],
     captures: Captures,
     score: Score,
-    result: GameResult | null
+    result?: GameResult
 }
 
 export type PiecePositionUpdate = {
     primaryMove: Move,
-    secondaryMove: Move | null,
-    pieceCapture: PieceCapture | null,
+    secondaryMove?: Move,
+    pieceCapture?: PieceCapture,
     pawnPromotion: string, // queen, knight, bishop, rook
-    reverted: Boolean,
+    reverted: boolean,
     turn: string,
     label: string,
     score: Score

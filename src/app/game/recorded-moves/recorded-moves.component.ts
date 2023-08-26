@@ -12,7 +12,7 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class RecordedMovesComponent implements OnInit, OnDestroy {
 
-  moves: { white: string, black: string | null }[] = []
+  moves: { white: string, black?: string }[] = []
   result = ""
   private positionChangeSubscription: Subscription
   private gameStartedSubscription: Subscription
@@ -55,14 +55,14 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
     if (lastMove && !lastMove.black) {
       this.moves[this.moves.length - 1] = { white: lastMove.white, black: label }
     } else {
-      this.moves.push({ white: label, black: null })
+      this.moves.push({ white: label })
     }
   }
 
   pop() {
     let lastMove = this.moves[this.moves.length - 1]
     if (lastMove && lastMove.black) {
-      this.moves[this.moves.length - 1] = { white: lastMove.white, black: null }
+      this.moves[this.moves.length - 1] = { white: lastMove.white }
     } else {
       this.moves.pop()
     }

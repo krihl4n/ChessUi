@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,16 +15,16 @@ export class StorageService {
       this.cookieService.set('chess-game', JSON.stringify({gameId, playerId}), undefined, "/game")
   }
 
-  public getGame(): SavedGame | null {
+  public getGame(): SavedGame | undefined {
     var cookieValue = this.cookieService.get('chess-game')
     if(cookieValue) {
       return JSON.parse(cookieValue)
     }
-    return null
+    return undefined
   }
 }
 
-export interface SavedGame{
+export interface SavedGame {
   gameId: string,
   playerId: string 
 }

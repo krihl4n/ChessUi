@@ -9,9 +9,9 @@ import { Promotion } from './promotion.model';
 export class PawnPromotionService {
 
   private shouldDisplay = false
-  private promotionSelected: string | null
+  private promotionSelected?: string
   private promotionOpened: Subject<null> = new Subject()
-  private promotionClosed: Subject<Promotion | null> = new Subject()
+  private promotionClosed: Subject<Promotion | undefined> = new Subject()
 
   private from: string = ""
   private to: string = ""
@@ -33,14 +33,14 @@ export class PawnPromotionService {
     this.shouldDisplay = true
   }
 
-  closeSelection(promotionSelected: string | null) {
+  closeSelection(promotionSelected?: string) {
     if (!this.shouldDisplay) {
       return
     }
     this.shouldDisplay = false
     this.promotionSelected = promotionSelected
 
-    let promotion = null
+    let promotion
 
     if(promotionSelected) {
       promotion = { promotion: promotionSelected, from: this.from, to: this.to } 
@@ -58,7 +58,7 @@ export class PawnPromotionService {
   }
 
   moveWithPromotionPerformed() {
-    this.promotionSelected = null
+    this.promotionSelected = undefined
   }
 
   private isLastRank(to: string, playerColor: string) {

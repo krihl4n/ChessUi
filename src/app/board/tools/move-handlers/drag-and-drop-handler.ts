@@ -13,7 +13,7 @@ export class PieceDragHandler {
   private pieceDraggedFromField: string
   private draggedPiece?: Piece
   private promotionClosedSubscription: Subscription
-  private deferredMove: DeferredMove | undefined
+  private deferredMove?: DeferredMove
 
   constructor(
     private fieldUtils: FieldUtilsService,
@@ -22,7 +22,7 @@ export class PieceDragHandler {
     private htmlPieceRenderer: HtmlPieceReneder,
     private gameService: GameService) {
 
-    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: Promotion | null) => {
+    this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion?: Promotion) => {
       console.log("***** D & D PROMOTION CLOSED")
       if (this.deferredMove) {
         if (promotion) {
@@ -115,8 +115,8 @@ export class PieceDragHandler {
   }
 }
 
-interface DeferredMove {
+type DeferredMove = {
   piece: Piece,
-  attackedPiece: Piece | undefined,
+  attackedPiece?: Piece,
   toField: string
 }

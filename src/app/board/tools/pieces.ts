@@ -33,13 +33,13 @@ export class Pieces {
         this.availablePieces.push(new Piece('black', "queen", fieldSize))
     }
 
-    getPiece(color: string, type: string): Piece | null {
+    getPiece(color: string, type: string): Piece | undefined {
         const piece = this.availablePieces.find(p => p.color == color.toLowerCase() && p.type == type.toLowerCase())
         if (piece) {
             const index = this.availablePieces.indexOf(piece)
             this.availablePieces.splice(index, 1)
             return piece
         }
-        return null
+        return undefined
     }
 }

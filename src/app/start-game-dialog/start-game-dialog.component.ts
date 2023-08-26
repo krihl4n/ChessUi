@@ -109,7 +109,7 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
 
   private initNewGame() {
     if (this.colorSelected() && this.modeSelected()) {
-      this.gameService.initiateNewGame(this.determineSelectedMode(), this.determineSelectedColor(), this.pieceSetup)  
+      this.gameService.initiateNewGame(this.determineSelectedMode(), this.pieceSetup, this.determineSelectedColor())  
     }
   }
 
@@ -121,10 +121,10 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
     return this.isComputerSelected || this.isFriendSelected || this.isTestSelected
   }
 
-  private determineSelectedColor(): string | null {
+  private determineSelectedColor(): string | undefined {
     if (this.isWhiteColorSelected) return "white"
     if (this.isBlackColorSelected) return "black"
-    return null
+    return undefined
   }
 
   private determineSelectedMode(): string {

@@ -38,7 +38,7 @@ export class PawnPromotionComponent implements OnInit, OnDestroy {
   }
 
   listener = () => {
-    this.pawnPromotionService.closeSelection(null)
+    this.pawnPromotionService.closeSelection()
   }
 
   promotionSelected(event: Event, promotion: string) {

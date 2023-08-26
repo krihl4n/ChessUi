@@ -13,21 +13,20 @@ import { GameEventsService } from './game-events.service';
 export class GameService implements OnDestroy {
 
   private moveRequestInProgress: boolean = false
-  private possibleMoves: PossibleMoves | null
+  private possibleMoves?: PossibleMoves
   private canPlayerMove: boolean = false
   private playerId = ""
   private playerColor = ""
   private turn = ""
-  private gameMode: string | null
-  public gameResult: GameResult | null // todo remove?
-  public colorPreference: string | null
-  public lastMove: Move | null // for field marking
+  private gameMode?: string
+  public gameResult?: GameResult
+  public colorPreference?: string
+  public lastMove?: Move // for field marking
 
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
   private gameFinishedEvent: Subject<GameFinishedEvent> = new Subject()
 
-  private pawnPromotionClosed: Subject<Promotion | null> = new Subject()
-
+  private pawnPromotionClosed: Subject<Promotion | undefined> = new Subject()
   private promotionClosedSubscription: Subscription
 
   constructor(private gameControlService: GameControlService, private gameEventsService: GameEventsService, private pawnPromotionService: PawnPromotionService) {
@@ -67,12 +66,12 @@ export class GameService implements OnDestroy {
     return this.gameFinishedEvent.asObservable()
   }
 
-  initiateNewGame(mode: string, colorPreference: string | null, pieceSetup: string) {
+  initiateNewGame(mode: string, pieceSetup: string, colorPreference?: string) {
     this.colorPreference = colorPreference
     this.gameControlService.initiateNewGame(this.playerId, mode, pieceSetup)
   }
 
-  joinExistingGame(gameId: string, colorPreference: string | null, playerId: string | null) {
+  joinExistingGame(gameId: string, colorPreference?: string, playerId?: string) {
     this.gameControlService.joinExistingGame(gameId, colorPreference, playerId)
   }
 
@@ -105,13 +104,13 @@ export class GameService implements OnDestroy {
       }
 
       this.moveRequestInProgress = true
-      this.gameControlService.moveRequest(this.playerId, from, to, null) // TODO what happens if move fails on the backend side?
+      this.gameControlService.moveRequest(this.playerId, from, to) // TODO what happens if move fails on the backend side?
       return MoveRequestResult.ACCEPTED
     }
     return MoveRequestResult.REJECTED;
   }
 
-  canMove(color: string | null = null) {
+  canMove(color?: string) {
     if (color && this.gameMode != "test_mode") {
       return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
     }
@@ -148,7 +147,7 @@ export class GameService implements OnDestroy {
   private subscribeToMoveUpdates() {
     this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdate) => {
       if (update.reverted) {
-        this.lastMove = null
+        this.lastMove = undefined
       } else {
         this.lastMove = { from: update.primaryMove.from, to: update.primaryMove.to }
       }
@@ -179,7 +178,7 @@ export class GameService implements OnDestroy {
   }
 
   private gameStarted(gameInfo: GameInfoMessage) {
-    this.gameResult = null
+    this.gameResult = undefined
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
     this.playerId = gameInfo.player.id

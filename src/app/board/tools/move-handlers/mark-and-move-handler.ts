@@ -23,7 +23,7 @@ export class MarkAndMoveHandler { // todo maybe separate handlers for pieve move
         private renderer: HtmlPieceReneder,
         private gameService: GameService) {
 
-        this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion: Promotion | null) => {
+        this.promotionClosedSubscription = this.gameService.getPromotionClosedObservable().subscribe((promotion?: Promotion) => {
             console.log("***** M & M PROMOTION CLOSED")
             this.markedField = undefined // todo extract field marking
             this.previouslyMarkedField = undefined

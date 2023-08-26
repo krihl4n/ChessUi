@@ -6,8 +6,8 @@ export type StartGameRequest = {
 
 export type JoinGameRequest = {
     gameId: string,
-    colorPreference: string | null,
-    playerId: string | null
+    colorPreference?: string,
+    playerId?: string
 }
 
 export type RejoinGameRequest = {
@@ -25,7 +25,7 @@ export type MoveRequest = {
     playerId: string,
     from: string,
     to: string,
-    pawnPromotion: string | null
+    pawnPromotion?: string
 }
 
 export type UndoMoveRequest = {

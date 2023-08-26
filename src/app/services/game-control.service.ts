@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
 import { GameInfoMessage, GameResultMessage} from '../model/messages';
@@ -34,7 +33,7 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.connected = false
   }
 
-  moveRequest(playerId: string, from: string, to: string, pawnPromotion: string | null) {
+  moveRequest(playerId: string, from: string, to: string, pawnPromotion?: string) {
     var savedGame = this.storageService.getGame();
     if(savedGame) {
       this.webSocketApiService.sendMoveMsg(
@@ -59,7 +58,7 @@ export class GameControlService { // rethink this component. is it needed? if so
       })
   }
 
-  joinExistingGame(gameId: string, colorPreference: string | null, playerId: string | null) {
+  joinExistingGame(gameId: string, colorPreference?: string, playerId?: string) {
     if (this.connected) {
       this.joinGame(gameId, colorPreference, playerId)
     } else {
@@ -81,8 +80,8 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   private joinGame(gameId: string,
-    colorPreference: string | null,
-    playerId: string | null) {
+    colorPreference?: string,
+    playerId?: string) {
     var savedGame = this.storageService.getGame();
     if (savedGame) {
       playerId = savedGame.playerId
