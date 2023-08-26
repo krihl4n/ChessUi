@@ -167,7 +167,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribteToGameStartEvent() {
-    this.gameControlService.getGameStartedSubscription().subscribe((gameInfo: GameInfoMessage) => { // TODO unsubscribe?
+    this.gameEventsService.getGameStartedObservable().subscribe((gameInfo: GameInfoMessage) => { // TODO unsubscribe?
       this.gameStarted(gameInfo)
     })
   }
@@ -194,7 +194,7 @@ export class GameService implements OnDestroy {
   }
 
   private subscribeToGameFinishedEvent() {
-    this.gameControlService.getGameResultSubscription().subscribe((gameResult: GameResultMessage) => {
+    this.gameEventsService.getGameFinishedObservable().subscribe((gameResult: GameResultMessage) => {
       this.canPlayerMove = false
       this.gameResult = gameResult
       this.gameFinishedEvent.next({ gameResult: gameResult} )

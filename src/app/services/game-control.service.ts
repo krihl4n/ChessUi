@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
 import { GameInfoMessage, GameResultMessage} from '../model/messages';
+import { GameEventsService } from './game-events.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,12 @@ export class GameControlService { // rethink this component. is it needed? if so
 
   connected = false
 
-  constructor(private webSocketApiService: WebSocketAPIService, private storageService: StorageService) {
+  constructor(private webSocketApiService: WebSocketAPIService, private storageService: StorageService, private gameEventsService: GameEventsService) {
     this.subscribeToGameStartedEvent()
   }
 
   subscribeToGameStartedEvent() {
-    this.webSocketApiService.gameStartedSubject.subscribe((gameInfo: GameInfoMessage) => {
+    this.gameEventsService.getGameStartedObservable().subscribe((gameInfo: GameInfoMessage) => {
       this.storageService.save(gameInfo.gameId, gameInfo.player.id)
     })
   }
@@ -127,13 +128,5 @@ export class GameControlService { // rethink this component. is it needed? if so
     if(savedGame) {
       this.webSocketApiService.sendRequestPossibleMovesRequest({gameId: savedGame.gameId, field: field})
     }
-  }
-  
-  getGameResultSubscription(): Observable<GameResultMessage> {
-    return this.webSocketApiService.gameResultSubject.asObservable()
-  }
-
-  getGameStartedSubscription(): Subject<GameInfoMessage> {
-    return this.webSocketApiService.gameStartedSubject
   }
 }

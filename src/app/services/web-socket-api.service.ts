@@ -2,9 +2,7 @@
 //import * as SockJS from 'sockjs-client';
 import { Client, Message } from '@stomp/stompjs';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { JoinGameRequest, MoveRequest, PossibleMovesRequest, RejoinGameRequest, ResignRequest, StartGameRequest, UndoMoveRequest } from '../model/requests';
-import { GameInfoMessage, GameResultMessage} from '../model/messages';
 import { GameEventsService } from './game-events.service';
 
 // https://www.javaguides.net/2019/06/spring-boot-angular-8-websocket-example-tutorial.html
@@ -13,9 +11,7 @@ import { GameEventsService } from './game-events.service';
     providedIn: "root"
 })
 export class WebSocketAPIService {
-    client: Client;
-    gameResultSubject: Subject<GameResultMessage> = new Subject()
-    gameStartedSubject: Subject<GameInfoMessage> = new Subject() // next 
+    client: Client; 
 
     constructor(private gameEventsService: GameEventsService){
     }
@@ -36,14 +32,13 @@ export class WebSocketAPIService {
             const _this = this
             this.client.onConnect = function(frame) {
                 this.subscribe("/user/queue/game-started", function(msg) {
-                    _this.onGameStarted(msg)
+                    _this.gameEventsService.gameStartedMessageReceived(JSON.parse(msg.body))
                 })
-
                 this.subscribe("/user/queue/waiting-for-other-player", function(msg) {
                     _this.gameEventsService.waitingForOtherPlayersMsgReceived(msg.body)
                 })
                 this.subscribe("/user/queue/game-result", function (msg) {
-                    _this.onGameResultReceived(msg);
+                    _this.gameEventsService.gameFinishedMessageReceived(JSON.parse(msg.body))
                 });
                 this.subscribe("/user/queue/joined-existing-game", function (msg) {
                     _this.gameEventsService.joinedExistingGame(JSON.parse(msg.body))
@@ -83,49 +78,39 @@ export class WebSocketAPIService {
         })
     }
 
-    sendMoveMsg(message: MoveRequest) {
-       this.publish("/chess-app/move", JSON.stringify(message))
+    sendMoveMsg(msg: MoveRequest) {
+       this.publish("/chess-app/move", JSON.stringify(msg))
     }
 
-    sendGameControlsMsg(message: string) {
-        this.publish("/chess-app/game-controls", message)
+    sendGameControlsMsg(msg: string) {
+        this.publish("/chess-app/game-controls", msg)
     }
 
-    sendRematchMsg(gameId: string) {
-        this.publish("/chess-app/rematch", gameId)
+    sendRematchMsg(msg: string) {
+        this.publish("/chess-app/rematch", msg)
     }
 
-    sendResignMsg(message: ResignRequest) {
-        this.publish("/chess-app/resign", JSON.stringify(message))
+    sendResignMsg(msg: ResignRequest) {
+        this.publish("/chess-app/resign", JSON.stringify(msg))
     }
 
-    sendUndoMoveMsg(message: UndoMoveRequest) {
-        this.publish("/chess-app/undo-move", JSON.stringify(message))
+    sendUndoMoveMsg(msg: UndoMoveRequest) {
+        this.publish("/chess-app/undo-move", JSON.stringify(msg))
     }
 
-    sendStartNewGameMsg(message: StartGameRequest) {
-        this.publish("/chess-app/start-new-game", JSON.stringify(message))
+    sendStartNewGameMsg(msg: StartGameRequest) {
+        this.publish("/chess-app/start-new-game", JSON.stringify(msg))
     }
 
-    sendJoinGameMsg(req: JoinGameRequest) {
-        this.publish("/chess-app/join-game", JSON.stringify(req))
+    sendJoinGameMsg(msg: JoinGameRequest) {
+        this.publish("/chess-app/join-game", JSON.stringify(msg))
     }
 
-    sendRejoinGameMsg(req: RejoinGameRequest) {
-        this.publish("/chess-app/rejoin-game", JSON.stringify(req))
+    sendRejoinGameMsg(msg: RejoinGameRequest) {
+        this.publish("/chess-app/rejoin-game", JSON.stringify(msg))
     }
 
-    sendRequestPossibleMovesRequest(message: PossibleMovesRequest) {
-        this.publish("/chess-app/possible-moves", JSON.stringify(message))
-    }
-
-    onGameStarted(message: Message) {
-        let value = JSON.parse(message.body)
-        this.gameStartedSubject.next(value)
-    }
-
-    onGameResultReceived(message: Message) {
-        let value = JSON.parse(message.body)
-        this.gameResultSubject.next(value)
+    sendRequestPossibleMovesRequest(msg: PossibleMovesRequest) {
+        this.publish("/chess-app/possible-moves", JSON.stringify(msg))
     }
 }

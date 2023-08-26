@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { GameInfoMessage, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
+import { GameInfoMessage, GameResultMessage, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
 
 @Injectable({
     providedIn: "root"
@@ -12,7 +12,9 @@ export class GameEventsService {
     private joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     private waitingForOtherPlayersSubject: Subject<string> = new Subject()
     private possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
-    
+    private gameResultSubject: Subject<GameResultMessage> = new Subject()
+    private gameStartedSubject: Subject<GameInfoMessage> = new Subject()
+
     piecePositionUpdated(piecePosition: PiecePositionUpdate) {
         this.piecePositionUpdateSubject.next(piecePosition)
     }
@@ -33,6 +35,14 @@ export class GameEventsService {
         this.possibleMovesSubject.next(possibleMovesMessage)
     }
 
+    gameStartedMessageReceived(gameInfo: GameInfoMessage) {
+        this.gameStartedSubject.next(gameInfo)
+    }
+
+    gameFinishedMessageReceived(gameResult: GameResultMessage) {
+        this.gameResultSubject.next(gameResult)
+    }
+
     getPiecePositionUpdatedObservable() {
         return this.piecePositionUpdateSubject.asObservable()
     }
@@ -51,5 +61,13 @@ export class GameEventsService {
 
     getPossibleMovesObservable() {
         return this.possibleMovesSubject.asObservable()
+    }
+
+    getGameStartedObservable() {
+        return this.gameStartedSubject.asObservable()
+    }
+
+    getGameFinishedObservable() {
+        return this.gameResultSubject.asObservable()
     }
 }
