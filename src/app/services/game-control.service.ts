@@ -7,7 +7,7 @@ import { GameEventsService } from './game-events.service';
 @Injectable({
   providedIn: 'root'
 })
-export class GameControlService { // rethink this component. is it needed? if so, who should be allowed to use it?
+export class GameControlService {
 
   connected = false
 

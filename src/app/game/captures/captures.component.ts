@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PiecePositionUpdate } from 'src/app/model/messages';
+import { GameInfoMessage, PiecePositionUpdate } from 'src/app/model/messages';
 import { Captures, GameStartEvent, Piece, Score } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
+import { GameInfoService } from 'src/app/services/game-info.service';
 import { GameService } from 'src/app/services/game.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   private piecePositionSubscription: Subscription
   private gameStartedSubscription: Subscription
 
-  constructor(private gameService: GameService, private gameEventsService: GameEventsService) { }
+  constructor(private gameService: GameService, private gameEventsService: GameEventsService, private gameInfoService: GameInfoService) { }
 
   ngOnInit(): void {
     this.piecePositionSubscription = this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdate) => {
@@ -86,9 +87,9 @@ export class CapturesComponent implements OnInit, OnDestroy {
 
   private getPlayerColor(owner: string) {
     if (owner === "this_payer") {
-      return this.gameService.getPlayerColor()
+      return this.gameInfoService.getPlayerColor()
     } else {
-      return this.gameService.getOpponentColor()
+      return this.gameInfoService.getOpponentColor()
     }
   }
 

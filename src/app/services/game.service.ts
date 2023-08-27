@@ -6,6 +6,7 @@ import { Promotion } from '../board/pawn-promotion/promotion.model';
 import { GameInfoMessage, GameResultMessage, PiecePositionUpdate } from '../model/messages';
 import { GameResult, GameFinishedEvent, GameStartEvent, Move, PossibleMoves } from '../model/typings';
 import { GameEventsService } from './game-events.service';
+import { GameInfoService } from './game-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,6 @@ export class GameService implements OnDestroy {
   private moveRequestInProgress: boolean = false
   private possibleMoves?: PossibleMoves
   private canPlayerMove: boolean = false
-  private playerColor = ""
   private turn = ""
   private gameMode?: string
   public gameResult?: GameResult
@@ -28,7 +28,7 @@ export class GameService implements OnDestroy {
   private pawnPromotionClosed: Subject<Promotion | undefined> = new Subject()
   private promotionClosedSubscription: Subscription
 
-  constructor(private gameControlService: GameControlService, private gameEventsService: GameEventsService, private pawnPromotionService: PawnPromotionService) {
+  constructor(private gameControlService: GameControlService, private gameEventsService: GameEventsService, private pawnPromotionService: PawnPromotionService, private gameInfoService: GameInfoService) {
     this.subscribeToMoveUpdates();
     this.subscribeToPossibleMoves();
     this.subscribteToGameStartEvent();
@@ -67,11 +67,11 @@ export class GameService implements OnDestroy {
 
   initiateNewGame(mode: string, pieceSetup: string, colorPreference?: string) {
     this.colorPreference = colorPreference
-    this.gameControlService.initiateNewGame(mode, pieceSetup)
+    this.gameControlService.initiateNewGame(mode, pieceSetup) // color preference here?
   }
 
-  joinExistingGame(gameId: string, colorPreference?: string) {
-    this.gameControlService.joinExistingGame(gameId, colorPreference)
+  joinExistingGame(gameId: string) {
+    this.gameControlService.joinExistingGame(gameId, this.colorPreference)
   }
 
   rematch() {
@@ -96,7 +96,7 @@ export class GameService implements OnDestroy {
     }
 
     if (this.possibleMoves?.from == from && this.possibleMoves.to.includes(to)) {
-      if (this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.playerColor)) {
+      if (this.pawnPromotionService.shouldOpenPromotionChoice(from, to, this.gameInfoService.getPlayerColor())) {
         this.pawnPromotionService.display(from, to)
         this.canPlayerMove = false
         return MoveRequestResult.DEFERRED
@@ -111,28 +111,13 @@ export class GameService implements OnDestroy {
 
   canMove(color?: string) {
     if (color && this.gameMode != "test_mode") {
-      return this.canPlayerMove && color.toLowerCase() == this.playerColor.toLowerCase() && this.turn == this.playerColor
+      return this.canPlayerMove && color.toLowerCase() == this.gameInfoService.getPlayerColor().toLowerCase() && this.turn == this.gameInfoService.getPlayerColor()
     }
     return this.canPlayerMove
   }
 
   getTurn() {
     return this.turn
-  }
-
-  getPlayerColor() {
-    return this.playerColor
-  }
-
-  getOpponentColor() {
-    if(this.playerColor === "white") {
-      return "black"
-    }
-    if(this.playerColor === "black") {
-      return "white"
-    }
-
-    return ""
   }
 
   resign() {
@@ -180,9 +165,8 @@ export class GameService implements OnDestroy {
     this.gameResult = undefined
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-    this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
-    this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score, piecePositions: gameInfo.piecePositions})
+    this.gameStartEvent.next({ playerColor: gameInfo.player.color, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score, piecePositions: gameInfo.piecePositions})
     if(gameInfo.result) {
       this.canPlayerMove = false
       this.gameResult = gameInfo.result
