@@ -70,8 +70,8 @@ export class GameService implements OnDestroy {
     this.gameControlService.initiateNewGame(mode, pieceSetup)
   }
 
-  joinExistingGame(gameId: string, colorPreference?: string, playerId?: string) {
-    this.gameControlService.joinExistingGame(gameId, colorPreference, playerId)
+  joinExistingGame(gameId: string, colorPreference?: string) {
+    this.gameControlService.joinExistingGame(gameId, colorPreference)
   }
 
   rematch() {

@@ -58,14 +58,14 @@ export class GameControlService { // rethink this component. is it needed? if so
       })
   }
 
-  joinExistingGame(gameId: string, colorPreference?: string, playerId?: string) {
+  joinExistingGame(gameId: string, colorPreference?: string) {
     if (this.connected) {
-      this.joinGame(gameId, colorPreference, playerId)
+      this.joinGame(gameId, colorPreference)
     } else {
       this.webSocketApiService.connect()
         .then(() => {
           this.connected = true
-          this.joinGame(gameId, colorPreference, playerId)
+          this.joinGame(gameId, colorPreference)
         })
     }
   }
@@ -80,13 +80,9 @@ export class GameControlService { // rethink this component. is it needed? if so
   }
 
   private joinGame(gameId: string,
-    colorPreference?: string,
-    playerId?: string) {
+    colorPreference?: string) {
     var savedGame = this.storageService.getGame();
-    if (savedGame) {
-      playerId = savedGame.playerId
-    }
-    if (savedGame?.gameId === gameId) {
+    if (savedGame && savedGame?.gameId === gameId) {
       this.webSocketApiService.sendRejoinGameMsg({
         gameId: savedGame.gameId,
         playerId: savedGame.playerId
@@ -94,8 +90,7 @@ export class GameControlService { // rethink this component. is it needed? if so
     } else {
       this.webSocketApiService.sendJoinGameMsg({
         gameId: gameId,
-        colorPreference: colorPreference,
-        playerId: playerId
+        colorPreference: colorPreference
       })
     }
   }
