@@ -15,7 +15,6 @@ export class GameService implements OnDestroy {
   private moveRequestInProgress: boolean = false
   private possibleMoves?: PossibleMoves
   private canPlayerMove: boolean = false
-  private playerId = ""
   private playerColor = ""
   private turn = ""
   private gameMode?: string
@@ -86,7 +85,7 @@ export class GameService implements OnDestroy {
   private requestMoveWithPromotion(from: string, to: string, pawnPromotion: string) {
     this.pawnPromotionService.moveWithPromotionPerformed()
     this.moveRequestInProgress = true
-    this.gameControlService.moveRequest(this.playerId, from, to, pawnPromotion) // TODO what happens if move fails on the backend side?
+    this.gameControlService.moveRequest(from, to, pawnPromotion) // TODO what happens if move fails on the backend side?
     return true
   }
 
@@ -104,7 +103,7 @@ export class GameService implements OnDestroy {
       }
 
       this.moveRequestInProgress = true
-      this.gameControlService.moveRequest(this.playerId, from, to) // TODO what happens if move fails on the backend side?
+      this.gameControlService.moveRequest(from, to) // TODO what happens if move fails on the backend side?
       return MoveRequestResult.ACCEPTED
     }
     return MoveRequestResult.REJECTED;
@@ -137,11 +136,11 @@ export class GameService implements OnDestroy {
   }
 
   resign() {
-    this.gameControlService.resign(this.playerId)
+    this.gameControlService.resign()
   }
 
   undoMove() {
-    this.gameControlService.undoMove(this.playerId)
+    this.gameControlService.undoMove()
   }
 
   private subscribeToMoveUpdates() {
@@ -181,7 +180,6 @@ export class GameService implements OnDestroy {
     this.gameResult = undefined
     this.canPlayerMove = true
     this.gameMode = gameInfo.mode
-    this.playerId = gameInfo.player.id
     this.playerColor = gameInfo.player.color
     this.turn = gameInfo.turn
     this.gameStartEvent.next({ playerColor: this.playerColor, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score, piecePositions: gameInfo.piecePositions})

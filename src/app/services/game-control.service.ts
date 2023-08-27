@@ -33,13 +33,13 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.connected = false
   }
 
-  moveRequest(playerId: string, from: string, to: string, pawnPromotion?: string) {
+  moveRequest(from: string, to: string, pawnPromotion?: string) {
     var savedGame = this.storageService.getGame();
     if(savedGame) {
       this.webSocketApiService.sendMoveMsg(
         {
           gameId: savedGame.gameId, 
-          playerId: playerId, 
+          playerId: savedGame.playerId, 
           from: from, 
           to: to, 
           pawnPromotion: pawnPromotion 
@@ -108,17 +108,17 @@ export class GameControlService { // rethink this component. is it needed? if so
     this.webSocketApiService.sendGameControlsMsg("start_" + mode)
   }
 
-  undoMove(playerId: string) {
+  undoMove() {
     var savedGame = this.storageService.getGame();
     if(savedGame) {
-      this.webSocketApiService.sendUndoMoveMsg({gameId: savedGame.gameId, playerId})
+      this.webSocketApiService.sendUndoMoveMsg({gameId: savedGame.gameId, playerId: savedGame.playerId})
     }
   }
 
-  resign(playerId: string) {
+  resign() {
     var savedGame = this.storageService.getGame();
     if(savedGame) {
-      this.webSocketApiService.sendResignMsg({gameId: savedGame.gameId, playerId})
+      this.webSocketApiService.sendResignMsg({gameId: savedGame.gameId, playerId: savedGame.playerId})
     }
   }
 
