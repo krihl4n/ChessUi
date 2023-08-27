@@ -50,11 +50,11 @@ export class GameControlService { // rethink this component. is it needed? if so
     }
   }
 
-  initiateNewGame(playerId: string, mode: string, pieceSetup: string) {
+  initiateNewGame(mode: string, pieceSetup: string) {
     this.webSocketApiService.connect()
       .then(() => {
         this.connected = true
-        this.startNewGame(playerId, mode, pieceSetup)
+        this.startNewGame(mode, pieceSetup)
       })
   }
 
@@ -100,8 +100,8 @@ export class GameControlService { // rethink this component. is it needed? if so
     }
   }
 
-  private startNewGame(playerId: string, mode: string, pieceSetup: string,) {
-    this.webSocketApiService.sendStartNewGameMsg({ playerId, mode, setup: pieceSetup })
+  private startNewGame(mode: string, pieceSetup: string,) {
+    this.webSocketApiService.sendStartNewGameMsg({ mode, setup: pieceSetup })
   }
 
   startGame(mode: string) {
