@@ -17,10 +17,9 @@ export class GameService implements OnDestroy {
   private possibleMoves?: PossibleMoves
   private canPlayerMove: boolean = false
   private turn = ""
-  private gameMode?: string
   public gameResult?: GameResult
   public colorPreference?: string
-  public lastMove?: Move // for field marking
+  public lastMove?: Move // for field marking. doesn't work after refresh. send form BE?
 
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
   private gameFinishedEvent: Subject<GameFinishedEvent> = new Subject()
@@ -110,8 +109,9 @@ export class GameService implements OnDestroy {
   }
 
   canMove(color?: string) {
-    if (color && this.gameMode != "test_mode") {
-      return this.canPlayerMove && color.toLowerCase() == this.gameInfoService.getPlayerColor().toLowerCase() && this.turn == this.gameInfoService.getPlayerColor()
+    if (color && !this.gameInfoService.isTestMode()) {
+      return this.canPlayerMove && this.gameInfoService.isCurrentPlayer(color) && this.turn == color
+      //return this.canPlayerMove && color.toLowerCase() == this.gameInfoService.getPlayerColor().toLowerCase() && this.turn == this.gameInfoService.getPlayerColor()
     }
     return this.canPlayerMove
   }
@@ -163,8 +163,8 @@ export class GameService implements OnDestroy {
 
   private gameStarted(gameInfo: GameInfoMessage) {
     this.gameResult = undefined
+    this.lastMove = undefined
     this.canPlayerMove = true
-    this.gameMode = gameInfo.mode
     this.turn = gameInfo.turn
     this.gameStartEvent.next({ playerColor: gameInfo.player.color, recordedMoves: gameInfo.recordedMoves, captures: gameInfo.captures, score: gameInfo.score, piecePositions: gameInfo.piecePositions})
     if(gameInfo.result) {
