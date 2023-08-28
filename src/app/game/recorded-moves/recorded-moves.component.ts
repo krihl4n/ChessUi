@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PiecePositionUpdate } from 'src/app/model/messages';
+import { PiecePositionUpdateMessage } from 'src/app/model/messages';
 import { GameFinishedEvent, GameResult, GameStartEvent } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameService } from 'src/app/services/game.service';
@@ -22,7 +22,7 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.positionChangeSubscription = this.gameEventsService.getPiecePositionUpdatedObservable()
-      .subscribe((update: PiecePositionUpdate) => {
+      .subscribe((update: PiecePositionUpdateMessage) => {
         if (update.reverted) {
           this.pop()
         } else {

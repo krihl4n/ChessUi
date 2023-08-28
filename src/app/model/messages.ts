@@ -12,7 +12,7 @@ export type GameInfoMessage = {
     result?: GameResult
 }
 
-export type PiecePositionUpdate = {
+export type PiecePositionUpdateMessage = {
     primaryMove: Move,
     secondaryMove?: Move,
     pieceCapture?: PieceCapture,

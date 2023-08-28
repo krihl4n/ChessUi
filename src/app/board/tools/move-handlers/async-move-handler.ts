@@ -1,7 +1,7 @@
 import { PiecesLocations } from "../pieces-locations";
 import { HtmlPieceReneder } from "../html-piece-renderer";
 import { Subscription } from "rxjs";
-import { PiecePositionUpdate } from "src/app/model/messages";
+import { PiecePositionUpdateMessage } from "src/app/model/messages";
 import { GameEventsService } from "src/app/services/game-events.service";
 
 export class AsyncMoveHandler {
@@ -10,7 +10,7 @@ export class AsyncMoveHandler {
 
     constructor(private piecesLocations: PiecesLocations, private htmlPieceRenderer: HtmlPieceReneder, private gameEventsService: GameEventsService) {
         this.positionChangeSubscription = this.gameEventsService.getPiecePositionUpdatedObservable()
-            .subscribe((update: PiecePositionUpdate) => {
+            .subscribe((update: PiecePositionUpdateMessage) => {
                 console.log("***** M&M HANDLER - POSITION UPDATE")
                 if (!update.reverted) {
                     this.handlePiecePositionUpdate(update)
@@ -24,7 +24,7 @@ export class AsyncMoveHandler {
         this.positionChangeSubscription?.unsubscribe()
     }
 
-    private handlePiecePositionUpdate(update: PiecePositionUpdate) {
+    private handlePiecePositionUpdate(update: PiecePositionUpdateMessage) {
         if (update.pawnPromotion != null) {
             this.moveAndChangePiece(update.primaryMove.from, update.primaryMove.to, update.pawnPromotion)
         } else {
@@ -44,7 +44,7 @@ export class AsyncMoveHandler {
         }
     }
 
-    private handleRevertedPiecePositionUpdate(update: PiecePositionUpdate) {
+    private handleRevertedPiecePositionUpdate(update: PiecePositionUpdateMessage) {
         if (update.pawnPromotion) {
             this.changeAndMovePiece(update.primaryMove.to, update.primaryMove.from)
         } else {
@@ -64,7 +64,7 @@ export class AsyncMoveHandler {
         }
     }
 
-    private isEnPassantAttack(update: PiecePositionUpdate) {
+    private isEnPassantAttack(update: PiecePositionUpdateMessage) {
         return update.pieceCapture && update.primaryMove.to != update.pieceCapture.field
     }
 

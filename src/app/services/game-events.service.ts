@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { GameInfoMessage, GameResultMessage, PiecePositionUpdate, PossibleMovesMessage } from "../model/messages";
+import { GameInfoMessage, GameResultMessage, PiecePositionUpdateMessage, PossibleMovesMessage } from "../model/messages";
 
 @Injectable({
     providedIn: "root"
 })
 export class GameEventsService {
 
-    private piecePositionUpdateSubject: Subject<PiecePositionUpdate> = new Subject()
+    private piecePositionUpdateSubject: Subject<PiecePositionUpdateMessage> = new Subject()
     private rematchRequestedSubject: Subject<string> = new Subject()
     private joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     private waitingForOtherPlayersSubject: Subject<string> = new Subject()
@@ -15,7 +15,7 @@ export class GameEventsService {
     private gameResultSubject: Subject<GameResultMessage> = new Subject()
     private gameStartedSubject: Subject<GameInfoMessage> = new Subject()
 
-    piecePositionUpdated(piecePosition: PiecePositionUpdate) {
+    piecePositionUpdated(piecePosition: PiecePositionUpdateMessage) {
         this.piecePositionUpdateSubject.next(piecePosition)
     }
     

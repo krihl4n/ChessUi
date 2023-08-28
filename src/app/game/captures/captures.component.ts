@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GameInfoMessage, PiecePositionUpdate } from 'src/app/model/messages';
+import { GameInfoMessage, PiecePositionUpdateMessage } from 'src/app/model/messages';
 import { Captures, GameStartEvent, Piece, Score } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameInfoService } from 'src/app/services/game-info.service';
@@ -23,7 +23,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   constructor(private gameService: GameService, private gameEventsService: GameEventsService, private gameInfoService: GameInfoService) { }
 
   ngOnInit(): void {
-    this.piecePositionSubscription = this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdate) => {
+    this.piecePositionSubscription = this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdateMessage) => {
       let playerColor = this.getPlayerColor(this.player)
       this.updateCaptures(playerColor, update)
       this.setScore(playerColor, update.score)
@@ -42,7 +42,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
     this.gameStartedSubscription?.unsubscribe()
   }
 
-  updateCaptures(playerColor: string, update: PiecePositionUpdate) {
+  updateCaptures(playerColor: string, update: PiecePositionUpdateMessage) {
     let capturedPiece = update.pieceCapture?.capturedPiece
     if (capturedPiece && playerColor != capturedPiece.color) {
       if (update.reverted) {
