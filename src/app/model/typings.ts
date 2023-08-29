@@ -54,3 +54,5 @@ export type GameStartEvent = {
 export type GameFinishedEvent = {
     gameResult: GameResult
 }
+
+export enum Color { WHITE, BLACK }

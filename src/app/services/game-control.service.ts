@@ -3,7 +3,7 @@ import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
 import { GameInfoMessage, GameResultMessage} from '../model/messages';
 import { GameEventsService } from './game-events.service';
-import { Color } from '../model/requests';
+import { Color } from '../model/typings';
 
 @Injectable({
   providedIn: 'root'
