@@ -5,11 +5,9 @@ export type StartGameRequest = {
 
 export type JoinGameRequest = {
     gameId: string,
-    colorPreference?: Color,
+    colorPreference?: string,
     playerId?: string
 }
-
-export enum Color { WHITE, BLACK }
 
 export type RejoinGameRequest = {
     gameId: string,

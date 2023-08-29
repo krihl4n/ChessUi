@@ -7,7 +7,6 @@ import { GameInfoMessage, GameResultMessage, PiecePositionUpdateMessage } from '
 import { GameResult, GameFinishedEvent, GameStartEvent, Move, PossibleMoves } from '../model/typings';
 import { GameEventsService } from './game-events.service';
 import { GameInfoService } from './game-info.service';
-import { Color } from '../model/requests';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class GameService implements OnDestroy {
   private canPlayerMove: boolean = false
   private turn = ""
   public gameResult?: GameResult
-  public colorPreference?: Color
+  public colorPreference?: string
   public lastMove?: Move // for field marking. doesn't work after refresh. send form BE?
 
   private gameStartEvent: Subject<GameStartEvent> = new Subject()
@@ -65,7 +64,7 @@ export class GameService implements OnDestroy {
     return this.gameFinishedEvent.asObservable()
   }
 
-  initiateNewGame(mode: string, pieceSetup: string, colorPreference?: Color) {
+  initiateNewGame(mode: string, pieceSetup: string, colorPreference?: string) {
     this.colorPreference = colorPreference
     this.gameControlService.initiateNewGame(mode, pieceSetup) // color preference here?
   }

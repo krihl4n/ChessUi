@@ -3,7 +3,6 @@ import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
 import { GameInfoMessage, GameResultMessage} from '../model/messages';
 import { GameEventsService } from './game-events.service';
-import { Color } from '../model/requests';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +58,7 @@ export class GameControlService {
       })
   }
 
-  joinExistingGame(gameId: string, colorPreference?: Color) {
+  joinExistingGame(gameId: string, colorPreference?: string) {
     if (this.connected) {
       this.joinGame(gameId, colorPreference)
     } else {
@@ -81,7 +80,7 @@ export class GameControlService {
   }
 
   private joinGame(gameId: string,
-    colorPreference?: Color) {
+    colorPreference?: string) {
     var savedGame = this.storageService.getGame();
     if (savedGame && savedGame?.gameId === gameId) {
       this.webSocketApiService.sendRejoinGameMsg({
