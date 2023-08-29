@@ -7,8 +7,8 @@ import { GameEventsService } from './game-events.service';
 })
 export class GameInfoService {
 
-  private playerColor = ""
-  private gameMode = ""
+  private playerColor: string
+  private gameMode: string
 
   constructor(gameEventsService: GameEventsService) {
     gameEventsService.getGameStartedObservable().subscribe((gameInfo: GameInfoMessage) => {
@@ -20,25 +20,24 @@ export class GameInfoService {
       this.playerColor = gameInfo.player.color
       this.gameMode = gameInfo.mode
     })
-   }
+  }
 
-   isCurrentPlayer(color: string) {
+  isCurrentPlayer(color: string) {
     return this.playerColor.toLowerCase() == color.toLowerCase()
-   }
+  }
 
   getPlayerColor() {
     return this.playerColor
   }
 
-  getOpponentColor() {
-    if(this.playerColor === "white") {
+  getOpponentColor(): string | undefined {
+    if (this.playerColor === "white") {
       return "black"
     }
-    if(this.playerColor === "black") {
+    if (this.playerColor === "black") {
       return "white"
     }
-
-    return ""
+    return undefined
   }
 
   isTestMode() {

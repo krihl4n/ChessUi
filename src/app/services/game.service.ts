@@ -16,7 +16,7 @@ export class GameService implements OnDestroy {
   private moveRequestInProgress: boolean = false
   private possibleMoves?: PossibleMoves
   private canPlayerMove: boolean = false
-  private turn = ""
+  private turn: string
   public gameResult?: GameResult
   public colorPreference?: string
   public lastMove?: Move // for field marking. doesn't work after refresh. send form BE?
