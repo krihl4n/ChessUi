@@ -1,5 +1,3 @@
-import { Color } from "./typings"
-
 export type StartGameRequest = {
     mode: string,
     setup: string
@@ -10,6 +8,8 @@ export type JoinGameRequest = {
     colorPreference?: Color,
     playerId?: string
 }
+
+export enum Color { WHITE, BLACK }
 
 export type RejoinGameRequest = {
     gameId: string,

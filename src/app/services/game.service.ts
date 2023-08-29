@@ -4,9 +4,10 @@ import { GameControlService } from './game-control.service';
 import { PawnPromotionService } from '../board/pawn-promotion/pawn-promotion.service';
 import { Promotion } from '../board/pawn-promotion/promotion.model';
 import { GameInfoMessage, GameResultMessage, PiecePositionUpdateMessage } from '../model/messages';
-import { GameResult, GameFinishedEvent, GameStartEvent, Move, PossibleMoves, Color } from '../model/typings';
+import { GameResult, GameFinishedEvent, GameStartEvent, Move, PossibleMoves } from '../model/typings';
 import { GameEventsService } from './game-events.service';
 import { GameInfoService } from './game-info.service';
+import { Color } from '../model/requests';
 
 @Injectable({
   providedIn: 'root'

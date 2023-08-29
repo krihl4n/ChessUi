@@ -5,7 +5,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameEventsService } from '../services/game-events.service';
-import { Color } from '../model/typings';
+import { Color } from '../model/requests';
 
 @Component({
   selector: 'app-start-game-dialog',
