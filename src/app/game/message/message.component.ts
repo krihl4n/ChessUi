@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { GameInfoMessage } from 'src/app/model/messages';
-import { COLOR_BLACK, COLOR_WHITE } from 'src/app/model/typings';
 import { GameInfoService } from 'src/app/services/game-info.service';
 import { GameService } from 'src/app/services/game.service';
 
@@ -11,6 +9,10 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class MessageComponent implements OnInit {
 
+  private static WHITE_PLAYER_WON = "white_player_won";
+  private static BLACK_PLAYER_WON = "black_player_won";
+  private static DRAW = "DRAW";
+
   constructor(private gameService: GameService, private gameInfoService: GameInfoService) { }
 
   ngOnInit(): void {
@@ -18,19 +20,21 @@ export class MessageComponent implements OnInit {
 
   getMessage(): string {
     const result = this.gameService.gameResult
-    if(result) {
-      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == COLOR_WHITE || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == COLOR_BLACK) {
+    if (result) {
+      if (result.result == MessageComponent.WHITE_PLAYER_WON && this.gameInfoService.isPlayerWhite() ||
+        result.result == MessageComponent.BLACK_PLAYER_WON && this.gameInfoService.isPlayerBlack()) {
         return "You won!"
       }
-      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == COLOR_BLACK || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == COLOR_WHITE) {
+      if (result.result == MessageComponent.WHITE_PLAYER_WON && this.gameInfoService.isPlayerBlack() ||
+        result.result == MessageComponent.BLACK_PLAYER_WON && this.gameInfoService.isPlayerWhite()) {
         return "You lost!"
       }
-      if(result.result == "DRAW") {
+      if (result.result == MessageComponent.DRAW) {
         return "Draw!"
       }
       return result.result + " " + result.reason
     } else {
-      if(this.gameInfoService.getPlayerColor() == this.gameService.getTurn()) {
+      if (this.gameInfoService.getPlayerColor() == this.gameService.getTurn()) {
         return "Your move"
       } else {
         return "Waiting for opponent"

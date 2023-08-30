@@ -3,7 +3,7 @@ export const COLOR_BLACK = "black"
 
 export const MODE_TEST = "test_mode"
 export const MODE_VS_FRIEND = "vs_friend"
-export const MODE_VS_COMPUTER = "vs_compoter"
+export const MODE_VS_COMPUTER = "vs_computer"
 
 export type Player = {
     id: string,

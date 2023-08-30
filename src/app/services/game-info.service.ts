@@ -38,4 +38,12 @@ export class GameInfoService {
   isTestMode() {
     return this.gameMode == MODE_TEST
   }
+
+  isPlayerWhite() {
+    return this.playerColor == COLOR_WHITE
+  }
+
+  isPlayerBlack() {
+    return this.playerColor == COLOR_BLACK
+  }
 }
