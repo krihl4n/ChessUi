@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { COLOR_WHITE } from 'src/app/model/typings';
 import { PiecesLocations } from '../tools/pieces-locations';
 import { Promotion } from './promotion.model';
 
@@ -62,7 +63,7 @@ export class PawnPromotionService {
   }
 
   private isLastRank(to: string, playerColor: string) {
-    if (playerColor == 'white') {
+    if (playerColor == COLOR_WHITE) {
       return to[1] == '8'
     } else {
       return to[1] == '1'

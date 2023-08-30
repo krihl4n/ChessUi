@@ -1,3 +1,4 @@
+import { COLOR_BLACK, COLOR_WHITE } from "src/app/model/typings";
 import { Piece } from "./piece.model";
 
 export class Pieces {
@@ -6,31 +7,31 @@ export class Pieces {
 
     initialize(fieldSize: number) {
         for(var i = 0; i < 8; i++){
-            this.availablePieces.push(new Piece('white', "pawn", fieldSize))
-            this.availablePieces.push(new Piece('black', "pawn", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_WHITE, "pawn", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_BLACK, "pawn", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "rook", fieldSize))
-            this.availablePieces.push(new Piece('black', "rook", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_WHITE, "rook", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_BLACK, "rook", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "bishop", fieldSize))
-            this.availablePieces.push(new Piece('black', "bishop", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_WHITE, "bishop", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_BLACK, "bishop", fieldSize))
         }
 
         for(var i = 0; i < 2; i++){
-            this.availablePieces.push(new Piece('white', "knight", fieldSize))
-            this.availablePieces.push(new Piece('black', "knight", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_WHITE, "knight", fieldSize))
+            this.availablePieces.push(new Piece(COLOR_BLACK, "knight", fieldSize))
         }
 
 
-        this.availablePieces.push(new Piece('white', "king", fieldSize))
-        this.availablePieces.push(new Piece('black', "king", fieldSize))
+        this.availablePieces.push(new Piece(COLOR_WHITE, "king", fieldSize))
+        this.availablePieces.push(new Piece(COLOR_BLACK, "king", fieldSize))
 
-        this.availablePieces.push(new Piece('white', "queen", fieldSize))
-        this.availablePieces.push(new Piece('black', "queen", fieldSize))
+        this.availablePieces.push(new Piece(COLOR_WHITE, "queen", fieldSize))
+        this.availablePieces.push(new Piece(COLOR_BLACK, "queen", fieldSize))
     }
 
     getPiece(color: string, type: string): Piece | undefined {

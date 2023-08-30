@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameInfoMessage } from 'src/app/model/messages';
+import { COLOR_BLACK, COLOR_WHITE } from 'src/app/model/typings';
 import { GameInfoService } from 'src/app/services/game-info.service';
 import { GameService } from 'src/app/services/game.service';
 
@@ -18,10 +19,10 @@ export class MessageComponent implements OnInit {
   getMessage(): string {
     const result = this.gameService.gameResult
     if(result) {
-      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == 'white' || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == 'black') {
+      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == COLOR_WHITE || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == COLOR_BLACK) {
         return "You won!"
       }
-      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == 'black' || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == 'white') {
+      if(result.result == "white_player_won" && this.gameInfoService.getPlayerColor() == COLOR_BLACK || result.result == "black_player_won" && this.gameInfoService.getPlayerColor() == COLOR_WHITE) {
         return "You lost!"
       }
       if(result.result == "DRAW") {
