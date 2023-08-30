@@ -5,6 +5,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameEventsService } from '../services/game-events.service';
+import { COLOR_BLACK, COLOR_WHITE, MODE_TEST, MODE_VS_COMPUTER, MODE_VS_FRIEND } from '../model/typings';
 
 @Component({
   selector: 'app-start-game-dialog',
@@ -122,14 +123,14 @@ export class StartGameDialogComponent implements OnInit, OnDestroy {
   }
 
   private determineSelectedColor(): string | undefined {
-    if (this.isWhiteColorSelected) return "white"
-    if (this.isBlackColorSelected) return "black"
+    if (this.isWhiteColorSelected) return COLOR_WHITE
+    if (this.isBlackColorSelected) return COLOR_BLACK
     return undefined
   }
 
   private determineSelectedMode(): string {
-    if (this.isFriendSelected) return "vs_friend"
-    if (this.isTestSelected) return "test_mode"
-    else return "vs_computer"
+    if (this.isFriendSelected) return MODE_VS_FRIEND
+    if (this.isTestSelected) return MODE_TEST
+    else return MODE_VS_COMPUTER
   }
 }

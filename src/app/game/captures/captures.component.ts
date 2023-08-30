@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GameInfoMessage, PiecePositionUpdateMessage } from 'src/app/model/messages';
-import { Captures, GameStartEvent, Piece, Score } from 'src/app/model/typings';
+import { Captures, COLOR_WHITE, GameStartEvent, Piece, Score } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameInfoService } from 'src/app/services/game-info.service';
 import { GameService } from 'src/app/services/game.service';
@@ -74,7 +74,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   }
 
   private getScore(color: string, score: Score) {
-    if (color == "white") {
+    if (color == COLOR_WHITE) {
       return score.white
     } else {
       return score.black
@@ -98,7 +98,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   }
 
   private getCaptures(color: String, captures: Captures) {
-    if (color === "white") {
+    if (color === COLOR_WHITE) {
       return captures.capturesOfWhitePlayer
     } else {
       return captures.capturesOfBlackPlayer

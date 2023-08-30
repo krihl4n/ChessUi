@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameInfoMessage } from '../model/messages';
+import { COLOR_BLACK, COLOR_WHITE, MODE_TEST } from '../model/typings';
 import { GameEventsService } from './game-events.service';
 
 @Injectable({
@@ -30,17 +31,11 @@ export class GameInfoService {
     return this.playerColor
   }
 
-  getOpponentColor(): string | undefined {
-    if (this.playerColor === "white") {
-      return "black"
-    }
-    if (this.playerColor === "black") {
-      return "white"
-    }
-    return undefined
+  getOpponentColor(): string {
+    return this.playerColor == COLOR_WHITE ? COLOR_BLACK : COLOR_WHITE
   }
 
   isTestMode() {
-    return this.gameMode == "test_mode"
+    return this.gameMode == MODE_TEST
   }
 }

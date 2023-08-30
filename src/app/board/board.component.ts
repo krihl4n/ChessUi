@@ -14,7 +14,7 @@ import { MarkAndMoveHandler } from './tools/move-handlers/mark-and-move-handler'
 import { GameService } from '../services/game.service';
 import { Subscription } from 'rxjs';
 import { GameEventsService } from '../services/game-events.service';
-import { GameStartEvent } from '../model/typings';
+import { COLOR_BLACK, GameStartEvent } from '../model/typings';
 
 @Component({
   selector: 'app-board',
@@ -68,7 +68,7 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     this.gameStartedEvent = this.gameService.getGameStartedEventObservable()
       .subscribe((gameStartEvent: GameStartEvent) => {
-        if (gameStartEvent.playerColor == "black") {
+        if (gameStartEvent.playerColor == COLOR_BLACK) {
           this.boardSetup = new BoardSetup(true, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(true, this.boardSetup.fieldSize)
         } else {
