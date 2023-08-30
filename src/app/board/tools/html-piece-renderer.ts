@@ -1,4 +1,5 @@
 import { Renderer2 } from "@angular/core";
+import { PAWN } from "src/app/model/typings";
 import { FieldUtilsService } from "./field-utils.service";
 import { Piece } from "./piece.model";
 
@@ -84,7 +85,7 @@ export class HtmlPieceReneder {
   }
 
   renderPieceChangeWithPieceMovement(startingField: string, destinationField: string, piece: Piece) {
-    const newPiece = new Piece(piece.color, "pawn", this.fieldSize)
+    const newPiece = new Piece(piece.color, PAWN, this.fieldSize)
     this.preRenderPieces([newPiece])
     this.renderPieceAtField(startingField, newPiece)
     this.deletePieceNow(piece)

@@ -1,3 +1,4 @@
+import { PAWN } from "src/app/model/typings";
 import { BoardSetup } from "./board-setup";
 
 export class Piece {
@@ -24,7 +25,7 @@ export class Piece {
     }
 
     setDesiredHeight() {
-        if(this.type == "pawn"){
+        if(this.type == PAWN){
             this.desiredHeight = this.fieldSize * 0.7 
         } else {
             this.desiredHeight = this.fieldSize * 0.8 

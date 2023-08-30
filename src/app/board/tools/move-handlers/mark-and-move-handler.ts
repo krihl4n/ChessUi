@@ -7,7 +7,6 @@ import { Piece } from "../piece.model";
 import { GameService, MoveRequestResult } from "src/app/services/game.service";
 import { Subscription } from "rxjs";
 import { Promotion } from "../../pawn-promotion/promotion.model";
-import { PossibleMoves } from "src/app/model/typings";
 
 export class MarkAndMoveHandler { // todo maybe separate handlers for pieve movement and fields marking
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { COLOR_WHITE } from 'src/app/model/typings';
+import { COLOR_WHITE, PAWN } from 'src/app/model/typings';
 import { PiecesLocations } from '../tools/pieces-locations';
 import { Promotion } from './promotion.model';
 
@@ -20,7 +20,7 @@ export class PawnPromotionService {
   constructor(private piecesLocations: PiecesLocations) { }
 
   shouldOpenPromotionChoice(from: string, to: string, playerColor: string) {
-    return this.isLastRank(to, playerColor) && !this.hasPlayerSelectedPromotion() && this.piecesLocations.get(from)?.type == "pawn" // todo some kind of constatns?
+    return this.isLastRank(to, playerColor) && !this.hasPlayerSelectedPromotion() && this.piecesLocations.get(from)?.type == PAWN 
   }
 
   shouldDisplayPromotionChoice() {

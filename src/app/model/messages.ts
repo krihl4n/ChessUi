@@ -16,7 +16,7 @@ export type PiecePositionUpdateMessage = {
     primaryMove: Move,
     secondaryMove?: Move,
     pieceCapture?: PieceCapture,
-    pawnPromotion: string, // queen, knight, bishop, rook
+    pawnPromotion: string,
     reverted: boolean,
     turn: string,
     label: string,
