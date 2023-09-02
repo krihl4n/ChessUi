@@ -22,6 +22,14 @@ export class StorageService {
     }
     return undefined
   }
+
+  public getPlayerId(): string | undefined {
+    var cookieValue = this.cookieService.get('chess-game')
+    if(cookieValue) {
+      return JSON.parse(cookieValue).playerId
+    }
+    return undefined
+  }
 }
 
 export interface SavedGame {

@@ -90,7 +90,8 @@ export class GameControlService {
     } else {
       this.webSocketApiService.sendJoinGameMsg({
         gameId: gameId,
-        colorPreference: colorPreference
+        colorPreference: colorPreference,
+        playerId: savedGame?.playerId
       })
     }
   }
