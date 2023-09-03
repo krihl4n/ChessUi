@@ -18,6 +18,10 @@ export class HtmlPieceReneder {
     return piece
   }
 
+  preRenderPiece(piece: Piece) {
+    this.preRenderPieces([piece])
+  }
+
   preRenderPieces(pieces: Piece[]) {
     for(let piece of pieces) {
       const htmlElement = this.renderer.createElement('img')

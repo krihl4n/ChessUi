@@ -9,7 +9,6 @@ import { HtmlPieceReneder } from './tools/html-piece-renderer';
 import { PieceDragHandler } from './tools/move-handlers/drag-and-drop-handler';
 import { AsyncMoveHandler } from './tools/move-handlers/async-move-handler';
 import { Piece } from './tools/piece.model';
-import { Pieces } from './tools/pieces';
 import { MarkAndMoveHandler } from './tools/move-handlers/mark-and-move-handler';
 import { GameService } from '../services/game.service';
 import { Subscription } from 'rxjs';
@@ -55,7 +54,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private htmlPieceRender: HtmlPieceReneder
 
-  private pieces = new Pieces()
   private dragHandler: PieceDragHandler;
   private pieceMoveHandler: AsyncMoveHandler
   private markAndMoveHandler: MarkAndMoveHandler
@@ -77,13 +75,9 @@ export class BoardComponent implements OnInit, OnDestroy {
         }
         gameStartEvent.piecePositions.forEach(fieldOccupation => {
           if (fieldOccupation.piece) {
-            const pieceElement = this.pieces.getPiece(fieldOccupation.piece.color, fieldOccupation.piece.type)
-            if (pieceElement) {
-              this.piecesLocations.set(
-                fieldOccupation.field,
-                pieceElement
-              )
-            }
+            const pieceElement = new Piece(fieldOccupation.piece.color, fieldOccupation.piece.type, this.boardSetup.fieldSize)
+            this.htmlPieceRender.preRenderPiece(pieceElement)
+            this.piecesLocations.set(fieldOccupation.field, pieceElement)
           }
         })
         setTimeout(() => {
@@ -115,10 +109,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.pieceMoveHandler = new AsyncMoveHandler(this.piecesLocations, this.htmlPieceRender, this.gameEventsService)
     this.markAndMoveHandler = new MarkAndMoveHandler(this.fieldUtils, this.boardSetup, this.piecesLocations, this.htmlPieceRender, this.gameService)
 
-    this.pieces = new Pieces()
     this.piecesLocations.reset()
-    this.pieces.initialize(this.boardSetup.fieldSize)
-    this.htmlPieceRender.preRenderPieces(this.pieces.availablePieces)
 
     this.canvas.nativeElement.addEventListener('mousedown', this.mouseDownListener)
     window.addEventListener('mouseup', this.mouseUpListener)
