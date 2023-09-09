@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { GameInfoMessage, GameResultMessage, PiecePositionUpdateMessage, PossibleMovesMessage } from "../model/messages";
+import { GameInfoMessage, GameResultMessage, JoinedNewGameMessage, PiecePositionUpdateMessage, PossibleMovesMessage } from "../model/messages";
 
 @Injectable({
     providedIn: "root"
@@ -9,6 +9,7 @@ export class GameEventsService {
 
     private piecePositionUpdateSubject: Subject<PiecePositionUpdateMessage> = new Subject()
     private rematchRequestedSubject: Subject<string> = new Subject()
+    private joinedNewGameSubject: Subject<JoinedNewGameMessage> = new Subject()
     private joinedExistingGameSubject: Subject<GameInfoMessage> = new Subject()
     private waitingForOtherPlayersSubject: Subject<string> = new Subject()
     private possibleMovesSubject: Subject<PossibleMovesMessage> = new Subject()
@@ -21,6 +22,10 @@ export class GameEventsService {
     
     rematchRequested(gameId: string) {
         this.rematchRequestedSubject.next(gameId)
+    }
+
+    joinedNewGame(event: JoinedNewGameMessage) {
+        this.joinedNewGameSubject.next(event)
     }
 
     joinedExistingGame(gameInfo: GameInfoMessage) {
@@ -49,6 +54,10 @@ export class GameEventsService {
 
     getRematchRequestedObservable() {
         return this.rematchRequestedSubject.asObservable()
+    }
+
+    getJoinedNewGameObservable() {
+        return this.joinedNewGameSubject.asObservable()
     }
 
     getJoinedExistingGameObservable() {

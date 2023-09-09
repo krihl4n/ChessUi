@@ -43,6 +43,9 @@ export class WebSocketAPIService {
                 this.subscribe("/user/queue/joined-existing-game", function (msg) {
                     _this.gameEventsService.joinedExistingGame(JSON.parse(msg.body))
                 });
+                this.subscribe("/user/queue/joined-new-game", function (msg) {
+                    _this.gameEventsService.joinedNewGame(JSON.parse(msg.body))
+                });
                 this.subscribe("/user/queue/piece-position-updates", function (msg) {
                     _this.gameEventsService.piecePositionUpdated(JSON.parse(msg.body))
                 });

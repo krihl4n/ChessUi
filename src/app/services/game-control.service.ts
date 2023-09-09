@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WebSocketAPIService } from './web-socket-api.service';
 import { StorageService } from '../storage.service';
-import { GameInfoMessage, GameResultMessage} from '../model/messages';
+import { GameInfoMessage, GameResultMessage, JoinedNewGameMessage} from '../model/messages';
 import { GameEventsService } from './game-events.service';
 
 @Injectable({
@@ -18,6 +18,9 @@ export class GameControlService {
   subscribeToGameStartedEvent() {
     this.gameEventsService.getGameStartedObservable().subscribe((gameInfo: GameInfoMessage) => {
       this.storageService.save(gameInfo.gameId, gameInfo.player.id)
+    })
+    this.gameEventsService.getJoinedNewGameObservable().subscribe((event: JoinedNewGameMessage) => {
+      this.storageService.save(event.gameId, event.playerId)
     })
   }
 

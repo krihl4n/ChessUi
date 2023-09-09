@@ -2,6 +2,7 @@ import { Captures, FieldOccupation, Move, Piece, PieceCapture, Player, Score, Ga
 
 export type GameInfoMessage = {
     gameId: string,
+    gameInProgress: boolean,
     mode: string,
     player: Player,
     piecePositions: FieldOccupation[],
@@ -36,4 +37,9 @@ export type GameResultMessage = {
 export type PossibleMovesMessage = {
     from: string,
     to: string[]
+}
+
+export type JoinedNewGameMessage = {
+    gameId: string,
+    playerId: string
 }
