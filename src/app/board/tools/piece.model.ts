@@ -1,12 +1,15 @@
 import { PAWN } from "src/app/model/typings";
-import { BoardSetup } from "./board-setup";
 
 export class Piece {
 
     imagePath: string
     htmlElement: any
     desiredHeight: number
+    desiredWidth: number
     listener: any; // todo collection
+
+    height: number = -1
+    width: number = -1
 
     constructor(public color: string, public type: string, private fieldSize: number) {
         this.imagePath = `assets/${color}_${type}.svg`
@@ -18,6 +21,8 @@ export class Piece {
         this.htmlElement.addEventListener('mousedown', (e:MouseEvent)=> {
             this.listener(e, this)
         })
+       this.height = htmlElement.height
+       this.width = htmlElement.width
     }
 
     setMouseDownListener(listener: any) { // todo type
@@ -30,5 +35,17 @@ export class Piece {
         } else {
             this.desiredHeight = this.fieldSize * 0.8 
         }
+    }
+
+    getWidth() {
+        // console.log("element w:" + this.htmlElement.width)
+        // console.log("this w:" + this.width)
+        // return this.width
+        return this.htmlElement.width
+    }
+
+    getHeight() {
+    //    return this.height
+    return this.htmlElement.height
     }
 }

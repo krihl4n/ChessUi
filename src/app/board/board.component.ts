@@ -138,7 +138,11 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   private renderPieces() {
     this.piecesLocations.getAll().forEach((piece, field) => {
-      this.htmlPieceRender.renderPieceAtField(field, piece)
+      this.htmlPieceRender.preRenderPiece(piece)
+      setTimeout(() => {
+        this.htmlPieceRender.renderPieceAtField(field, piece)
+      }, 200)
+      
       //piece.setMouseDownListener(this.notifyPieceClicked.bind(this)) // moved to renderer 
     })
   }

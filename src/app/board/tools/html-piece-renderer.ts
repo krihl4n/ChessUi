@@ -1,4 +1,4 @@
-import { Renderer2 } from "@angular/core";
+import { Renderer2, RendererStyleFlags2 } from "@angular/core";
 import { PAWN } from "src/app/model/typings";
 import { FieldUtilsService } from "./field-utils.service";
 import { Piece } from "./piece.model";
@@ -14,7 +14,10 @@ export class HtmlPieceReneder {
   renderPiece(color: string, type: string, field: string): Piece {
     const piece = new Piece(color.toLowerCase(), type.toLowerCase(), this.fieldSize)
     this.preRenderPieces([piece])
-    this.renderPieceAtField(field, piece)
+    setTimeout(() => {
+      this.renderPieceAtField(field, piece)
+    }, 200)
+    
     return piece
   }
 
@@ -22,16 +25,18 @@ export class HtmlPieceReneder {
     this.preRenderPieces([piece])
   }
 
-  preRenderPieces(pieces: Piece[]) {
+  preRenderPieces(pieces: Piece[]) { // todo maybe prerender predefined pieces upfront ?
     for(let piece of pieces) {
       const htmlElement = this.renderer.createElement('img')
       this.renderer.setAttribute(htmlElement, 'hidden', 'true')
       this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
-
       this.renderer.appendChild(this.boardNativeElement, htmlElement)
       piece.setHtmlElement(htmlElement)   
+      piece.width = htmlElement.width
+      piece.height = htmlElement.height
+     // console.log("PRE RENDER, width: " + htmlElement.width)
     }
   }
 
@@ -39,6 +44,8 @@ export class HtmlPieceReneder {
     for(let piece of pieces) {
       piece.setDesiredHeight()
       this.renderer.setStyle(piece.htmlElement, 'height', piece.desiredHeight + 'px')
+      piece.width = piece.htmlElement.width
+      piece.height = piece.htmlElement.height
     }
   }
 
@@ -46,7 +53,7 @@ export class HtmlPieceReneder {
     //this.createElementIfNotExists(piece)
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '999')
-    this.setElementLocation(piece.htmlElement, { x: mouseX - piece.htmlElement.width/2, y: mouseY - piece.htmlElement.height/2 })  
+    this.setElementLocation(piece.htmlElement, { x: mouseX - piece.getWidth()/2, y: mouseY - piece.getHeight()/2 })  
   }
 
   renderPieceAtField(field: string, piece: Piece) {
