@@ -1,47 +1,31 @@
 import { Renderer2, RendererStyleFlags2 } from "@angular/core";
 import { PAWN } from "src/app/model/typings";
 import { FieldUtilsService } from "./field-utils.service";
+import { PieceFactory } from "./piece-factory";
 import { Piece } from "./piece.model";
 
 export class HtmlPieceReneder {
+
+  private pieceFactory: PieceFactory
+
   constructor(
     private renderer: Renderer2,
     private fieldUtils: FieldUtilsService,
     private boardNativeElement: any,
     private fieldSize: number,
-    private onPieceClickListener: any) { }
+    private onPieceClickListener: any) {
+
+    this.pieceFactory = new PieceFactory(renderer, boardNativeElement, fieldSize)
+  }
 
   renderPiece(color: string, type: string, field: string): Piece {
-    const piece = new Piece(color.toLowerCase(), type.toLowerCase(), this.fieldSize)
-    this.preRenderPieces([piece])
-    setTimeout(() => {
-      this.renderPieceAtField(field, piece)
-    }, 200)
-    
+    const piece = this.pieceFactory.getPiece(color, type)
+    this.renderPieceAtField(field, piece)
     return piece
   }
 
-  preRenderPiece(piece: Piece) {
-    this.preRenderPieces([piece])
-  }
-
-  preRenderPieces(pieces: Piece[]) { // todo maybe prerender predefined pieces upfront ?
-    for(let piece of pieces) {
-      const htmlElement = this.renderer.createElement('img')
-      this.renderer.setAttribute(htmlElement, 'hidden', 'true')
-      this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
-      this.renderer.setAttribute(htmlElement, 'draggable', 'false')
-      this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
-      this.renderer.appendChild(this.boardNativeElement, htmlElement)
-      piece.setHtmlElement(htmlElement)   
-      piece.width = htmlElement.width
-      piece.height = htmlElement.height
-     // console.log("PRE RENDER, width: " + htmlElement.width)
-    }
-  }
-
   resizePieces(pieces: Piece[]) {
-    for(let piece of pieces) {
+    for (let piece of pieces) {
       piece.setDesiredHeight()
       this.renderer.setStyle(piece.htmlElement, 'height', piece.desiredHeight + 'px')
       piece.width = piece.htmlElement.width
@@ -50,14 +34,12 @@ export class HtmlPieceReneder {
   }
 
   renderPieceByCoursor(mouseX: number, mouseY: number, piece: Piece) {
-    //this.createElementIfNotExists(piece)
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '999')
-    this.setElementLocation(piece.htmlElement, { x: mouseX - piece.getWidth()/2, y: mouseY - piece.getHeight()/2 })  
+    this.setElementLocation(piece.htmlElement, { x: mouseX - piece.getWidth() / 2, y: mouseY - piece.getHeight() / 2 })
   }
 
   renderPieceAtField(field: string, piece: Piece) {
-    //this.createElementIfNotExists(piece)
     this.renderer.removeAttribute(piece.htmlElement, 'hidden')
     this.renderer.setStyle(piece.htmlElement, 'z-index', '1')
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(field, piece))
@@ -85,19 +67,17 @@ export class HtmlPieceReneder {
     this.moveElementToTop(piece);
     this.setElementLocation(piece.htmlElement, this.getPieceLocationAtField(destinationField, piece))
 
-    const newPiece = new Piece(piece.color, newPieceType, this.fieldSize)
-    this.preRenderPieces([newPiece])
+    const newPiece = this.pieceFactory.getPiece(piece.color, newPieceType)
     setTimeout(() => {
-       this.clearElementAnimation(piece);
-       this.deletePieceNow(piece)
-       this.renderPieceAtField(destinationField, newPiece)
+      this.clearElementAnimation(piece);
+      this.deletePieceNow(piece)
+      this.renderPieceAtField(destinationField, newPiece)
     }, 600)
-     return newPiece
+    return newPiece
   }
 
   renderPieceChangeWithPieceMovement(startingField: string, destinationField: string, piece: Piece) {
-    const newPiece = new Piece(piece.color, PAWN, this.fieldSize)
-    this.preRenderPieces([newPiece])
+    const newPiece = this.pieceFactory.getPiece(piece.color, PAWN)
     this.renderPieceAtField(startingField, newPiece)
     this.deletePieceNow(piece)
 
@@ -106,10 +86,10 @@ export class HtmlPieceReneder {
     this.setElementLocation(newPiece.htmlElement, this.getPieceLocationAtField(destinationField, newPiece))
 
     setTimeout(() => {
-       this.clearElementAnimation(newPiece);
-       this.moveElementToBackground(newPiece)
+      this.clearElementAnimation(newPiece);
+      this.moveElementToBackground(newPiece)
     }, 600)
-     return newPiece
+    return newPiece
   }
 
   deletePiece(piece: Piece, field: string) {
@@ -119,7 +99,7 @@ export class HtmlPieceReneder {
   }
 
   deletePieceNow(piece: Piece) { // todo remove completly or clear listeners?
-      this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
+    this.renderer.setAttribute(piece.htmlElement, 'hidden', 'true')
   }
 
   private moveElementToBackground(piece: Piece) {
@@ -137,18 +117,6 @@ export class HtmlPieceReneder {
   private setElementAnimation(piece: Piece) {
     this.renderer.setStyle(piece.htmlElement, "transition", "all 500ms ease");
   }
-
-// private createElementIfNotExists(piece: Piece) {
-//     if (!piece.htmlElement) {
-//       const htmlElement = this.renderer.createElement('img')
-//       this.renderer.setAttribute(htmlElement, 'hidden', 'true')
-//       this.renderer.setAttribute(htmlElement, 'src', piece.imagePath)
-//       this.renderer.setAttribute(htmlElement, 'draggable', 'false')
-//       this.renderer.setStyle(htmlElement, 'height', piece.desiredHeight + 'px')
-//       this.renderer.appendChild(this.boardNativeElement, htmlElement)
-//       piece.setHtmlElement(htmlElement)   
-//     }
-//   }
 
   private setElementLocation(pieceImageElement: any, pieceLocation: { x: number, y: number }) {
     this.renderer.setStyle(pieceImageElement, 'left', pieceLocation.x + 'px')

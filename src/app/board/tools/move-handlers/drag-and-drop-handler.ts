@@ -30,13 +30,9 @@ export class PieceDragHandler {
           this.piecesLocations.set(promotion.to, newPiece)
         } else {
           if (this.deferredMove.attackedPiece) {
-            this.htmlPieceRenderer.preRenderPiece(this.deferredMove.attackedPiece)
-            let m = this.deferredMove
-            setTimeout(() => {
-              if(m.attackedPiece){
-                this.htmlPieceRenderer.renderPieceAtField(m.toField, m.attackedPiece)
-              }
-            }, 200)
+            if (this.deferredMove.attackedPiece) {
+              this.htmlPieceRenderer.renderPieceAtField(this.deferredMove.toField, this.deferredMove.attackedPiece)
+            }
           }
           this.returnToOriginalPosition(this.deferredMove.piece)
         }

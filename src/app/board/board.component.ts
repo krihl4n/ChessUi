@@ -73,16 +73,15 @@ export class BoardComponent implements OnInit, OnDestroy {
           this.boardSetup = new BoardSetup(false, this.boardContainer.nativeElement.offsetHeight)
           this.fieldUtils.initialize(false, this.boardSetup.fieldSize)
         }
-        gameStartEvent.piecePositions.forEach(fieldOccupation => {
-          if (fieldOccupation.piece) {
-            const pieceElement = new Piece(fieldOccupation.piece.color, fieldOccupation.piece.type, this.boardSetup.fieldSize)
-            this.htmlPieceRender.preRenderPiece(pieceElement)
-            this.piecesLocations.set(fieldOccupation.field, pieceElement)
-          }
-        })
         setTimeout(() => {
-          this.renderPieces()
-       }, 200) // pieces not diplayed at proper locations fix.
+          gameStartEvent.piecePositions.forEach(fieldOccupation => {
+            if (fieldOccupation.piece) {
+              const pieceElement = this.htmlPieceRender.renderPiece(fieldOccupation.piece.color, fieldOccupation.piece.type, fieldOccupation.field)
+              this.piecesLocations.set(fieldOccupation.field, pieceElement)
+            }
+          })
+        }, 300)
+
       })
   }
 
@@ -135,17 +134,6 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.dragHandler.notifyMouseDownEvent(this.getEventLocationOnBoard(e))
     }
   }).bind(this)
-
-  private renderPieces() {
-    this.piecesLocations.getAll().forEach((piece, field) => {
-      this.htmlPieceRender.preRenderPiece(piece)
-      setTimeout(() => {
-        this.htmlPieceRender.renderPieceAtField(field, piece)
-      }, 200)
-      
-      //piece.setMouseDownListener(this.notifyPieceClicked.bind(this)) // moved to renderer 
-    })
-  }
 
   notifyPieceClicked(e: MouseEvent, piece: Piece) {
     e.preventDefault()
