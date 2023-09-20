@@ -1,6 +1,6 @@
 <div *ngFor="let move of moves; let i = index">
     <div class="recorded-moves-entry">
-        {{ i + 1 }} | <div>{{ move.white }}</div><div>{{ move.black }}</div> 
+        <div class="move-number">{{ i + 1 }}.</div><div class="move">{{ move.white }}</div><div class="move">{{ move.black }}</div> 
     </div>
 </div>
 <div> {{result}} </div>
