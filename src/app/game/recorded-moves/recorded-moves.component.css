@@ -4,6 +4,10 @@
     justify-content: flex-start;
 }
 
+.entry-light {
+    background-color: #3C5D66;
+}
+
 .move-number {
     flex-grow: 1;
     flex-basis: 10px
@@ -13,3 +17,7 @@
     flex-grow: 3;
     flex-basis: 40px
 }
+
+/* blue_theme_light: #36555D
+blue_theme_light_2: #3C5D66
+blue_theme_list_3: #4E6E77 */
