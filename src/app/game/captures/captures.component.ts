@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { GameInfoMessage, PiecePositionUpdateMessage } from 'src/app/model/messages';
+import { PiecePositionUpdateMessage } from 'src/app/model/messages';
 import { Captures, COLOR_WHITE, GameStartEvent, KNIGHT, Piece, Score } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameInfoService } from 'src/app/services/game-info.service';
@@ -14,7 +14,7 @@ import { GameService } from 'src/app/services/game.service';
 export class CapturesComponent implements OnInit, OnDestroy {
 
   @Input() player: string
-  captures: string[] = []
+  captures: Piece[] = []
   score: string
 
   private piecePositionSubscription: Subscription
@@ -52,7 +52,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
       if (update.reverted) {
         this.captures.pop()
       } else {
-        this.push(capturedPiece.type)
+        this.captures.push(capturedPiece)
       }
     }
   }
@@ -60,7 +60,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   setCaptures(playerColor: string, gameStarted: GameStartEvent) {
     let captures = this.getCaptures(playerColor, gameStarted.captures)
     captures.forEach((piece: Piece) => {
-      this.push(piece.type)
+      this.captures.push(piece)
     })
   }
 
@@ -78,14 +78,6 @@ export class CapturesComponent implements OnInit, OnDestroy {
       return score.white
     } else {
       return score.black
-    }
-  }
-
-  private push(pieceType: string) {
-    if (pieceType == KNIGHT) {
-      this.captures.push("n")
-    } else {
-      this.captures.push(pieceType[0].toLowerCase())
     }
   }
 

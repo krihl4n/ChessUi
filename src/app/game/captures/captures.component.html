@@ -1,3 +1,4 @@
 <div class="captures">
-    <div *ngFor="let capture of captures">{{ capture }}</div><div>{{ this.score }}</div>
+    <app-capture *ngFor="let capture of captures" [color]="capture.color"[type]="capture.type"></app-capture>
+    <div>{{ this.score }}</div>
 </div>

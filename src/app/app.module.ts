@@ -15,6 +15,7 @@ import { PawnPromotionComponent } from './board/pawn-promotion/pawn-promotion.co
 import { RematchComponent } from './game/rematch/rematch.component';
 import { RecordedMovesComponent } from './game/recorded-moves/recorded-moves.component';
 import { CapturesComponent } from './game/captures/captures.component';
+import { CaptureComponent } from './game/captures/capture/capture.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,6 +28,7 @@ import { CapturesComponent } from './game/captures/captures.component';
     RematchComponent,
     RecordedMovesComponent,
     CapturesComponent,
+    CaptureComponent,
   ],
   imports: [
     BrowserModule,
