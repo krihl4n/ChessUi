@@ -3,4 +3,12 @@
     justify-content: start; 
     gap: 5px;
     flex-wrap: wrap;
+    align-items: baseline;
+    /* align-content: flex-start; */
+}
+
+.capture {
+    /* flex-grow: 0;
+    flex-shrink: 1; */
+    flex: 0 1 0px;
 }
