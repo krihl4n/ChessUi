@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PiecePositionUpdateMessage } from 'src/app/model/messages';
-import { GameFinishedEvent, GameResult, GameStartEvent } from 'src/app/model/typings';
+import { GameFinishedEvent, GameStartEvent } from 'src/app/model/typings';
 import { GameEventsService } from 'src/app/services/game-events.service';
 import { GameService } from 'src/app/services/game.service';
 
@@ -18,7 +18,12 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
   private gameStartedSubscription: Subscription
   private gameFinishedSubscription: Subscription
 
-  constructor(private gameService: GameService, private gameEventsService: GameEventsService) { }
+  constructor(
+    private elementRef: ElementRef,
+    private gameService: GameService,
+    private gameEventsService: GameEventsService,
+    private applicationRef: ApplicationRef
+  ) { }
 
   ngOnInit(): void {
     this.positionChangeSubscription = this.gameEventsService.getPiecePositionUpdatedObservable()
@@ -57,6 +62,7 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
     } else {
       this.moves.push({ white: label })
     }
+    this.scrollToBottom()
   }
 
   pop() {
@@ -66,11 +72,19 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
     } else {
       this.moves.pop()
     }
+    this.scrollToBottom()
   }
 
   ngOnDestroy(): void {
     this.positionChangeSubscription?.unsubscribe()
     this.gameStartedSubscription?.unsubscribe()
     this.gameFinishedSubscription?.unsubscribe()
+  }
+
+  scrollToBottom(): void {
+    this.applicationRef.tick()
+    try {
+      this.elementRef.nativeElement.parentElement.scrollTop = this.elementRef.nativeElement.parentElement.scrollHeight;
+    } catch (err) { }
   }
 }
