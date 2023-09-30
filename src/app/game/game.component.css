@@ -18,18 +18,18 @@
 
 .control-panel {
     align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* use flex here? */
-
 .recorded-moves-box {
-    margin-top: 20px;
     color: lightgrey;
     background-color: #36555D;
-    /* align-self: center; */
     height: 300px;
     padding: 5px;
     overflow: auto;
+    border-radius: 2px;
 }
 
 .recorded-moves {
@@ -37,44 +37,23 @@
     flex-direction: column;
 }
 
-/* width */
+/* scroll width */
 ::-webkit-scrollbar {
     width: 10px;
 }
 
-/* Track */
+/* scroll track */
 ::-webkit-scrollbar-track {
     background-color: lightgray;
 }
 
-/* Handle */
+/* scroll handle */
 ::-webkit-scrollbar-thumb {
     background: #777;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {}
-
-.controls-box {
-    margin-top: 20px
 }
 
 .message-box {
     color: lightgrey;
     font-size: 14px;
     font-weight: 400;
-    margin-top: 20px
-}
-
-.rematch-box {
-    margin-top: 20px
-}
-
-.player-captures-box {
-    margin-top: 20px;
-    color: lightgrey;
-}
-
-.opponent-captures-box {
-    color: lightgrey;
 }

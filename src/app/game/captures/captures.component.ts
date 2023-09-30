@@ -23,6 +23,7 @@ export class CapturesComponent implements OnInit, OnDestroy {
   constructor(private gameService: GameService, private gameEventsService: GameEventsService, private gameInfoService: GameInfoService) { }
 
   ngOnInit(): void {
+    console.log("CAPTURES")
     this.piecePositionSubscription = this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdateMessage) => {
       let playerColor = this.getPlayerColor(this.player)
       if (playerColor) {
