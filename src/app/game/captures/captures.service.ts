@@ -14,24 +14,32 @@ export class CapturesService {
 
   whitePlayerScore: string
   blackPlayerScore: string
-  
-  constructor(private gameEventsService: GameEventsService, private gameService: GameService) { 
+
+  constructor(private gameEventsService: GameEventsService, private gameService: GameService) {
     this.gameEventsService.getPiecePositionUpdatedObservable().subscribe((update: PiecePositionUpdateMessage) => {
-        this.updateCaptures(update)
-        this.setScore(update.score)
+      this.updateCaptures(update)
+      this.setScore(update.score)
     })
 
     this.gameService.getGameStartedEventObservable()
       .subscribe((gameStarted: GameStartEvent) => {
-          this.setCaptures(gameStarted)
-          this.setScore(gameStarted.score)
+        this.setCaptures(gameStarted)
+        this.setScore(gameStarted.score)
       })
   }
 
-  updateCaptures(update: PiecePositionUpdateMessage) {
+  playerHasCaptures(color: string) {
+    if (color == "white") {
+      return this.whitePlayerCaptures.length > 0
+    } else {
+      return this.blackPlayerCaptures.length > 0
+    }
+  }
+
+  private updateCaptures(update: PiecePositionUpdateMessage) {
     let capturedPiece = update.pieceCapture?.capturedPiece
-    
-    if(capturedPiece) {
+
+    if (capturedPiece) {
       let capturesCollection = capturedPiece.color == "white" ? this.blackPlayerCaptures : this.whitePlayerCaptures
       if (update.reverted) {
         capturesCollection.pop()
@@ -41,7 +49,7 @@ export class CapturesService {
     }
   }
 
-  setCaptures(gameStarted: GameStartEvent) {
+  private setCaptures(gameStarted: GameStartEvent) {
     this.whitePlayerCaptures = []
     this.blackPlayerCaptures = []
     gameStarted.captures.capturesOfBlackPlayer.forEach((piece: Piece) => {

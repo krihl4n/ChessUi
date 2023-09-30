@@ -3,8 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GameEventsService } from '../services/game-events.service';
+import { GameInfoService } from '../services/game-info.service';
 import { GameService } from '../services/game.service';
 import { StartGameDialogComponent } from '../start-game-dialog/start-game-dialog.component';
+import { CapturesService } from './captures/captures.service';
 
 @Component({
   selector: 'app-game',
@@ -15,7 +17,15 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private waitingForPlayersEventSubscription: Subscription
   private rematchRequestedSubscription: Subscription
-  constructor(private dialog: MatDialog, private gameService: GameService, private route: ActivatedRoute, private router: Router, private gameEventsService: GameEventsService) { }
+  constructor(
+    private dialog: MatDialog,
+    private gameService: GameService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private gameEventsService: GameEventsService,
+    private gameInfoService: GameInfoService,
+    private capturesService: CapturesService
+  ) { }
 
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false
@@ -57,6 +67,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   joinExistingGame(gameId: string) {
     this.gameService.joinExistingGame(gameId)
+  }
+
+  playerHasCaptures() {
+    return this.capturesService.playerHasCaptures(this.gameInfoService.getPlayerColor())
   }
 }
 
