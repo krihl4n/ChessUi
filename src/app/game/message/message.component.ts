@@ -11,7 +11,7 @@ export class MessageComponent implements OnInit {
 
   private static WHITE_PLAYER_WON = "white_player_won";
   private static BLACK_PLAYER_WON = "black_player_won";
-  private static DRAW = "DRAW";
+  private static DRAW = "draw";
 
   constructor(private gameService: GameService, private gameInfoService: GameInfoService) { }
 

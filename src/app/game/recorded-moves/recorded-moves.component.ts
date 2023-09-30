@@ -46,11 +46,11 @@ export class RecordedMovesComponent implements OnInit, OnDestroy {
       .subscribe((gameFinishedEvent: GameFinishedEvent) => {
         let result = gameFinishedEvent.gameResult.result
         if (result == "white_player_won") {
-          this.result = "1-0"
+          this.result = "1 - 0"
         } else if (result == "black_player_won") {
-          this.result = "0-1"
+          this.result = "0 - 1"
         } else if (result == "draw") {
-          this.result = "1/2-1/2"
+          this.result = "½ - ½"
         }
       })
   }
