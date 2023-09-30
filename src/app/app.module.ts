@@ -12,7 +12,6 @@ import { GameComponent } from './game/game.component';
 import { MessageComponent } from './game/message/message.component';
 import { ControlsComponent } from './game/controls/controls.component';
 import { PawnPromotionComponent } from './board/pawn-promotion/pawn-promotion.component';
-import { RematchComponent } from './game/rematch/rematch.component';
 import { RecordedMovesComponent } from './game/recorded-moves/recorded-moves.component';
 import { CapturesComponent } from './game/captures/captures.component';
 import { CaptureComponent } from './game/captures/capture/capture.component';
@@ -25,7 +24,6 @@ import { CaptureComponent } from './game/captures/capture/capture.component';
     MessageComponent,
     ControlsComponent,
     PawnPromotionComponent,
-    RematchComponent,
     RecordedMovesComponent,
     CapturesComponent,
     CaptureComponent,

@@ -8,9 +8,18 @@ import { GameService } from 'src/app/services/game.service';
 })
 export class ControlsComponent implements OnInit {
 
+  undoVisible = true
+  resignVisible = true
+  rematchVisible = false
+
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
+    this.gameService.getGameFinishedObservable().subscribe(result => {
+      this.rematchVisible = true
+      this.undoVisible = false
+      this.resignVisible = false
+    })
   }
 
   resign() {
@@ -19,5 +28,9 @@ export class ControlsComponent implements OnInit {
 
   undoMove() {
     this.gameService.undoMove()
+  }
+
+  rematch() {
+    this.gameService.rematch()    
   }
 }

@@ -1,2 +1,3 @@
-<button class="btn" (click)="resign()" style="margin-right: 10px;">resign</button>
-<button class="btn" (click)="undoMove()" style="margin-right: 10px;">undo</button>
+<button *ngIf="resignVisible" class="btn" (click)="resign()" style="margin-right: 10px;">resign</button>
+<button *ngIf="undoVisible" class="btn" (click)="undoMove()" style="margin-right: 10px;">undo</button>
+<button *ngIf="rematchVisible" class="btn" (click)="rematch()" style="margin-right: 10px;">rematch</button>
