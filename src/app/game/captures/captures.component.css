@@ -5,3 +5,7 @@
     flex-wrap: wrap;
     align-items: baseline;
 }
+
+.score {
+    align-self: center;
+}
