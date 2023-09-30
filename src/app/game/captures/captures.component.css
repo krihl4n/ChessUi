@@ -5,6 +5,7 @@
     flex-wrap: wrap;
     align-items: baseline;
     user-select: none;
+    color: lightgray;
 }
 
 .score {

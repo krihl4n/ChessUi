@@ -1,4 +1,4 @@
 <div class="captures">
-    <app-capture class="capture" *ngFor="let capture of captures" [color]="capture.color"[type]="capture.type"></app-capture>
-    <div class="score">{{ this.score }}</div>
+    <app-capture class="capture" *ngFor="let capture of getCaptures()" [color]="capture.color"[type]="capture.type"></app-capture>
+    <div class="score">{{ this.getScore() }}</div>
 </div>
